@@ -3,8 +3,8 @@ title: Shiny部署
 author: 钟宇飞
 date: '2020-07-29'
 slug: deploying-shiny
-categories: [R]
-tags: [shiny]
+categories: [shiny]
+tags: [deloping shiny]
 
 ---
 
