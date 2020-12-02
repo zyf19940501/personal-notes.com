@@ -1,2 +1,2 @@
 # personal-notes.com
-my notes
+个人学习笔记，记录一些知识点。
