@@ -47,6 +47,7 @@ pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py  --hidden-import=pytt
 
 pyttsx3代码如下：
 
+
 ```
 import pyttsx3
 filename = input('请输入需转化语音的txt文件名称:')
@@ -64,7 +65,6 @@ rate = engine.getProperty('rate')
 engine.setProperty('rate', 200)
 engine.save_to_file(line,'output.mp3')
 engine.runAndWait()
-
 ```
 
 ## 资料
