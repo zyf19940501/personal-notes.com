@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on study notes</title>
+    <link>/tags/</link>
+    <description>Recent content in Tags on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>r-4.1.0</title>
+      <link>/tags/r-4.1.0/</link>
+      <pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r-4.1.0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blastula email</title>
+      <link>/tags/blastula-email/</link>
+      <pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/blastula-email/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Power Pivot</title>
+      <link>/tags/power-pivot/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/power-pivot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pyttsx3</title>
+      <link>/tags/pyttsx3/</link>
+      <pubDate>Mon, 14 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/pyttsx3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>usemethod DT</title>
+      <link>/tags/usemethod-dt/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/usemethod-dt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>git study</title>
+      <link>/tags/git-study/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/git-study/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberry</title>
+      <link>/tags/raspberry/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/raspberry/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>deloping shiny</title>
+      <link>/tags/deloping-shiny/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/deloping-shiny/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

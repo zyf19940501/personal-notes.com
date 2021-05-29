@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>Shiny部署 - study notes</title>
+<meta property="og:title" content="Shiny部署 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Shiny部署</h1>
+
+    
+    <span class="article-date">2020-07-29</span>
+    
+
+    <div class="article-content">
+      <h3 id="安装">安装</h3>
+<p>官网资料：<a href="https://rstudio.com/products/shiny/download-server/">https://rstudio.com/products/shiny/download-server/</a></p>
+<p>第一步安装R</p>
+<p>sudo yum install R</p>
+<p>centos7 上可直接用上面命令安装R,但是在centos 8 安装会无法成功。因为R软件包没有被包含在 CentOS 8 的核心软件源中。我们需要从 EPEL 软件源中安装 R</p>
+<p>启用 EPEL 和 PowerTools 软件源</p>
+<p>sudo dnf install epel-release
+sudo dnf config-manager &ndash;set-enabled PowerTools</p>
+<p>安装R输入：</p>
+<p>sudo yum install R</p>
+<p>查看R版本  R &ndash;version</p>
+<p>第二步 安装shiny package</p>
+<p>sudo su -<br>
+-c &ldquo;R -e &quot;install.packages(&lsquo;shiny&rsquo;, repos=&lsquo;<a href="https://cran.rstudio.com/'">https://cran.rstudio.com/'</a>)&quot;&rdquo;</p>
+<p>或者近入R后<code>install.package('shiny')</code> 安装</p>
+<p>第三步 下载安装shiny</p>
+<p>wget <a href="https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm">https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm</a></p>
+<p>sudo yum install &ndash;nogpgcheck shiny-server-1.5.14.948-x86_64.rpm</p>
+<p>第四步 测试是否安装成功</p>
+<p><a href="http://ip:3838">http://ip:3838</a></p>
+<p>ip地址如果是本机,可以换成localhost,或者是本机ip地址。如果是公网像云服务器,需要开放3838的端口后再测试。</p>
+<p>查看shiny-server 状态</p>
+<p><code>sudo systemctl status shiny-server</code></p>
+<h3 id="部署">部署</h3>
+<h4 id="部署在个人服务器上">部署在个人服务器上</h4>
+<ul>
+<li>本地文件上传</li>
+</ul>
+<p>app.R</p>
+<ul>
+<li>修改shiny 配置文件</li>
+</ul>
+<p>进入 <code>sudo vim /etc/shiny-server/shiny-server.conf</code></p>
+<p>添加</p>
+<pre><code>location /demo1{ #/demo1 访问app.R的网址后缀
+         app_dir /home/shiny/shinyapp/demo1; #app.R所在文件夹
+        log_dir /var/log/shiny-server/demo1;#app.R日志所在文件夹
+}
+# 添加后
+
+# Instruct Shiny Server to run applications as the user &quot;shiny&quot;
+run_as shiny; # 依赖的包需要再shiny用户下安装
+
+# Define a server that listens on port 3838
+server {
+  listen 3838;
+
+  # Define a location at the base URL
+  location / {
+
+    # Host the directory of Shiny Apps stored in this directory
+    site_dir /srv/shiny-server;
+
+    # Log all Shiny output to files in this directory
+    log_dir /var/log/shiny-server;
+
+    # When a user visits the base URL rather than a particular application,
+    # an index of the applications available in this directory will be shown.
+    directory_index on;
+  }
+
+    location /demo1{                     #/demo1 访问app.R的网址后缀
+        app_dir /home/shiny/shinyapp/demo1; #app.R所在文件夹
+        log_dir /var/log/shiny-server/demo1;#app.R日志所在文件夹
+}
+
+}
+
+</code></pre><ul>
+<li>重启</li>
+</ul>
+<p><code>sudo systemctl restart shiny-server</code></p>
+<h4 id="部署官方服务器">部署官方服务器</h4>
+<pre><code>#本地安装rsconnect 
+install.packages('rsconnect')
+library(rsconnect)
+
+#想要最新版本可以用以下命令安装该包
+if(!require(&quot;devtools&quot;))
+  install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;rstudio/rsconnect&quot;)
+
+#通过以下网址创建shinyapp.io账户
+https://www.shinyapps.io/
+
+</code></pre><p>测试部署</p>
+<pre><code>#复制该代码到R窗口下运行
+rsconnect::setAccountInfo(name='genomenetwork',
+              token='869F3553609D3A17C74FA157528D58C8',
+              secret='&lt;SECRET&gt;')
+#将工作目录设置到样本app的文件下
+setwd(&quot;~/Downloads/shiny-examples-master/001-hello&quot;)
+#当运行以下命令成功运行程序时，目录设置正确
+shiny::runApp()
+
+# 部署
+#停止应用，运行以下代码部署app
+library(rsconnect)
+deployApp()
+#部署完成自动弹出网页
+https://genomenetwork.shinyapps.io/001-hello/
+
+</code></pre><h4 id="检查报错">检查报错</h4>
+<pre><code>#应用启动失败，一般是依赖包问题，好好查看报错信息
+#日志
+sudo cat /var/log/shiny-server/demo/
+#重启
+sudo systemctl restart shiny-server;
+#文件配置
+sudo vim /etc/shiny-server/shiny-server.conf
+</code></pre><p>由于Shiny Server为了保证性能，所以非敏感性的错误日志被设置了自动清除，每当你出现了错误，
+要去看日志定位问题的时候，这个日志就刚好被自动清除了。可做如下调整</p>
+<pre><code>sudo vi /etc/shiny-server/shiny-server.conf
+run_as shiny;
+access_log /var/log/shiny-server/access.log default;  # 增加记录访问
+preserve_logs true;                                   # 禁止自动清除日志
+# Define a server that listens on port 3838
+server {
+  listen 3838;
+# 省略
+}
+
+</code></pre>
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

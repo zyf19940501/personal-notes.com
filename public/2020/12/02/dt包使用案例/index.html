@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>DT包使用案例 - study notes</title>
+<meta property="og:title" content="DT包使用案例 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">DT包使用案例</h1>
+
+    
+    <span class="article-date">2020-12-02</span>
+    
+
+    <div class="article-content">
+      <h2 id="说明">说明</h2>
+<p>记录DT包使用案例</p>
+<h3 id="案例">案例</h3>
+<ul>
+<li>按钮</li>
+</ul>
+<pre><code>dat &lt;- data.frame(
+  &quot;Title&quot; = c(
+    &quot;A Random Walk Down Wall Street&quot;,
+    &quot;Naked Statistics&quot;,
+    &quot;Freakonomics&quot;
+  ),
+  &quot;Author&quot; = c(
+    &quot;Burton G. Malkiel&quot;,
+    &quot;Charles Wheelan&quot;,
+    &quot;Steven D. Levitt and Stephen J. Dubner&quot;
+  )
+)
+library(DT)
+datatable(dat)
+datatable(dat,
+  rownames = FALSE, # remove row numbers
+  filter = &quot;top&quot;, # add filter on top of columns
+  extensions = &quot;Buttons&quot;, # add download buttons
+  options = list(
+    autoWidth = TRUE,
+    dom = &quot;Blfrtip&quot;, # location of the download buttons
+    buttons = c(&quot;copy&quot;, &quot;csv&quot;, &quot;excel&quot;, &quot;pdf&quot;, &quot;print&quot;), # download buttons
+    pageLength = 5, # show first 5 entries, default is 10
+    order = list(0, &quot;asc&quot;) # order the title column by ascending order
+  )
+)
+
+# Add links to the interactive table
+datatable(dat,
+  rownames = FALSE, # remove row numbers
+  filter = &quot;top&quot;, # add filter on top of columns
+  extensions = &quot;Buttons&quot;, # add download buttons
+  options = list(
+    autoWidth = TRUE,
+    dom = &quot;Blfrtip&quot;, # location of the download buttons
+    buttons = c(&quot;copy&quot;, &quot;csv&quot;, &quot;excel&quot;, &quot;pdf&quot;, &quot;print&quot;), # download buttons
+    pageLength = 5, # show first 5 entries, default is 10
+    order = list(0, &quot;asc&quot;) # order the title column by ascending order
+  ),
+  escape = FALSE # to make URLs clickable
+)
+</code></pre><p>来源：<a href="https://www.statsandr.com/blog/how-to-create-an-interactive-booklist-with-automatic-amazon-affiliate-links-in-r/">https://www.statsandr.com/blog/how-to-create-an-interactive-booklist-with-automatic-amazon-affiliate-links-in-r/</a></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

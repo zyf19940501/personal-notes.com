@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>git study on study notes</title>
+    <link>/tags/git-study/</link>
+    <description>Recent content in git study on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/git-study/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>git使用</title>
+      <link>/2020/12/01/git%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/12/01/git%E4%BD%BF%E7%94%A8/</guid>
+      <description>git使用 需要更进一步学习了解userthis包
+library(usethis) ?use_github() edit_r_environ() #creat github use_github(protocol = &#39;https&#39;,auth_token = Sys.getenv(&amp;quot;GITHUB_PAT&amp;quot;)) upstream_url &amp;lt;- &amp;quot;git@github.com:&amp;lt;OWNER&amp;gt;/&amp;lt;REPO&amp;gt;.git&amp;quot; use_git_remote(name = &amp;quot;upstream&amp;quot;, url = upstream_url) 参考地址 https://www.youtube.com/watch?v=kL6L2MNqPHg&amp;amp;t=799s
+blogdown 关于github git的使用 https://bookdown.org/yihui/blogdown/github-pages.html</description>
+    </item>
+    
+  </channel>
+</rss>

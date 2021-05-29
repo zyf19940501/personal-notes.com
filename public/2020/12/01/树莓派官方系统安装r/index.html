@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>树莓派官方系统安装R-4.0.3 - study notes</title>
+<meta property="og:title" content="树莓派官方系统安装R-4.0.3 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">树莓派官方系统安装R-4.0.3</h1>
+
+    
+    <span class="article-date">2020-12-01</span>
+    
+
+    <div class="article-content">
+      <h3 id="树莓派安装r">树莓派安装R</h3>
+<hr>
+<h4 id="参考资料">参考资料</h4>
+<p><a href="http://rolandtanglao.com/2020/10/28/p1-how-to-install-r-403-raspberry-pi4-debian10/">http://rolandtanglao.com/2020/10/28/p1-how-to-install-r-403-raspberry-pi4-debian10/</a></p>
+<p><a href="https://stackoverflow.com/questions/57023388/cant-install-r-3-6-in-raspberry-pi-3-b-in-raspbian-stretch">https://stackoverflow.com/questions/57023388/cant-install-r-3-6-in-raspberry-pi-3-b-in-raspbian-stretch</a></p>
+<h4 id="代码">代码</h4>
+<p>先执行以下操作</p>
+<pre><code>wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gz
+tar -zvxf pcre2-10.35.tar.gz
+cd pcre2-10.35
+./configure;
+make
+make install
+</code></pre><pre><code>sudo apt-get install -y gfortran libreadline6-dev libx11-dev libxt-dev \
+       libpng-dev libjpeg-dev libcairo2-dev xvfb \
+       libbz2-dev libzstd-dev liblzma-dev \
+       libcurl4-openssl-dev \
+       texinfo texlive texlive-fonts-extra \
+       screen wget openjdk-8-jdk
+cd /usr/local/src
+sudo wget https://cran.rstudio.com/src/base/R-4/R-4.0.3.tar.gz
+sudo su
+tar zxvf R-4.0.3.tar.gz
+cd R-4.0.3
+./configure --enable-R-shlib #--with-blas --with-lapack #optional
+make
+make install
+cd ..
+rm -rf R-4.0.3*
+exit
+cd
+</code></pre><h4 id="部分r包依赖环境">部分R包依赖环境</h4>
+<pre><code>sudo apt install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
+</code></pre><h4 id="ubuntu系统安装r">Ubuntu系统安装R</h4>
+<p>树莓派Ubuntu系统安装R相对简单很多，正常更新源就能安装到最新版本。或者简单搜索即可。</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

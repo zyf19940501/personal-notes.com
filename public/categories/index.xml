@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on study notes</title>
+    <link>/categories/</link>
+    <description>Recent content in Categories on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R</title>
+      <link>/categories/r/</link>
+      <pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ubuntu</title>
+      <link>/categories/ubuntu/</link>
+      <pubDate>Mon, 11 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blastula</title>
+      <link>/categories/blastula/</link>
+      <pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/blastula/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Power Pivot</title>
+      <link>/categories/power-pivot/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/power-pivot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VBA</title>
+      <link>/categories/vba/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/vba/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python3</title>
+      <link>/categories/python3/</link>
+      <pubDate>Mon, 14 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/python3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DT</title>
+      <link>/categories/dt/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/dt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>git</title>
+      <link>/categories/git/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/git/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shiny</title>
+      <link>/categories/shiny/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/shiny/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
