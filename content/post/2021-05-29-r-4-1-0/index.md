@@ -34,8 +34,7 @@ tags:
 
 - 官网安装
 
-![m1-r](https://gitee.com/zhongyufei/photo-bed/raw/pic/img/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16216711112163.png)
-
+<img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16216711112163.png" alt="m1-r" style="zoom:50%;" />
 官网下载正常安装即可，或者通过homebrew安装。
 
 ## R包安装
@@ -57,7 +56,7 @@ install.packages(packageurl, repos=NULL, type="source")
 
 对于我常用的odbc,DBI都可以正常安装，甚至我成功安装SQL SERVER的驱动，如下所示：
 
-![odbc-driver](https://gitee.com/zhongyufei/photo-bed/raw/pic/img/image-20210529202342513.png)
+<img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/image-20210529202342513.png" alt="odbc-driver" style="zoom:50%;" />
 
 但是无法正常连接数据库，据说微软计划下一个版本的odbc会支持m1.
 ![odbc-fail](images/odbc-driver-fail.png).
