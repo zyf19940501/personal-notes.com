@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Power Pivot on study notes</title>
+    <title>power pivot on study notes</title>
     <link>/tags/power-pivot/</link>
-    <description>Recent content in Power Pivot on study notes</description>
+    <description>Recent content in power pivot on study notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/power-pivot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/power-pivot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>利用VBA自动生成Power Pivot 数据透视表</title>
       <link>/2020/12/30/%E5%88%A9%E7%94%A8vba%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90power-pivot-%E6%95%B0%E6%8D%AE%E9%80%8F%E8%A7%86%E8%A1%A8/</link>
@@ -28,6 +32,22 @@
 在这种情况下，透视表可以通过录制宏实现VBA代码自动创建透视表。讲道理，看多了这几段代码能勉强认识看懂，但是不是完全理解，大家如果需要用，自己多录制几段宏代码就ok了。
 演示数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba
 Sub 创建透视表() Sheets.Add ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&amp;#34;表1&amp;#34; _ , Version:=6).CreatePivotTable TableDestination:=&amp;#34;Sheet1!R3C1&amp;#34;, TableName _ :=&amp;#34;数据透视表1&amp;#34;, DefaultVersion:=6 Sheets(&amp;#34;Sheet1&amp;#34;).Select Cells(3, 1).Select With ActiveSheet.PivotTables(&amp;#34;数据透视表1&amp;#34;).PivotCache .RefreshOnFileOpen = False .MissingItemsLimit = xlMissingItemsDefault End With ’数据透视表行列部分以及计算汇总字段 ActiveSheet.PivotTables(&amp;#34;数据透视表1&amp;#34;).RepeatAllLabels xlRepeatLabels With ActiveSheet.</description>
+    </item>
+    
+    <item>
+      <title>自动创建数据透视表</title>
+      <link>/2019/09/03/vba/</link>
+      <pubDate>Tue, 03 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/09/03/vba/</guid>
+      <description>为什么需要自动创建数据透视表 最近接到一项工作任务，需要制作大量同款数据透视表，但是使用区域以及层级不一样导致数据源不一样，依据一个模板批量复制后更改部分细节问题会有大量工作，需要一个个透视表取更改，因此萌发了VBA实现批量制作透视表的想法。
+基础透视表 本处基础透视表是指不需要从模型生成透视表，也不需要通过DAX函数添加度量值的情况下透视表。在这种情况下透视表可以通过录制宏实现VBA代码自动创建透视表。
+数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba
+Sub 创建透视表()Sheets.AddActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&amp;quot;表1&amp;quot; _, Version:=6).CreatePivotTable TableDestination:=&amp;quot;Sheet1!R3C1&amp;quot;, TableName _:=&amp;quot;数据透视表1&amp;quot;, DefaultVersion:=6Sheets(&amp;quot;Sheet1&amp;quot;).SelectCells(3, 1).SelectWith ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotCache.RefreshOnFileOpen = False.MissingItemsLimit = xlMissingItemsDefaultEnd With’数据透视表行列部分以及计算汇总字段ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).RepeatAllLabels xlRepeatLabelsWith ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotFields(&amp;quot;Species&amp;quot;).Orientation = xlRowField.Position = 1End WithActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).AddDataField ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot; _).PivotFields(&amp;quot;Petal.Width&amp;quot;), &amp;quot;求和项:Petal.Width&amp;quot;, xlSumEnd SubPower Pivot 透视表 工作中大部分时候都是带度量值的透视表，那就需要通过VBA直接生成度量值，主要步骤：第一步将表格添加到模型，第二步创建度量值，第三步创建透视表，拉取透视表。
+数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba/Powerpivot
+  将表格添加到模型
+第一步将表添加到模型，需要说明的是 ：将Sheet1添加到模型，并命名为ORA，这些参数需根据实际情况修改调整
+Sub 添加到模型()Sheets(&amp;quot;Sheet1&amp;quot;).ListObjects(1).Name = &amp;quot;ORA&amp;quot;WrkName = ActiveWorkbook.NameTblName = Sheets(&amp;quot;Sheet1&amp;quot;).</description>
     </item>
     
   </channel>

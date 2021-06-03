@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.73.0" />
 
 
 <title>Shiny部署 - study notes</title>
@@ -54,7 +54,7 @@
     
     <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
     
-    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
     
   </ul>
 </nav>
@@ -89,7 +89,7 @@ sudo dnf config-manager &ndash;set-enabled PowerTools</p>
 <p>查看R版本  R &ndash;version</p>
 <p>第二步 安装shiny package</p>
 <p>sudo su -<br>
--c &ldquo;R -e &quot;install.packages(&lsquo;shiny&rsquo;, repos=&lsquo;<a href="https://cran.rstudio.com/'">https://cran.rstudio.com/'</a>)&quot;&rdquo;</p>
+-c &ldquo;R -e &quot;install.packages(&lsquo;shiny&rsquo;, repos='https://cran.rstudio.com/')&quot;&rdquo;</p>
 <p>或者近入R后<code>install.package('shiny')</code> 安装</p>
 <p>第三步 下载安装shiny</p>
 <p>wget <a href="https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm">https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm</a></p>

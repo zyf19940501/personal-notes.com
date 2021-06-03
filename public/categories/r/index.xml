@@ -6,7 +6,11 @@
     <description>Recent content in R on study notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>M1原生R语言</title>
       <link>/2021/05/29/m1%E5%8E%9F%E7%94%9Fr%E8%AF%AD%E8%A8%80/</link>
@@ -20,10 +24,45 @@ rstudio preview下载地址。
  因为本人是商业数据分析师，所以测试内容仅仅只是简单的数据处理的R包，如tidyverse,data.table,rmarkdown,bookdown,readxl,openxlsx等
  R安装  官网安装  官网下载正常安装即可，或者通过homebrew安装。
 R包安装 数据处理包 我常用data.table处理数据,所以第一个安装的R包是data.table，正常安装。接下来安装tidyverse报错，看原因是stringi没办法正确安装，解决办法如下：
- stringi  packageurl &amp;lt;- &amp;quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&amp;quot; install.packages(packageurl, repos=NULL, type=&amp;quot;source&amp;quot;) 安装stringi包后，tidyverse即可正常使用。
+ stringi  packageurl &amp;lt;- &amp;quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&amp;quot;install.packages(packageurl, repos=NULL, type=&amp;quot;source&amp;quot;)安装stringi包后，tidyverse即可正常使用。
 数据库相关 对于我常用的odbc,DBI都可以正常安装，甚至我成功安装SQL SERVER的驱动，如下所示：
 但是无法正常连接数据库，据说微软计划下一个版本的odbc会支持m1. .
 至于其他的数据库比如mysql，我想是可以成功，没测试。</description>
+    </item>
+    
+    <item>
+      <title>Deploy plumber with docker</title>
+      <link>/2020/10/13/deploy-plumber-with-docker/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/10/13/deploy-plumber-with-docker/</guid>
+      <description>前言 最近部门同事有较多临时取数需求,但因其不熟悉SQL,Power Pivot等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装odbc package,导致没法使用现成plumber docker，如：docker pull trestletech/plumber 或 docker pull rstudio/plumber 等，需要自定义dockerfile构建docker镜像,现记录如下。
+构建dockerfile 从r-base构建R环境,然后安装R中安装包需要的环境如：libxml2-dev,libssl-dev等，但是linux系统命令都不太理解，以下代码为拼凑起来。
+其中 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 等部分可以参考微软官网，官网详细列出了各系统安装odbc驱动的代码。
+FROM r-baseRUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \git-core \libssl-dev \libcurl4-gnutls-devRUN apt-get update \&amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \apt-transport-https \curl \gnupg \unixodbc-dev \libxml2-dev \libcurl4-openssl-dev \libssl-dev \libsodium-dev \&amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \&amp;amp;&amp;amp; curl https://packages.</description>
+    </item>
+    
+    <item>
+      <title>Send email with R</title>
+      <link>/2020/08/19/send-email/</link>
+      <pubDate>Wed, 19 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/19/send-email/</guid>
+      <description>[toc]
+前言 blastula包是新出来的发送邮件包，相比Rmail包，该包不依赖JAVA环境，可移植性更好，有时候同事的电脑上并没有配置安装好java环境，代码在他们的电脑上将会报错，而且java环境配置也有很多坑，Rmail包依赖java8的版本，其他的版本好像也会报错，这样比起来blastula包用起来舒服太多，而且 blastula包可以很容易地发送HTML电子邮件 ，消息可以具有三个内容区域（正文，标题和页脚），通过blastula::blocks()以及blastula::md()函数，我们可以插入Markdown文本，甚至是HTML片段
+github地址https://github.com/rstudio/blastula
+其他发送邮件包如RDCOMClient，sendmailR，mailR,emayili,gmailR等。
+常规邮件发送 第一步生成发送邮件的邮箱凭证，第二步利用compose_email()函数构建邮件内容，第三步smtp_send()发送邮件。通过下面的官方案例解析，我们将会看到多种元素间可以通过c()与md()连接起来，让我们邮件正文拥有无限可能。
+生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
+重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@example.com.hk&#39;,host = &#39;mail.example.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
+user:发送邮件的邮件账户;
+host:邮件服务器，像mail.example.com.hk,是目前邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com，gmail邮箱是smtp.gmai.com不同邮件的host地址不一样
+port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
+use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
+可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
+构建邮件正文 以下代码是官方案例：
+#添加时间date_time &amp;lt;- add_readable_time() # Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)#添加图片 转化成html文本img_string &amp;lt;- add_image(file = img_file_path) # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
     </item>
     
     <item>
@@ -36,14 +75,135 @@ R包安装 数据处理包 我常用data.table处理数据,所以第一个安装
 blastula包可以很容易地发送HTML电子邮件 。该消息可以具有三个内容区域（正文，标题和页脚），并且我们可以插入Markdown文本，基于块的组件,甚至HTML片段。
 生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
 重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
-create_smtp_creds_file(file = &#39;email_creds&#39;, user = &#39;zhongyf@ghzy.com.hk&#39;, host = &#39;mail.ghzy.com.hk&#39;, port = 25,use_ssl = FALSE) file:文件名为email_creds;
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@ghzy.com.hk&#39;,host = &#39;mail.ghzy.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
 user:发送邮件的邮件账户;
 host:邮件服务器，像mail.ghzy.com.hk,是目前公司的邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com,不同邮件的host地址不一样
 port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
 use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
 可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
 发送邮件 以下代码是官方案例：
-date_time &amp;lt;- add_readable_time() #添加时间 # Create an image string using an on-disk 指定一个图像文件路径 # image file img_file_path &amp;lt;- system.file( &amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;, package = &amp;quot;blastula&amp;quot; ) img_string &amp;lt;- add_image(file = img_file_path) #添加图片 转化成html文本 # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中 # The compose_email() function allows us to easily create an email message.</description>
+date_time &amp;lt;- add_readable_time() #添加时间# Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)img_string &amp;lt;- add_image(file = img_file_path) #添加图片 转化成html文本# compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
+    </item>
+    
+    <item>
+      <title>在linux上利用cronR部署定时任务</title>
+      <link>/2020/08/13/cronr/</link>
+      <pubDate>Thu, 13 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/13/cronr/</guid>
+      <description>Cron 基础 在linux上定时任务可直接利用命令部署。cron服务是Linux的内置服务，但它不会开机自动启动，可以每分钟执行任务。可以用以下命令启动和停止服务：
+/bin/systemctl start crond/bin/systemctl stop crond/bin/systemctl restart crond/bin/systemctl reload crond/bin/systemctl status crond#以上代码在centos7上测试成功Crontab 操作 crontab -u //设定某个用户的cron服务crontab -l //列出某个用户cron服务的详细内容crontab -r //删除某个用户的cron服务crontab -e //编辑某个用户的cron服务crontab -i //打印提示，输入yes等确认信息/var/spool/cron/root (以用户命名的文件) 是所有默认存放定时任务的文件/etc/cron.deny 该文件中所列出用户不允许使用crontab命令/etc/cron.allow 该文件中所列出用户允许使用crontab命令，且优先级高于/etc/cron.deny/var/log/cron 该文件存放cron服务的日志用以下crontab -e 打开编辑任务：
+* * * * * /usr/lib64/R/bin/Rscript &#39;/home/zyf/testcornR.R&#39; &amp;gt;&amp;gt; &#39;/home/zyf/testcornR.log&#39; 2&amp;gt;&amp;amp;1
+# Rscript 路径/usr/lib64/R/bin/Rscript # 待执行脚本完整路径/home/zyf/testcornR.R# 日志输出&amp;gt;&amp;gt; &#39;/home/zyf/testcornR.log&#39; 2&amp;gt;&amp;amp;1# 2&amp;gt;&amp;amp;1 重新定向 不太懂CronR设置定时任务 cronR包cran地址</description>
+    </item>
+    
+    <item>
+      <title>Deploying Shiny</title>
+      <link>/2020/07/29/deploying-shiny/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/29/deploying-shiny/</guid>
+      <description>安装 官网资料：https://rstudio.com/products/shiny/download-server/
+第一步安装R
+sudo yum install R
+centos7 上可直接用上面命令安装R,但是在centos 8 安装会无法成功。因为R软件包没有被包含在 CentOS 8 的核心软件源中。我们需要从 EPEL 软件源中安装 R
+启用 EPEL 和 PowerTools 软件源
+sudo dnf install epel-release sudo dnf config-manager &amp;ndash;set-enabled PowerTools
+安装R输入：
+sudo yum install R
+查看R版本 R &amp;ndash;version
+第二步 安装shiny package
+sudo su -
+-c &amp;ldquo;R -e &amp;quot;install.packages(&amp;lsquo;shiny&amp;rsquo;, repos=&#39;https://cran.rstudio.com/&#39;)&amp;quot;&amp;rdquo;
+或者近入R后install.package(&#39;shiny&#39;) 安装
+第三步 下载安装shiny
+wget https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm
+sudo yum install &amp;ndash;nogpgcheck shiny-server-1.5.14.948-x86_64.rpm
+第四步 测试是否安装成功
+http://ip:3838
+ip地址如果是本机,可以换成localhost,或者是本机ip地址。如果是公网像云服务器,需要开放3838的端口后再测试。
+查看shiny-server 状态
+sudo systemctl status shiny-server</description>
+    </item>
+    
+    <item>
+      <title>ODBC Driver 17 for SQL Server VS SQL Server</title>
+      <link>/2020/07/28/t/</link>
+      <pubDate>Tue, 28 Jul 2020 11:30:57 +0000</pubDate>
+      
+      <guid>/2020/07/28/t/</guid>
+      <description>在使用DBI包向数据库MSSQL导入数据时,发现更改连接驱动,效率有明显提升。现记录如下：
+环境sessionInfo()R 查看本机现有驱动library(odbc)drivers_tbl &amp;lt;- odbc::odbcListDrivers()head(drivers_tbl)模拟数据library(data.table)n &amp;lt;- 1e5dt &amp;lt;- data.table(a=1:n,b=rep(&amp;#39;a&amp;#39;,n),d=1:n * 1e4)测试con_1 &amp;lt;- dbConnect(odbc::odbc(), .connection_string = &amp;quot;driver={ODBC Driver 17 for SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456&amp;quot;, timeout = 10)con_2 &amp;lt;- dbConnect(odbc::odbc(), .connection_string = &amp;quot;driver={SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456&amp;quot;, timeout = 10)#测试次数nn &amp;lt;- 10result_1 &amp;lt;- vector(length = nn)result_2 &amp;lt;- vector(length = nn)for(i in 1:nn){#con_1tictoc::tic()DBI::dbWriteTable(conn = con_1,name = &amp;#39;test_table&amp;#39;,value = dt,overwrite=T)a &amp;lt;- tictoc::toc()result_1[i] &amp;lt;- a$toc-a$tic#con_2tictoc::tic()DBI::dbWriteTable(conn = con_2,name = &amp;#39;test_table&amp;#39;,value = dt,overwrite=T)a &amp;lt;- tictoc::toc()result_2[i] &amp;lt;- a$toc-a$tic}差异比较mean(result_1)mean(result_2)</description>
+    </item>
+    
+    <item>
+      <title>用R刷新透视表</title>
+      <link>/2020/07/26/refresh-excel-pivot-table-use-r/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/26/refresh-excel-pivot-table-use-r/</guid>
+      <description>在工作中需要批量刷新Excel透视表，现用R语言实现批量自动刷新。
+准备VBA代码 创建宏Excel 文件，另存为Refresh.xlsm，将宏命名为refresh。
+以下VB代码可实现Refresh.xlsm文件所在文件夹内的其余全部Excle 文件刷新。利用该功能可实现批量刷新。
+Sub refresh() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;#34;\&amp;#34; f = Dir(x &amp;amp; &amp;#34;&amp;#34; &amp;amp; &amp;#34;*xls&amp;#34;) Do While f &amp;lt;&amp;gt; &amp;#34;&amp;#34; If f &amp;lt;&amp;gt; ThisWorkbook.Name Then Set wb = Workbooks.Open(x &amp;amp; &amp;#34;&amp;#34; &amp;amp; f) ActiveWorkbook.RefreshAll wb.Save wb.Close End If f = Dir Loop End Sub 文件结构 创建文件夹refresh_backup,然后将需要刷新的文件放入其中。
+当透视表是通过连接数据库如MSSQL得到的透视表，利用Power Pivot 的Dax 建模的透视表在刷新时需要输入密码，需提前设置刷新时不需要密码。
+├─华东区 │ 刷新数据.xlsm │ 华东商品数据.xlsx │ 华东商品数据上海市.xlsx │ 华东商品数据加盟.xlsx │ 华东商品数据杭州市.xlsx │ 华东商品数据直营.</description>
+    </item>
+    
+    <item>
+      <title>Win10R语言定时任务</title>
+      <link>/2020/07/14/win10%E4%B8%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1-r%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Tue, 14 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/14/win10%E4%B8%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1-r%E8%AF%AD%E8%A8%80/</guid>
+      <description>定时任务 实际工作中，数据清洗工作中需要定时执行，比如从数仓跑固定报表后发邮件或者是按照一定业务逻辑整合数据。
+接下来就记录win10中的实现R语言的定时任务，共有两种方式，一种是win10自带的任务计划程序，另外一种是利用R包实现定时任务。需要注意的是Win下，R语言实现定时任务，需要用不带中文的脚本包裹真正的脚本来执行,因为直接执行的脚本包含中文时会报错。
+win10 自带 win10自带任务计划程序，在电脑左下角搜索【任务计划程序，进入win10任务计划程序。如下所示：
+Step 1: 点击创建任务
+常规选项：选择【不管用户是否登录都要运行】与【使用最高权限运行】
+Step2: 设置触发器
+选择触发器，点击新建，按照任务需求设置。
+Step 3：设置操作选项
+选择操作，点击新建。
+其中程序或脚本 请选择你的Rscript程序路径,如：D:\Program Files\R\R-4.0.2\bin\Rscript.exe，填写完整路径。
+添加参数(可选)A，即填写待执行的R脚本：C:\Users\zhongyf\Desktop\TEST.R ，填写完整路径。
+这里解释一下三个文本框内容的含义，
+【程序或脚本】文本框中填的是R编译器的名称，一般就是Rscript.exe
+【起始于】文本框中填的是R编译器的目录，上图中假设你的R编译器的完整路径是“【D:\Program Files\R\R-4.0.2\Rscript.exe】”
+【添加参数】文本框中填的是你的R程序的完整路径，这里假设在C盘的Users文件夹下面有一个叫做C:\Users\zhongyf\Desktop\TEST.R 的文件。
+将三部分连接在一起 R D:\Program Files\R\R-4.0.2\bin\Rscript.exe C:\Users\zhongyf\Desktop\TEST.R
+ R包实现定时任务 taskscheduleR包在WIN下实现定时任务。
+安装 包在CRAN上，安装很简单，运行
+install.packages(&amp;quot;taskscheduleR&amp;quot;)
+如果想要在Rstudio中可视化操作，需要安装：
+install.packages(&#39;miniUI&#39;)
+install.packages(&#39;shiny&#39;)
+脚本编写定时任务 在win10中 编写脚本Rscript.R，需要另外新建一个R脚本emailtasks.R，脚本内容为source(&amp;rsquo;./Rscript.R&amp;rsquo;,encoding = &amp;lsquo;utf-8&amp;rsquo;)`，通过这种方式可以避免脚本中包含中文无法执行的问题
+library(taskscheduleR)#需要定时执行的R脚本# emailtasks.R 文件的内容用source函数功能包裹起来的脚本myscript &amp;lt;- &amp;quot;C:/Users/admin/Desktop/timedtask/email/emailtasks.R&amp;quot;#创建定时任务taskscheduler_create(taskname = &amp;quot;dxc_tasks_email&amp;quot;, rscript = myscript, schedule = &amp;quot;DAILY&amp;quot;, starttime = &amp;quot;09:05&amp;quot;,startdate = format(Sys.Date(), &amp;quot;%Y/%m/%d&amp;quot;))#可以通过打开 【任务计划程序】查看任务是否添加成功# 删除任务# taskscheduler_delete(&#39;newtasks&#39;)# 运行任务# taskscheduler_runnow(&#39;dxc_tasks_email&#39;)linux上定时任务请查阅：http://www.</description>
+    </item>
+    
+    <item>
+      <title>linux系统安装R包环境依赖</title>
+      <link>/2020/07/06/linux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85r%E5%8C%85%E7%8E%AF%E5%A2%83%E4%BE%9D%E8%B5%96/</link>
+      <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/06/linux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85r%E5%8C%85%E7%8E%AF%E5%A2%83%E4%BE%9D%E8%B5%96/</guid>
+      <description>install xml2 package yum install openssl-develyum install libcurly libcurl-develyum install libxml2-devel yum install openssl-develyum install gcc gcc-c++ kernel-devel make</description>
+    </item>
+    
+    <item>
+      <title>Centos 8 install R and rstudio-server</title>
+      <link>/2020/06/19/centos-8-install-r-rstudio-shiny-server/</link>
+      <pubDate>Fri, 19 Jun 2020 10:07:30 +0000</pubDate>
+      
+      <guid>/2020/06/19/centos-8-install-r-rstudio-shiny-server/</guid>
+      <description>install R dnf install epel-releasednf install &#39;dnf-command(config-manager)&#39;dnf config-manager --set-enabled PowerToolsdnf install Rinstall Rstudio-server 可以通过官方页面安装 https://rstudio.com/products/rstudio/download-server/
+wget https://download2.rstudio.org/server/centos8/x86_64/rstudio-server-rhel-1.3.1056-x86_64.rpmsudo yum install rstudio-server-rhel-1.3.1056-x86_64.rpm利用docker安装 Rstudio
+ 安装docker  安装依赖
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.reposudo yum install docker-ce docker-ce-cli containerd.io如果报错：Problem: package docker-ce-3:19.03.4-3.el7.x86_64 requires containerd.io &amp;gt;= 1.2.2-3 那就先装新版的 containerd.io
+dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+安装 docker sudo yum install docker-ce docker-ce-cli
+sudo systemctl start dockerdocker --version#开机自启sudo systemctl enable docker 安装 rstudio-server  参考资料 https://hub.</description>
     </item>
     
   </channel>

@@ -1,0 +1,77 @@
+---
+title: ODBC Driver 17 for SQL Server VS SQL Server 
+author: 钟宇飞
+date: '2020-07-28T11:30:57'
+slug: t
+categories: [R]
+tags: [ODBC Driver]
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,eval = FALSE)
+```
+
+在使用DBI包向数据库MSSQL导入数据时,发现更改连接驱动,效率有明显提升。现记录如下：
+
+## 环境
+
+```{r}
+sessionInfo()
+```
+
+
+## R 查看本机现有驱动
+
+```{r}
+library(odbc)
+drivers_tbl <- odbc::odbcListDrivers()
+head(drivers_tbl)
+```
+
+## 模拟数据
+
+```{r}
+library(data.table)
+n <- 1e5
+dt <- data.table(a=1:n,b=rep('a',n),d=1:n * 1e4)
+```
+
+## 测试
+
+```{r}
+con_1 <- dbConnect(odbc::odbc(), .connection_string = "driver={ODBC Driver 17 for SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456", timeout = 10)
+
+con_2 <- dbConnect(odbc::odbc(), .connection_string = "driver={SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456", timeout = 10)
+
+
+#测试次数
+nn <- 10
+result_1 <- vector(length = nn)
+result_2 <- vector(length = nn)
+
+for(i in 1:nn){
+  #con_1
+  tictoc::tic()
+  DBI::dbWriteTable(conn = con_1,name = 'test_table',value = dt,overwrite=T)
+  a <- tictoc::toc()
+  result_1[i] <- a$toc-a$tic
+  #con_2
+  tictoc::tic()
+  DBI::dbWriteTable(conn = con_2,name = 'test_table',value = dt,overwrite=T)
+  a <- tictoc::toc()
+  result_2[i] <- a$toc-a$tic
+}
+
+
+```
+
+
+## 差异比较
+
+```{r}
+mean(result_1)
+mean(result_2)
+
+```
+

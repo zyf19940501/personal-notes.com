@@ -4,7 +4,11 @@
 
 # Session Data files
 .RData
-
+.Ruserdata
+.Rhistory
+public
+static/figures
+blogdown
 # User-specific files
 .Ruserdata
 

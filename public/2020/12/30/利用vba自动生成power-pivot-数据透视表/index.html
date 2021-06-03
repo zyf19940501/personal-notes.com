@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.73.0" />
 
 
 <title>利用VBA自动生成Power Pivot 数据透视表 - study notes</title>
@@ -54,7 +54,7 @@
     
     <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
     
-    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
     
   </ul>
 </nav>
@@ -144,7 +144,7 @@
 <p>name 参数是连接名称，</p>
 <p>Description：连接的描述，</p>
 <p>ConnectionString：连接的字符串，即工作簿的路径，在演示代码时可以打印查看，</p>
-<p>lCmdtype：是连接方式，针对连接Excel或数据库方式不一，<a href="https://docs.microsoft.com/en-us/office/vba/api/excel.xlcmdtype">参考官网</a>，连接数据库需要选着&quot;xlCmdSql&quot;</p>
+<p>lCmdtype：是连接方式，针对连接Excel或数据库方式不一，<a href="https://docs.microsoft.com/en-us/office/vba/api/excel.xlcmdtype">参考官网</a>，连接数据库需要选着&quot;xlCmdSql&rdquo;</p>
 <p><!-- raw HTML omitted --></p>
 <p>CreateModelConnection：是否将表添加到模型</p>
 <p>ImportRelationships：是否创建关系，如果选择是，后期可以在多个表中建立表关系</p>
@@ -169,7 +169,7 @@ TblName <span style="color:#f92672">=</span> Sheets(<span style="color:#e6db74">
                                         CreateModelConnection:<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, _
                                         ImportRelationships:<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>
 <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">Sub</span>
-
+  
 </code></pre></div><p>完成以上步骤实现了我刚开始遇到这个问题时最大的难题，可以说解决了问题的一大半。</p>
 </li>
 <li>
@@ -182,28 +182,28 @@ TblName <span style="color:#f92672">=</span> Sheets(<span style="color:#e6db74">
 <span style="color:#66d9ef">Dim</span> myModelMeasures <span style="color:#f92672">As</span> ModelMeasures
 <span style="color:#66d9ef">Dim</span> myModelTable <span style="color:#f92672">As</span> ModelTable
 <span style="color:#66d9ef">Dim</span> myModelTable1 <span style="color:#f92672">As</span> ModelTable
-
+  
 <span style="color:#75715e">&#39;tablname
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">Dim</span> tabl <span style="color:#f92672">As</span> <span style="color:#66d9ef">String</span>
-
+  
 <span style="color:#75715e">&#39;有货sku数
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">Dim</span> mea7 <span style="color:#f92672">As</span> <span style="color:#66d9ef">String</span>
-
+  
 <span style="color:#75715e">&#39;Create a reference to the PowerPivot Model
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">Set</span> myModel <span style="color:#f92672">=</span> ActiveWorkbook.Model
-
+  
 <span style="color:#75715e">&#39;myModel.Refresh
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">Set</span> myModelTables <span style="color:#f92672">=</span> myModel.ModelTables
 <span style="color:#66d9ef">Set</span> myModelTable <span style="color:#f92672">=</span> myModelTables.Item(1)
 <span style="color:#66d9ef">Set</span> myModelMeasures <span style="color:#f92672">=</span> myModel.ModelMeasures
-
+  
 <span style="color:#75715e">&#39;模型的表名
 </span><span style="color:#75715e">&#39;myModelTable.Name = &#34;a&#34;
-</span><span style="color:#75715e"></span>
+</span><span style="color:#75715e"></span>  
 tabl <span style="color:#f92672">=</span> myModelTable.Name
 tabll <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39;&#34;</span> <span style="color:#f92672">&amp;</span> myModelTable.Name <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;&#39;&#34;</span>
-
-
+  
+  
 <span style="color:#75715e">&#39;有货sku数
 </span><span style="color:#75715e"></span>mea7 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;COUNTROWS(FILTER(&#34;</span> <span style="color:#f92672">&amp;</span> tabll <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;,&#34;</span> <span style="color:#f92672">&amp;</span> tabll <span style="color:#f92672">&amp;</span> <span style="color:#e6db74">&#34;[可用库存]&gt;0))&#34;</span>
 <span style="color:#75715e">&#39;MsgBox mea7
@@ -216,7 +216,7 @@ tabll <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39
 </code></pre></div></li>
 <li>
 <p>创建透视表</p>
-<p>首先创建新的sheet 并命名为&quot;透视表&quot;,并指定透视表创建的位置<code>Worksheets(&quot;透视表&quot;).Cells(5, 3)</code>，第五行第三列的位置创建透视表。在我们多开Excel时，并创建了多个透视表，再新建透视表时会依据透视表个数依次指定透视表名称，“数据透视表1”，“数据透视表2”，“数据透视表3”，“数据透视表4”，“数据透视表5”。在以下代码中定义了<code>Pivottablename</code>参数可以用来指定透视表名称，方便最后一步拉取透视表字段。</p>
+<p>首先创建新的sheet 并命名为&quot;透视表&rdquo;,并指定透视表创建的位置<code>Worksheets(&quot;透视表&quot;).Cells(5, 3)</code>，第五行第三列的位置创建透视表。在我们多开Excel时，并创建了多个透视表，再新建透视表时会依据透视表个数依次指定透视表名称，“数据透视表1”，“数据透视表2”，“数据透视表3”，“数据透视表4”，“数据透视表5”。在以下代码中定义了<code>Pivottablename</code>参数可以用来指定透视表名称，方便最后一步拉取透视表字段。</p>
 <p><code>  Version:=xlPivotTableVersion15)</code>参数指定数据透视表版本</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">创建透视表</span>()
   Sheets.Add.Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;透视表&#34;</span>
@@ -232,7 +232,7 @@ tabll <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39
 </span><span style="color:#75715e"></span>  <span style="color:#66d9ef">Set</span> NewPowerPivotTable <span style="color:#f92672">=</span> PowerPivotCache.CreatePivotTable( _
   TableDestination:<span style="color:#f92672">=</span>Worksheets(<span style="color:#e6db74">&#34;透视表&#34;</span>).Cells(5, 3), _
   DefaultVersion:<span style="color:#f92672">=</span>xlPivotTableVersion15)
-
+    
   <span style="color:#75715e">&#39;Settings for new PowerPivotTable
 </span><span style="color:#75715e"></span>   <span style="color:#75715e">&#39;指定透视表名称会自动变化
 </span><span style="color:#75715e"></span>   <span style="color:#66d9ef">With</span> NewPowerPivotTable
@@ -241,31 +241,31 @@ tabll <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39
      <span style="color:#75715e">&#39;MsgBox NewPowerPivotTable.Name
 </span><span style="color:#75715e"></span>      Pivottablename <span style="color:#f92672">=</span> NewPowerPivotTable.Name
    <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">With</span>
-
+     
    <span style="color:#75715e">&#39; Cleanup
 </span><span style="color:#75715e"></span>   <span style="color:#66d9ef">Set</span> NewPowerPivotTable <span style="color:#f92672">=</span> <span style="color:#66d9ef">Nothing</span>
    <span style="color:#66d9ef">Set</span> PowerPivotCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">Nothing</span>
 <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">Sub</span>
 </code></pre></div><p>以上代码可简写为：</p>
 <pre><code>Sub 创建透视表()
-
+  
   Sheets.Add.Name = &quot;透视表&quot;
   '定义表以及定义透视表缓存
   Dim Pivottablename As String
   Dim PowerPivotCache As Excel.PivotCache
   Dim NewPowerPivotTable As Excel.PivotTable
-
+    
   '创建缓存
   Set PowerPivotCache = ActiveWorkbook.PivotCaches.Create( _
   SourceType:=xlExternal, _
   SourceData:=ActiveWorkbook.Connections(&quot;ThisWorkbookDataModel&quot;), _
   Version:=xlPivotTableVersion15)
-
+    
   ' 创建透视表
   Set NewPowerPivotTable = PowerPivotCache.CreatePivotTable( _
   TableDestination:=Worksheets(&quot;透视表&quot;).Cells(5, 3), _
   DefaultVersion:=xlPivotTableVersion15)
-
+  
 End Sub
 </code></pre></li>
 <li>
@@ -274,28 +274,28 @@ End Sub
 <p>注意<code>Pivottablename</code>这个是引用的创建透视表中的值，代表当前透视表名称。分开执行时须指定<code>Pivottablename</code>的值，默认情况下为数据透视表1</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">按照需求拉透视表</span>()
    <span style="color:#75715e">&#39;拉透视表过程
-</span><span style="color:#75715e"></span>
+</span><span style="color:#75715e"></span>  
     Application.WindowState <span style="color:#f92672">=</span> xlMaximized
-
+      
     <span style="color:#66d9ef">With</span> ActiveSheet.PivotTables(Pivottablename).CubeFields(<span style="color:#e6db74">&#34;[ORA].[分析大类]&#34;</span>)
         .Orientation <span style="color:#f92672">=</span> xlRowField
         .Position <span style="color:#f92672">=</span> 1
     <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">With</span>
-
+      
     <span style="color:#66d9ef">With</span> ActiveSheet.PivotTables(Pivottablename).CubeFields(<span style="color:#e6db74">&#34;[ORA].[排名区间]&#34;</span>)
         .Orientation <span style="color:#f92672">=</span> xlRowField
         .Position <span style="color:#f92672">=</span> 2
     <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">With</span>
-
-
+      
+      
      <span style="color:#66d9ef">With</span> ActiveSheet.PivotTables(Pivottablename).CubeFields(<span style="color:#e6db74">&#34;[ORA].[城市]&#34;</span>)
         .Orientation <span style="color:#f92672">=</span> xlColumnField
         .Position <span style="color:#f92672">=</span> 1
     <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">With</span>
-
+      
     ActiveSheet.PivotTables(Pivottablename).AddDataField ActiveSheet.PivotTables(Pivottablename _
         ).CubeFields(<span style="color:#e6db74">&#34;[Measures].[有货sku数]&#34;</span>)
-
+      
 <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">Sub</span>
 </code></pre></div></li>
 <li>

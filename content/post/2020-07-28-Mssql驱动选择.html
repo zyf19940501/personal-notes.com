@@ -1,0 +1,59 @@
+---
+title: ODBC Driver 17 for SQL Server VS SQL Server 
+author: 钟宇飞
+date: '2020-07-28T11:30:57'
+slug: t
+categories: [R]
+tags: [ODBC Driver]
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>在使用DBI包向数据库MSSQL导入数据时,发现更改连接驱动,效率有明显提升。现记录如下：</p>
+<div id="环境" class="section level2">
+<h2>环境</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+</div>
+<div id="r-查看本机现有驱动" class="section level2">
+<h2>R 查看本机现有驱动</h2>
+<pre class="r"><code>library(odbc)
+drivers_tbl &lt;- odbc::odbcListDrivers()
+head(drivers_tbl)</code></pre>
+</div>
+<div id="模拟数据" class="section level2">
+<h2>模拟数据</h2>
+<pre class="r"><code>library(data.table)
+n &lt;- 1e5
+dt &lt;- data.table(a=1:n,b=rep(&#39;a&#39;,n),d=1:n * 1e4)</code></pre>
+</div>
+<div id="测试" class="section level2">
+<h2>测试</h2>
+<pre class="r"><code>con_1 &lt;- dbConnect(odbc::odbc(), .connection_string = &quot;driver={ODBC Driver 17 for SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456&quot;, timeout = 10)
+
+con_2 &lt;- dbConnect(odbc::odbc(), .connection_string = &quot;driver={SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456&quot;, timeout = 10)
+
+
+#测试次数
+nn &lt;- 10
+result_1 &lt;- vector(length = nn)
+result_2 &lt;- vector(length = nn)
+
+for(i in 1:nn){
+  #con_1
+  tictoc::tic()
+  DBI::dbWriteTable(conn = con_1,name = &#39;test_table&#39;,value = dt,overwrite=T)
+  a &lt;- tictoc::toc()
+  result_1[i] &lt;- a$toc-a$tic
+  #con_2
+  tictoc::tic()
+  DBI::dbWriteTable(conn = con_2,name = &#39;test_table&#39;,value = dt,overwrite=T)
+  a &lt;- tictoc::toc()
+  result_2[i] &lt;- a$toc-a$tic
+}</code></pre>
+</div>
+<div id="差异比较" class="section level2">
+<h2>差异比较</h2>
+<pre class="r"><code>mean(result_1)
+mean(result_2)</code></pre>
+</div>

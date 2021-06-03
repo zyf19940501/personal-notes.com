@@ -1,0 +1,523 @@
+---
+title: R package  tidyr study
+author: 宇飞的世界
+date: '2021-06-03'
+slug: r-package-tidyr-study
+categories:
+  - R package
+tags:
+  - tidyr
+---
+
+
+## 前言
+
+`tidyr`包是`tidyverse`系列中的核心包,`tidyr`包的核心目的是整洁数据，有以下特征：
+
+- 每列都是一个变量
+- 每行都是一个记录
+- 每个单元格都是一个值
+
+在日常使用数据过程中，这种数据存储方式是一种标准的数据存储方式，像关系型数据中数据的存储。
+
+## 安装
+
+```{r eval=FALSE}
+## 最简单是的方式就是安装tidyverse
+install.packages('tidyverse')
+
+## 或者仅仅安装 tidyr:
+install.packages('tidyr')
+
+## 或者从github 安装开发版本
+## install.packages("devtools")
+devtools::install_github("tidyverse/tidyr")
+
+# CTEST CODE
+```
+
+
+## 主要功能
+
+```{r}
+library(tidyr)
+```
+
+`tidyr`包中的函数可以分为5个主要大类
+
+- `pivot_longer()` 和 `pivot_wider()` 宽转长以及长转宽
+
+- `unnest_longer()` 和 `unnest_wider()`,`hoist()` 将列表嵌套转化为整洁数据
+
+- `nest()` 数据嵌套
+
+- `separate()`,`extract()`拆分列,提取新列
+
+-  `replace_na()` 缺失值处理
+
+
+### 宽转长 
+
+详情查看`vignette("pivot")`,以下是照搬该图册中的内容
+
+#### 基础
+
+长数据与宽数据之间的转换，类似我们常用的EXcel中的透视表功能。接下来用`tidyr`包自带的插图案例记录相关函数用法
+
+
+
+在Excel中有时候方便我们肉眼观察，可能一个数据集会有很多列,如下所示：
+
+col1 | col2 | col3  |col4   |col5 |col6 |col7
+---- | ---- | ----- |------ |-----|-----|----
+v1   | v2   | v3    |v4     |v5   |v6   |v7
+vb1  | vb2  | vb3   |vb4    |vb5  |vb6  |vb7
+
+方便观察，但是不方便统计分析，这是我们需要把数据做处理，从"宽数据变成长数据"即宽转长。
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(readr)
+```
+
+```{r}
+relig_income %>% 
+  pivot_longer(cols = !religion,names_to = 'income',values_to = "count")
+```
+
+
+* 第一个参数是数据集
+* 第二个参数是那些列需要重塑，在该例中除了`religion`的其他全部列
+* `names_to`这个参数是新增的列名
+* `values_to`是新增的存储之前数据集中数据的列名
+
+#### 列名带数字
+
+```{r}
+billboard %>% 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    values_to = "rank",
+    values_drop_na = TRUE
+  )
+```
+
+`names_prefix` 调整内容前缀，配合`names_transform`参数使用
+
+```{r}
+billboard %>% 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    names_prefix = "wk",
+    names_transform = list(week = as.integer),
+    values_to = "rank",
+    values_drop_na = TRUE,
+  )
+```
+
+经过以上转换`week`列属性变成了整数，当然达到以上效果有其他的途径，如下：
+
+```{r eval=FALSE}
+library(tidyverse,warn.conflicts = TRUE)
+
+# method 1
+billboard %>% 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    names_transform = list(week = readr::parse_number),
+    values_to = "rank",
+    values_drop_na = TRUE,
+)
+
+# method 2
+billboard %>%
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    values_to = "rank",
+    values_drop_na = TRUE,
+  ) %>%
+  mutate(week = str_remove(week, "wk") %>% as.integer())
+```
+
+
+#### 多变量列名
+
+该案列设计比较复杂的正则表达式,`new_?(.*)_(.)(.*)`需要一定正则表达式基础。
+`new_?`表示匹配`new`或`new_`，`(.*)`匹配任意0次或多次任意字符。
+
+[正则表达式介绍](https://www.runoob.com/regexp/regexp-syntax.html)
+
+```{r}
+who %>% pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"), 
+  names_pattern = "new_?(.*)_(.)(.*)",
+  values_to = "count"
+)
+```
+
+进一步处理列`gender`，`age` 。
+
+```{r}
+who %>% pivot_longer(
+  cols = new_sp_m014:newrel_f65,
+  names_to = c("diagnosis", "gender", "age"), 
+  names_pattern = "new_?(.*)_(.)(.*)",
+  names_transform = list(
+    gender = ~ readr::parse_factor(.x, levels = c("f", "m")),
+    age = ~ readr::parse_factor(
+      .x,
+      levels = c("014", "1524", "2534", "3544", "4554", "5564", "65"), 
+      ordered = TRUE
+    )
+  ),
+  values_to = "count",
+)
+```
+
+
+#### 一行多观测值
+
+```{r}
+family <- tribble(
+  ~family, ~dob_child1, ~dob_child2, ~gender_child1, ~gender_child2,
+  1L, "1998-11-26", "2000-01-29", 1L, 2L,
+  2L, "1996-06-22", NA, 2L, NA,
+  3L, "2002-07-11", "2004-04-05", 2L, 2L,
+  4L, "2004-10-10", "2009-08-27", 1L, 1L,
+  5L, "2000-12-05", "2005-02-28", 2L, 1L,
+)
+family <- family %>% mutate_at(vars(starts_with("dob")), parse_date)
+family
+```
+
+```{r}
+
+family %>% 
+  pivot_longer(
+    !family, 
+    names_to = c(".value", "child"), 
+    names_sep = "_", 
+    values_drop_na = TRUE
+  )
+```
+
+
+```{r}
+anscombe %>% 
+  pivot_longer(everything(), 
+    names_to = c(".value", "set"), 
+    names_pattern = "(.)(.)"
+  ) %>% 
+  arrange(set)
+```
+
+
+
+```{r}
+pnl <- tibble(
+  x = 1:4,
+  a = c(1, 1,0, 0),
+  b = c(0, 1, 1, 1),
+  y1 = rnorm(4),
+  y2 = rnorm(4),
+  z1 = rep(3, 4),
+  z2 = rep(-2, 4),
+)
+
+pnl %>% 
+  pivot_longer(
+    !c(x, a, b), 
+    names_to = c(".value", "time"), 
+    names_pattern = "(.)(.)"
+  )
+```
+
+
+#### 重复列名
+
+```{r}
+df <- tibble(id = 1:3, y = 4:6, y = 5:7, y = 7:9, .name_repair = "minimal")
+df %>% pivot_longer(!id, names_to = "name", values_to = "value")
+```
+
+### 长转宽
+
+`pivot_wider()`功能与`pivot_longer()`相反。通过增加列数减少行数使数据集变得更宽，通常我们在汇总时候使用，达到类似Excel透视表结果。
+
+#### 基础
+
+```{r}
+fish_encounters %>% pivot_wider(names_from = station, values_from = seen)
+```
+
+缺失值填充
+
+```{r}
+fish_encounters %>% pivot_wider(
+  names_from = station, 
+  values_from = seen,
+  values_fill = 0
+)
+```
+
+#### 聚合
+
+```{r}
+warpbreaks <- warpbreaks %>% as_tibble() 
+warpbreaks %>% count(wool, tension)
+```
+
+需要通过`values_fn`指定聚合方式
+
+```{r}
+warpbreaks %>% pivot_wider(names_from = wool, values_from = breaks,values_fn= list(breaks = sum))
+```
+
+
+#### 从多个变量生成新列名
+
+```{r}
+production <- expand_grid(
+    product = c("A", "B"), 
+    country = c("AI", "EI"), 
+    year = 2000:2014
+  ) %>%
+  filter((product == "A" & country == "AI") | product == "B") %>% 
+  mutate(production = rnorm(nrow(.)))
+production
+```
+
+```{r}
+production %>% pivot_wider(
+  names_from = c(product, country), 
+  values_from = production
+)
+```
+
+通过`names_sep`和`names_prefix`参数控制新的列名，或通过`names_glue`
+
+
+```{r}
+production %>% pivot_wider(
+  names_from = c(product, country), 
+  values_from = production,
+  names_sep = ".",
+  names_prefix = "prod."
+)
+```
+
+```{r}
+production %>% pivot_wider(
+  names_from = c(product, country), 
+  values_from = production,
+  names_glue = "prod_{product}_{country}"
+)
+```
+
+#### 多值变宽
+
+```{r}
+us_rent_income %>% 
+  pivot_wider(names_from = variable, values_from = c(estimate, moe))
+```
+
+
+### 处理json,html的数据
+
+实际工作中不是经常使用，需要使用的时候往往会用相关的包处理：`jsonlite` 
+
+可通过`vignette("rectangle")`自行学习
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(repurrrsive)
+```
+
+```{r}
+users <- tibble(user = gh_users)
+users
+users %>% unnest_wider(user)
+```
+
+
+### 嵌套数据
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(purrr)
+```
+
+
+#### 基础
+
+嵌套数据即：数据框中嵌套数据框，如下所示：
+
+```{r}
+df1 <- tibble(
+  g = c(1, 2, 3),
+  data = list(
+    tibble(x = 1, y = 2),
+    tibble(x = 4:5, y = 6:7),
+    tibble(x = 10)
+  )
+)
+df1
+```
+
+因为`data.frame()`的列特性【每列都是列表】【不确定理解对不对】：可以做如下操作：
+
+```{r}
+df2 <- tribble(
+  ~g, ~x, ~y,
+   1,  1,  2,
+   2,  4,  6,
+   2,  5,  7,
+   3, 10,  NA
+)
+df2 %>% nest(data = c(x, y))
+
+#sample above
+#df2 %>% group_by(g) %>% nest()
+```
+
+
+nest的反面 unnest
+
+```{r}
+df1 %>% unnest(data)
+```
+
+
+### 嵌套数据和模型
+
+```{r}
+mtcars_nested <- mtcars %>% 
+  group_by(cyl) %>% 
+  nest()
+
+mtcars_nested
+```
+
+```{r}
+mtcars_nested <- mtcars_nested %>% 
+  mutate(model = map(data, function(df) lm(mpg ~ wt, data = df)))
+mtcars_nested
+```
+
+```{r}
+mtcars_nested <- mtcars_nested %>% 
+  mutate(model = map(model, predict))
+mtcars_nested  
+```
+
+### 拆分和合并
+
+
+#### 拆分
+
+有时我们需要将一列拆分为多列：
+
+```{r}
+library(tidyr)
+df <- data.frame(x = c(NA, "a.b", "a.d", "b.c"))
+df %>% separate(x, c("A", "B"))
+```
+
+拆分数多列或少列时用`NA`补齐：
+
+```{r}
+df <- data.frame(x = c("a", "a b", "a b c", NA))
+df %>% separate(x, c("a", "b"))
+```
+
+多余的部分舍弃，缺失填充在左边还是右边：
+
+```{r}
+# The same behaviour as previous, but drops the c without warnings:
+df %>% separate(x, c("a", "b"), extra = "drop", fill = "right")
+```
+
+多余部分合并，缺失填充在左边
+
+```{r}
+df %>% separate(x, c("a", "b"), extra = "merge", fill = "left")
+```
+
+或者全部保留
+
+```{r}
+df %>% separate(x, c("a", "b", "c"))
+```
+
+
+指定分隔符
+```{r}
+df %>% separate(x, c("key", "value"), sep = ": ", extra = "merge")
+
+```
+
+使用正则表达式
+
+```{r}
+# Use regular expressions to separate on multiple characters:
+df <- data.frame(x = c(NA, "a?b", "a.d", "b:c"))
+df %>% separate(x, c("A","B"), sep = "([.?:])")
+```
+
+#### 新列提取
+
+```{r}
+df <- data.frame(x = c(NA, "a-b", "a-d", "b-c", "d-e"))
+df %>% extract(x, "A")
+df %>% extract(x, c("A", "B"), "([[:alnum:]]+)-([[:alnum:]]+)")
+# [:alnum:] 匹配字母和数字
+```
+
+
+以上本质是字符处理，[正则表达式](http://baiy.cn/utils/_regex_doc/index.htm)
+
+#### 合并
+
+```{r}
+df <- expand_grid(x = c("a", NA), y = c("b", NA))
+df
+df %>% unite("z", x:y, remove = FALSE)
+# expand_grid 类似笛卡尔积功能
+```
+
+移除缺失值
+
+```{r}
+df %>% unite("z", x:y, na.rm = TRUE, remove = FALSE)
+```
+
+合并后再拆分
+
+```{r}
+df %>%
+  unite("xy", x:y) %>%
+  separate(xy, c("x", "y"))
+```
+
+
+### 缺失值处理
+
+`replace_na()`用特定值替换缺失值。
+
+```{r}
+df <- tibble(x = c(1, 2, NA), y = c("a", NA, "b"))
+df %>% replace_na(list(x = 0, y = "unknown"))
+```
+
+```{r}
+df %>% dplyr::mutate(x = replace_na(x, 0))
+```
+

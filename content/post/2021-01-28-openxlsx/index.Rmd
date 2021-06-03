@@ -1,0 +1,844 @@
+---
+title: R包-openxlsx学习
+author: 宇飞的世界
+date: '2021-01-28'
+slug: openxlsx
+categories: [R package]
+tags: [openxlsx]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+ # cache = TRUE,
+  out.width = "70%",
+  fig.align = 'center',
+  fig.width = 6,
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+```
+
+
+# 前言
+
+openxlsx是当我需要定制输出Excel表格或报表时常用R包。目前该包的版本4.2.3，通过使用Rcpp，包的读写速度在Excel的百万级下是可接受状态,包的相关函数功能完善且简易好用，并且正在积极开发中，相信它以后会越来越好用。本着学习以及熟悉函数功能目的，所以有了本文，文中大部分案例是都官方案例，推荐直接阅读官方资料。项目地址如下：
+
+[openxlsx官方项目地址](https://ycphs.github.io/openxlsx/index.html)
+
+个人使用下来主要优势：
+
+- 不依赖java环境，很重要的一点
+
+- 读写速度可接受
+
+- 可设置条件格式，与Excel中『开始』选项卡的条件格式功能接近
+
+- 可批量插入ggplot2图
+
+- 可插入公式
+
+- 可渲染大部分Excel格式，并且效率相比部分python包高效
+
+- 可添加页眉页脚以及其他格式，方便直接打印
+
+- 功能完善并且在积极开发中
+
+
+本文使用版本信息如下:
+
+```{r}
+packageVersion("openxlsx")
+```
+
+Ps:当数据量较大时，目前采用`writexl::write_xlsx(dt,'test.xlsx')`输出Excel文件，这是我知道的现阶段输出Excel格式速度最快的包。该包的函数很简单，主要就是`write_xlsx()`功能。
+
+## 安装
+
+稳定版
+
+```{r eval=FALSE}
+# 稳定版
+install.packages("openxlsx", dependencies = TRUE, repos = "https://mirrors.tuna.tsinghua.edu.cn/CRAN/")
+```
+
+开发版
+
+```{r eval = FALSE}
+install.packages(c("Rcpp", "devtools"), dependencies = TRUE)
+library(devtools)
+install_github("ycphs/openxlsx")
+```
+
+
+## 基础读写功能
+
+```{r}
+library(openxlsx)
+```
+
+
+### 读取Excel
+
+read.xlsx()是读取函数，主要参数如下：
+
+```{r eval=FALSE}
+read.xlsx(
+  xlsxFile,
+  sheet = 1,
+  startRow = 1,
+  colNames = TRUE,
+  rowNames = FALSE,
+  detectDates = FALSE,
+  skipEmptyRows = TRUE,
+  skipEmptyCols = TRUE,
+  rows = NULL,
+  cols = NULL,
+  check.names = FALSE,
+  sep.names = ".",
+  namedRegion = NULL,
+  na.strings = "NA",
+  fillMergedCells = FALSE
+)
+```
+
+以上参数中需要注意 ：
+
+detecDates参数，当你的Excel表格中带日期列时需要将参数设置为TRUE,不然将会将日期识别为数字读入。
+
+namedRegion参数
+
+fillMergedCells参数，当你读取的表格中存在合并单元格，将用值填充其他全部单元格,如下所示：
+
+![](https://gitee.com/zhongyufei/photo-bed/raw/pic/img/merge-cell-xlsx.png)
+
+```{r eval=FALSE}
+read.xlsx('./test.xlsx',detectDates = TRUE,fillMergedCells = TRUE)
+```
+
+读取后如下所示：
+
+![](https://gitee.com/zhongyufei/photo-bed/raw/pic/img/R-read-merge-xlsx.png)
+
+
+readWorkbook()也可以读取Excel表格数据，参数与read.xlsx基本一致。
+
+```{r eval=FALSE}
+xlsxFile <- system.file("extdata", "readTest.xlsx", package = "openxlsx")
+df1 <- readWorkbook(xlsxFile = xlsxFile, sheet = 1)
+```
+
+
+### 写入Excel
+
+我们将R中的数据有时候需要导出到Excle中，这时就利用函数将data.frame写入Excle。
+
+write.xlsx()函数写入
+
+```{r}
+write.xlsx(iris, file = "writeXLSX1.xlsx", colNames = TRUE, borders = "columns")
+```
+
+
+带格式输出
+
+```{r eval=FALSE}
+hs <- createStyle(
+  textDecoration = "BOLD", fontColour = "#FFFFFF", fontSize = 12,
+  fontName = "Arial Narrow", fgFill = "#4F80BD"
+)
+## Not run: 
+write.xlsx(iris,
+  file = "writeXLSX3.xlsx",
+  colNames = TRUE, borders = "rows", headerStyle = hs
+)
+```
+
+
+
+## 写入带格式
+
+
+基础写入共计四步。
+
+第一步创建workbook
+
+第二步添加addworksheet
+
+第三步写入数据writeDataTable
+
+第四步保存saveworkbook。
+
+```{r eval=FALSE}
+df <- data.frame(a=1:10,b=1:10,d=1:10)
+wb <- createWorkbook(creator = 'zhongyf',title = 'test')
+addWorksheet(wb,sheetName = 'test')
+writeData(wb,sheet = 'test',x = df)
+saveWorkbook(wb, "test.xlsx", overwrite = TRUE)
+```
+
+
+我们以上面四步输出的方式举例，拆解其中四个函数的参数。
+
+- createWorkbook()
+
+- addWorksheet()
+
+- writeData()与writeDataTable()
+
+- saveWorkbook()
+
+首先看看包中自带的例子，我们分解其中的参数。
+
+```{r}
+wb <- createWorkbook("Fred")
+
+## Add 3 worksheets
+addWorksheet(wb, "Sheet 1")
+addWorksheet(wb, "Sheet 2", gridLines = FALSE)
+addWorksheet(wb, "Sheet 3", tabColour = "red")
+addWorksheet(wb, "Sheet 4", gridLines = FALSE, tabColour = "#4F81BD")
+
+## Headers and Footers
+addWorksheet(wb, "Sheet 5",
+  header = c("ODD HEAD LEFT", "ODD HEAD CENTER", "ODD HEAD RIGHT"),
+  footer = c("ODD FOOT RIGHT", "ODD FOOT CENTER", "ODD FOOT RIGHT"),
+  evenHeader = c("EVEN HEAD LEFT", "EVEN HEAD CENTER", "EVEN HEAD RIGHT"),
+  evenFooter = c("EVEN FOOT RIGHT", "EVEN FOOT CENTER", "EVEN FOOT RIGHT"),
+  firstHeader = c("TOP", "OF FIRST", "PAGE"),
+  firstFooter = c("BOTTOM", "OF FIRST", "PAGE")
+)
+
+addWorksheet(wb, "Sheet 6",
+  header = c("&[Date]", "ALL HEAD CENTER 2", "&[Page] / &[Pages]"),
+  footer = c("&[Path]&[File]", NA, "&[Tab]"),
+  firstHeader = c(NA, "Center Header of First Page", NA),
+  firstFooter = c(NA, "Center Footer of First Page", NA)
+)
+
+addWorksheet(wb, "Sheet 7",
+  header = c("ALL HEAD LEFT 2", "ALL HEAD CENTER 2", "ALL HEAD RIGHT 2"),
+  footer = c("ALL FOOT RIGHT 2", "ALL FOOT CENTER 2", "ALL FOOT RIGHT 2")
+)
+
+addWorksheet(wb, "Sheet 8",
+  firstHeader = c("FIRST ONLY L", NA, "FIRST ONLY R"),
+  firstFooter = c("FIRST ONLY L", NA, "FIRST ONLY R")
+)
+
+## Need data on worksheet to see all headers and footers
+writeData(wb, sheet = 5, 1:400)
+writeData(wb, sheet = 6, 1:400)
+writeData(wb, sheet = 7, 1:400)
+writeData(wb, sheet = 8, 1:400)
+
+## Save workbook
+## Not run: 
+saveWorkbook(wb, "addWorksheetExample.xlsx", overwrite = TRUE)
+```
+
+### createWorkbook
+
+```{r eval=FALSE }
+createWorkbook(
+  creator = ifelse(.Platform$OS.type == "windows", Sys.getenv("USERNAME"),
+    Sys.getenv("USER")),
+  title = NULL,
+  subject = NULL,
+  category = NULL
+)
+```
+
+```{r}
+wb <- createWorkbook(
+  creator = "宇飞的世界",
+  title = "标题",
+  subject = "主题",
+  category = "类别目录"
+)
+
+```
+
+
+
+### addWorksheet
+
+
+addWorksheet参数
+
+```{r eval=FALSE}
+addWorksheet(
+  wb,
+  sheetName,
+  gridLines = TRUE,
+  tabColour = NULL,
+  zoom = 100,
+  header = NULL,
+  footer = NULL,
+  evenHeader = NULL,
+  evenFooter = NULL,
+  firstHeader = NULL,
+  firstFooter = NULL,
+  visible = TRUE,
+  paperSize = getOption("openxlsx.paperSize", default = 9),
+  orientation = getOption("openxlsx.orientation", default = "portrait"),
+  vdpi = getOption("openxlsx.vdpi", default = getOption("openxlsx.dpi", default = 300)),
+  hdpi = getOption("openxlsx.hdpi", default = getOption("openxlsx.dpi", default = 300))
+)
+```
+
+
+gridLines参数：表格中是否有网格线，在Excle『视图』选项卡下面的网格线去除打勾的效果一致
+
+tabColour参数：输出表格sheet标签颜色
+
+zoom：发大缩小，默认是100，可选范围10-400
+
+header:页眉 长度为3的字符向量，左、中、右三个位置，用Na可跳过一位置，以下页眉页脚相同。
+
+footer: 页脚
+
+evenHeader: 每页页眉
+
+evenFooter: 每页页脚
+
+firstHeader: 第一页页眉
+
+firstFooter: 第一页页脚
+
+visible:sheet是否隐藏，如果为否sheet将被隐藏
+
+paperSize:页面大小,详见 ?pageSetup 
+
+orientation:One of "portrait" or "landscape" 不清楚干嘛用
+
+vdpi: 屏幕分辨率 默认值即可，不用调整
+
+hdpi: 屏幕分辨率 默认值即可，不用调整
+
+
+
+### writeDataTable
+
+writeData()可以将任何类型写入Excle;writeDataTable()函数将data.frame写入Excel。大部分时候都不需要调整参数，除非是有特殊需求，默认的即可。
+
+```{r eval=FALSE}
+writeDataTable(
+  wb,
+  sheet,
+  x,
+  startCol = 1,
+  startRow = 1,
+  xy = NULL,
+  colNames = TRUE,
+  rowNames = FALSE,
+  tableStyle = "TableStyleLight9",
+  tableName = NULL,
+  headerStyle = NULL,
+  withFilter = TRUE,
+  keepNA = FALSE,
+  na.string = NULL,
+  sep = ", ",
+  stack = FALSE,
+  firstColumn = FALSE,
+  lastColumn = FALSE,
+  bandedRows = TRUE,
+  bandedCols = FALSE
+)
+```
+
+wb:即createWorkbook()函数创建的workbook对象
+
+sheet:将输入写入的sheet名，由addWorksheet()函数创建
+
+x : a data.frame
+
+startCol: 从哪一列开始写入,接受数字
+
+startRow：从哪一行开始写入，接受数字
+
+xy: 指定开始行以及开始列的向量，xy = c(2,3)即从2列3行位置开始写入
+
+colNames: 如果TRUE,列名写入
+
+rowNames: 如果TRUE,行名写入
+
+tableStyle:一些表格样式，在中文版Excle『开始』选项卡下面的套用表格格式，可以使用预定义的表格样式
+
+tableName:workbook中的表中，表名必须是唯一的，熟悉Power Pivot的人应该很清晰“表”概念
+
+headerStyle:自定义列样式应用,用createStyle()函数创建
+
+withFilter: 在第一行是否由筛选
+
+keepNA:如果TRUE,NA值转化为#NA，如果否，变为空
+
+na.string :如果参数不是NULL,如果keepNA是TRUE,NA将会在Excel中转为该参数指定的字符
+
+sep：
+
+stack :请参照函数使用
+
+firstColumn:logical. If TRUE, the first column is bold
+
+lastColumn :logical. If TRUE, the last column is bold
+
+bandedRows:logical. If TRUE, rows are colour banded 即行线,默认为TRUE
+
+bandedCols:logical. If TRUE, the columns are colour banded 即列线 ,默认为TRUE
+
+
+
+### saveWorkbook
+
+```{r eval=FALSE}
+saveWorkbook(wb, file, overwrite = FALSE, returnValue = FALSE)
+```
+
+参数较为简单，wb即上文中的workbook对象，file即输出的文件名，overwrite即如果存在是否覆盖，returnValue如果设置为TRUE，返回TRUE代表保存成功
+
+### 数据类型调整
+
+在写入Excel时，我们大部分时候都需要指定列的数据类型，比如数字、字符、百分比、日期、小数点位数等格式类型。可通过如下方式调整：
+
+关于Excel中格式调整，个人建议通过VBA来调整最简单，简单的格式调整可以通过录制宏达到相应的，当需要批量执行时代码可以参考我的公众号或博客里面相关文章。
+
+```{r}
+df <- data.frame("Date" = Sys.Date()-0:4,
+                 "Logical" = c(TRUE, FALSE, TRUE, TRUE, FALSE),
+                 "Currency" = paste("$",-2:2),
+                 "Accounting" = -2:2,
+                 "hLink" = "https://CRAN.R-project.org/", 
+                 "Percentage" = seq(-1, 1, length.out=5),
+                 "TinyNumber" = runif(5) / 1E9)
+
+class(df$Currency) <- "currency"
+class(df$Accounting) <- "accounting"
+class(df$hLink) <- "hyperlink"
+class(df$Percentage) <- "percentage"
+class(df$TinyNumber) <- "scientific"
+```
+
+## 格式调整
+
+我曾在python中利用相关库渲染Excel表格格式，效率非常低下，当然也可能是我方式不对。目前在openxlsx下，渲染表格格式速度较为客观，属于能接受状态，但是在Excel中格式相关调整利用VBA更简单高效，所以接下来仅仅简单介绍部分可能用的函数，具体的参数请自行查阅函数用法。
+
+### createStyle
+
+createStyle()函数用来创建新样式，可以设置字体、字体大小、字体颜色、数字格式即Excel中的列类型，框线方式即Excle中的上框线，下框线，左框线，右框线等以及其他，框线颜色、框线格式、背景填充色、单元格前景填充色、水平对其方式、垂直对齐方式，字体格式，是否自动换行、缩进、单元格内容是否锁定、是否隐藏公式。具体详情?createStyle
+
+
+
+```{r eval=FALSE}
+createStyle(
+  fontName = NULL,
+  fontSize = NULL,
+  fontColour = NULL,
+  numFmt = "GENERAL",
+  border = NULL,
+  borderColour = getOption("openxlsx.borderColour", "black"),
+  borderStyle = getOption("openxlsx.borderStyle", "thin"),
+  bgFill = NULL,
+  fgFill = NULL,
+  halign = NULL,
+  valign = NULL,
+  textDecoration = NULL,
+  wrapText = FALSE,
+  textRotation = NULL,
+  indent = NULL,
+  locked = NULL,
+  hidden = NULL
+)
+```
+
+其中：numFmt、border、borderStyle、textDecoration等参数查看函数用法获取可选项。从上面可知：Excel的单元格格式基本可以同上上面函数全部实现自定义，从字，单元格两个大的对象，到他们的大小颜色对齐方式等。
+
+示例如下：
+
+18号Arial字体，填充色"#1A33CC",单元格左对齐方式，字体加粗，边框线上下左右都有。
+
+```{r}
+style <- createStyle(
+  fontSize = 18, fontName = "Arial",
+  textDecoration = "bold", halign = "left", fgFill = "#1A33CC", border = "TopBottomLeftRight"
+)
+```
+
+
+### addStyle
+
+创建style后，将其添加到workbook。addStyle()函数参数比较简单,如下所示：
+
+```{r eval=FALSE}
+addStyle(wb, sheet, style, rows, cols, gridExpand = FALSE, stack = FALSE)
+```
+
+gridExpand:如果为真，样式运用到所有的行列
+
+stack:如果为否，新样式替换老样式；
+
+
+```{r eval=FALSE}
+wb <- createWorkbook("My name here")
+addWorksheet(wb, "Expenditure", gridLines = FALSE)
+writeData(wb, sheet = 1, USPersonalExpenditure, rowNames = TRUE)
+style <- createStyle(
+  fontSize = 24, fontColour = rgb(1, 0, 0),
+  textDecoration = c("bold", "italic", "underline"),
+  halign = "center", valign = "center", border = "Bottom"
+)
+addStyle(wb, sheet = 1, style = style, rows = 1, cols = 1:6, gridExpand = TRUE)
+
+bodyStyle <- createStyle(border = "TopBottom", borderColour = "#4F81BD")
+addStyle(wb, sheet = 1, bodyStyle, rows = 2:6, cols = 1:6, gridExpand = TRUE)
+setColWidths(wb, 1, cols = 1, widths = 21) ## set column width for row names column
+## Not run: 
+saveWorkbook(wb, "addStyleExample.xlsx", overwrite = TRUE)
+
+
+```
+
+
+
+## 条件格式
+
+利用conditionalFormatting()函数实现条件格式功能。详见?conditionalFormatting。
+
+
+
+```{r eval=FALSE}
+conditionalFormatting(wb, "cellIs",
+  cols = 1,
+  rows = 1:11, rule = "!=0", style = negStyle
+)
+
+conditionalFormatting(wb, "Moving Row",
+  cols = 1:2,
+  rows = 1:11, rule = "$A1<0", style = negStyle
+)
+```
+
+databar
+
+```{r eval=FALSE}
+wb <- createWorkbook()
+addWorksheet(wb, "databar")
+
+## Databars
+writeData(wb, "databar", -5:5, startCol = 1)
+conditionalFormatting(wb, "databar", cols = 1, rows = 1:11, type = "databar") ## Defaults
+saveWorkbook(wb, file = "databarExample.xlsx", overwrite = TRUE)
+openXL('databarExample.xlsx')
+
+```
+
+## 插入图片
+
+### insertImage
+
+insertImage()函数可以插入图片。
+
+```{r eval=FALSE}
+img <- system.file("extdata", "einstein.jpg", package = "openxlsx")
+insertImage(wb, "Sheet 1", img, startRow = 5, startCol = 3, width = 6, height = 5)
+```
+
+### insertPlot
+
+insertPlot()函数可以将最新的作图插入到Excle中，如下所示：
+
+```{r eval=FALSE}
+wb <- createWorkbook()
+addWorksheet(wb, "Sheet 1", gridLines = FALSE)
+
+## create plot objects
+library(ggplot2)
+p1 <- qplot(mpg,
+  data = mtcars, geom = "density",
+  fill = as.factor(gear), alpha = I(.5), main = "Distribution of Gas Mileage"
+)
+p2 <- qplot(age, circumference,
+  data = Orange, geom = c("point", "line"), colour = Tree
+)
+
+## Insert currently displayed plot to sheet 1, row 1, column 1
+print(p1) # plot needs to be showing
+insertPlot(wb, 1, width = 5, height = 3.5, fileType = "png", units = "in")
+
+## Insert plot 2
+print(p2)
+insertPlot(wb, 1, xy = c("J", 2), width = 16, height = 10, fileType = "png", units = "cm")
+
+## Save workbook
+saveWorkbook(wb, "insertPlotExample.xlsx", overwrite = TRUE)
+
+```
+
+## 插入公式
+
+### writeFormula
+
+writeFormula()将包含Excel公式的字符向量写入。
+
+```{r}
+wb <- createWorkbook()
+addWorksheet(wb, "Sheet 1")
+writeData(wb, "Sheet 1", x = iris)
+
+v <- c("SUM(A2:A151)", "AVERAGE(B2:B151)") ## skip header row
+writeFormula(wb, sheet = 1, x = v, startCol = 10, startRow = 2)
+writeFormula(wb, 1, x = "A2 + B2", startCol = 10, startRow = 10)
+saveWorkbook(wb, "writeFormulaExample.xlsx", overwrite = TRUE)
+```
+
+
+## workbook相关函数
+
+### createComment
+
+添加注释功能，配合writeComment()写入workbook中。
+
+```{r}
+wb <- createWorkbook()
+addWorksheet(wb, "Sheet 1")
+c1 <- createComment(comment = "this is comment")
+writeComment(wb, 1, col = "B", row = 10, comment = c1)
+s1 <- createStyle(fontSize = 12, fontColour = "red", textDecoration = c("BOLD"))
+s2 <- createStyle(fontSize = 9, fontColour = "black")
+c2 <- createComment(comment = c("This Part Bold red\n\n", "This part black"), style = c(s1, s2))
+c2
+writeComment(wb, 1, col = 6, row = 3, comment = c2)
+## Not run: 
+saveWorkbook(wb, file = "createCommentExample.xlsx", overwrite = TRUE)
+
+```
+
+### dataValidation
+
+添加数据有效性，即Excel中『数据』选项卡的数据验证功能一致。详见?dataValidation
+
+### deleteData 
+
+deleteData()删除单元格内容以及格式。
+
+### freezePane 
+
+freezePane()冻结窗格，即Excel中『视图』选项卡的冻结窗格功能。
+
+```{r eval = FALSE}
+## Freeze Panes
+freezePane(wb, "Sheet 1", firstActiveRow = 5, firstActiveCol = 3)
+freezePane(wb, "Sheet 2", firstCol = TRUE) ## shortcut to firstActiveCol = 2
+freezePane(wb, 3, firstRow = TRUE) ## shortcut to firstActiveRow = 2
+freezePane(wb, 4, firstActiveRow = 1, firstActiveCol = "D")
+```
+
+1、Sheet1中从第五行第三列开始冻结
+2、Sheet2中冻结第一列
+3、冻结第一行
+4、冻结第一行以及D列
+
+### removeWorksheet
+
+从workbook中删除worksheet。
+
+
+### mergeCells
+
+mergeCells()合并单元格,removeCellMerge()取消合并单元格。
+
+```{r}
+mergeCells(wb, "Sheet 1", cols = 2, rows = 3:6)
+```
+
+
+
+## get系列函数
+
+
+### getBaseFont 
+
+getBaseFont()函数返回工作表字体属性。
+
+```{r}
+wb <- createWorkbook()
+getBaseFont(wb)
+```
+
+
+### getCellRefs
+
+
+getCellRefs()函数返回(x,y)的单元格坐标
+
+```{r}
+getCellRefs(data.frame(1, 3))
+getCellRefs(data.frame(1:3, 2:4))
+```
+
+### getCreators
+
+getCreators()函数返回workbook创建者。
+
+```{r}
+wb <- createWorkbook()
+getCreators(wb)
+```
+
+### getDateOrigin
+
+getDateOrigin()返回一个xlsx文件的起始日期。
+
+```{r}
+getDateOrigin(system.file("extdata", "readTest.xlsx", package = "openxlsx"))
+```
+
+### getSheetNames
+
+getSheetNames()返回xlsx文件的全部worksheet名称。
+
+```{r}
+getSheetNames(system.file("extdata", "readTest.xlsx", package = "openxlsx"))
+```
+
+
+### getStyles
+
+getStyles()返回一个workbook的style列表对象。
+
+```{r}
+wb <- loadWorkbook(file = system.file("extdata", "loadExample.xlsx", package = "openxlsx"))
+getStyles(wb)[1:3]
+```
+
+
+### getTables
+
+得到workbook中的表列表
+
+```{r}
+
+wb <- createWorkbook()
+addWorksheet(wb, sheetName = "Sheet1")
+writeDataTable(wb, sheet = "Sheet1", x = iris)
+writeDataTable(wb, sheet = 1, x = mtcars, tableName = "mtcars", startCol = 10)
+getTables(wb, sheet = "Sheet1")
+```
+
+## set系列函数
+
+### setColWidths 
+
+setColWidths ()函数设定列的宽度。
+
+
+###  setRowHeights
+
+setRowHeights()设定行高度。
+
+
+### setHeaderFooter 
+
+setHeaderFooter()设定workbook的页眉页脚。详见?setHeaderFooter 
+
+### setLastModifiedBy
+
+该函数设定最后被谁修改。
+
+
+
+
+
+
+
+
+## remove系列函数
+
+### removeCellMerge
+
+removeCellMerge()函数将合并的单元格分开，与mergeCells()函数配合使用。
+
+### removeColWidths
+
+removeColWidths()函数移除列的宽度，与setColWidths()配合使用。
+
+### removeComment
+
+removeComment()移除注释，与createComment()和writeComment()配合使用。
+
+### removeFilter
+
+removeFilter()函数移除筛选器，与addFilter()函数配合使用。
+
+### removeRowHeights
+
+removeRowHeights()函数移除行高度，与setRowHeights()配合使用。
+
+### removeTable
+
+removeTable()移除表,与getTables()配合使用。
+
+### removeWorksheet
+
+removeWorksheet()删除sheet,可删掉addWorksheet()新增sheet。
+
+## 其他函数
+
+### openxXL
+
+打开 Microsoft Excel file 或者是workbook的wb对象。
+
+### convertToDateTime
+
+convertToDate()与convertToDateTime()函数，将数字转化为R中的日期时间。
+
+```{r}
+convertToDate(c(41750, 41751, 41752, 41753, 41754, NA))
+x <- c(41821.8127314815, 41820.8127314815, NA, 41819, NaN)
+convertToDateTime(x)
+```
+
+### renameWorksheet
+
+renameWorksheet()重新命名worksheet。
+
+
+### worksheetOrder 
+
+worksheetOrder()函数获取或设定worksheets的顺序。
+
+```{r}
+wb <- createWorkbook()
+addWorksheet(wb = wb, sheetName = "Sheet 1", gridLines = FALSE)
+writeDataTable(wb = wb, sheet = 1, x = iris)
+
+addWorksheet(wb = wb, sheetName = "mtcars (Sheet 2)", gridLines = FALSE)
+writeData(wb = wb, sheet = 2, x = mtcars)
+
+addWorksheet(wb = wb, sheetName = "Sheet 3", gridLines = FALSE)
+writeData(wb = wb, sheet = 3, x = Formaldehyde)
+
+worksheetOrder(wb)
+worksheetOrder(wb) <- c(1, 3, 2)
+```
+
+### showGridLines
+
+showGridLines()函数设置是否显示网格线，即Excel中『视图』选项卡的网格线功能。
+
+
+## 写在最后
+
+有了DAX函数的数据透视表很强大，目前使用场景也较多，作为商业数据分析师，经常需要给同事搭建模型。作为我来说，我最希望的功能是能直接用R语言输出带Power Pivot 透视表的Excel，但是我知道好像并不太可能。
+
+
+但是，经过摸索，我已经找到了通过VBA自动生成带度量值的透视表方法，虽然没有很强的复用性，但是某些特定场景下还是比较高效的方式，除了写复杂度量值时。
+
+相关资料：
+
+[VBA自动生成Power Pivot数据透视表视频版](https://www.bilibili.com/video/av246016883/)
+
+[VBA自动生成Power Pivot数据透视表文字版](https://mp.weixin.qq.com/s?src=11&timestamp=1612518062&ver=2872&signature=OUhs*K6TstfoKc2H*rYBSVq-7Xpr3Fo7BS*8DglVkrP4bICDplH04qLoVINHKkB1RnK5iChPr7bHUYaIxpQF85LTCEvzVMTjvUAHFbyrGkC*-tC5mE9Arhmvmq-rOhrd&new=1)
+
+[gitee地址](https://gitee.com/zhongyufei/excel/tree/master/vba/Powerpivot)

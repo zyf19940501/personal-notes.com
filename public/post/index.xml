@@ -6,7 +6,47 @@
     <description>Recent content in Posts on study notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 Jun 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>R package  tidyr study</title>
+      <link>/2021/06/03/r-package-tidyr-study/</link>
+      <pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/06/03/r-package-tidyr-study/</guid>
+      <description>前言tidyr包是tidyverse系列中的核心包,tidyr包的核心目的是整洁数据，有以下特征：
+每列都是一个变量每行都是一个记录每个单元格都是一个值在日常使用数据过程中，这种数据存储方式是一种标准的数据存储方式，像关系型数据中数据的存储。
+安装## 最简单是的方式就是安装tidyverseinstall.packages(&amp;#39;tidyverse&amp;#39;)## 或者仅仅安装 tidyr:install.packages(&amp;#39;tidyr&amp;#39;)## 或者从github 安装开发版本## install.packages(&amp;quot;devtools&amp;quot;)devtools::install_github(&amp;quot;tidyverse/tidyr&amp;quot;)# CTEST CODE主要功能library(tidyr)tidyr包中的函数可以分为5个主要大类
+pivot_longer() 和 pivot_wider() 宽转长以及长转宽
+unnest_longer() 和 unnest_wider(),hoist() 将列表嵌套转化为整洁数据
+nest() 数据嵌套
+separate(),extract()拆分列,提取新列
+replace_na() 缺失值处理
+宽转长详情查看vignette(&#34;pivot&#34;),以下是照搬该图册中的内容
+基础长数据与宽数据之间的转换，类似我们常用的EXcel中的透视表功能。接下来用tidyr包自带的插图案例记录相关函数用法
+在Excel中有时候方便我们肉眼观察，可能一个数据集会有很多列,如下所示：
+col1col2col3col4col5col6col7v1v2v3v4v5v6v7vb1vb2vb3vb4vb5vb6vb7方便观察，但是不方便统计分析，这是我们需要把数据做处理，从“宽数据变成长数据”即宽转长。</description>
+    </item>
+    
+    <item>
+      <title>Rmarkdown 代码块修改中文注释斜体</title>
+      <link>/2021/06/03/bookdown-comment-font/</link>
+      <pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/06/03/bookdown-comment-font/</guid>
+      <description>前言 最近在使用 R 包 bookdown 写 “商业数据分-R语言处理数据”的笔记，在我写的过程中发现，渲染后book中代码块的中文注释是斜体，显得很难看。如下所示：
+ 欢迎大家查阅笔记，并提出意见
+ 在发现问题后，搜索一圈，但并没有找到我想要的资料，可能是我搜索方式不对。中文搜索引擎搜&amp;quot;代码块中文注释斜体&amp;rdquo;，能搜索到一些 vscode 相关文章。用 google 搜 “bookdown comment font style”，搜索结果基本都是谢益辉大神关于rmarkdown或bookdown相关的书。
+但是我看到一些资料后，让我大概知道我需要解决的问题，也就是关于css文件的修改。但是我对css文件毫无认知。最后通过查看渲染后的html文件，找到了解决办法，现记录如下。
+bookdown 在我们使用 bookdown 创建项目后，生成的项目文件中有一个名叫 style.css 的文件，我们修改该文件即可。
+打开 style.css，在最后添加即可。
+code span.co { color: #60a0b0; font-style: normal; } 完整 style.css 如下所示：
+p.caption {color: #777;margin-top: 10px;}p code {white-space: inherit;}pre {word-break: normal;word-wrap: normal;}pre code {white-space: inherit;}code span.co { color: #60a0b0;font-style: normal;}在修改完 style.</description>
+    </item>
+    
     <item>
       <title>M1原生R语言</title>
       <link>/2021/05/29/m1%E5%8E%9F%E7%94%9Fr%E8%AF%AD%E8%A8%80/</link>
@@ -20,10 +60,47 @@ rstudio preview下载地址。
  因为本人是商业数据分析师，所以测试内容仅仅只是简单的数据处理的R包，如tidyverse,data.table,rmarkdown,bookdown,readxl,openxlsx等
  R安装  官网安装  官网下载正常安装即可，或者通过homebrew安装。
 R包安装 数据处理包 我常用data.table处理数据,所以第一个安装的R包是data.table，正常安装。接下来安装tidyverse报错，看原因是stringi没办法正确安装，解决办法如下：
- stringi  packageurl &amp;lt;- &amp;quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&amp;quot; install.packages(packageurl, repos=NULL, type=&amp;quot;source&amp;quot;) 安装stringi包后，tidyverse即可正常使用。
+ stringi  packageurl &amp;lt;- &amp;quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&amp;quot;install.packages(packageurl, repos=NULL, type=&amp;quot;source&amp;quot;)安装stringi包后，tidyverse即可正常使用。
 数据库相关 对于我常用的odbc,DBI都可以正常安装，甚至我成功安装SQL SERVER的驱动，如下所示：
 但是无法正常连接数据库，据说微软计划下一个版本的odbc会支持m1. .
 至于其他的数据库比如mysql，我想是可以成功，没测试。</description>
+    </item>
+    
+    <item>
+      <title>使用prophet预测销售额</title>
+      <link>/2021/04/14/prophet/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/04/14/prophet/</guid>
+      <description>前言 留意到&amp;quot;先知&amp;quot;prophet已经有一段时间，第一次看到先知介绍时候注意到可以人为指定异常点以及节假日让我感觉到很新颖，以往在使用forecast包预测销售额时没有该功能。
+先知可以在R中和Python中实现预测，并且速度快，提供自动化的预测，或手工调整。官网上的介绍：
+Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It works best with time series that have strong seasonal effects and several seasons of historical data. Prophet is robust to missing data and shifts in the trend, and typically handles outliers well.
+Prophet is open source software released by Facebook’s Core Data Science team.</description>
+    </item>
+    
+    <item>
+      <title>R包-openxlsx学习</title>
+      <link>/2021/01/28/openxlsx/</link>
+      <pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/01/28/openxlsx/</guid>
+      <description>前言openxlsx是当我需要定制输出Excel表格或报表时常用R包。目前该包的版本4.2.3，通过使用Rcpp，包的读写速度在Excel的百万级下是可接受状态,包的相关函数功能完善且简易好用，并且正在积极开发中，相信它以后会越来越好用。本着学习以及熟悉函数功能目的，所以有了本文，文中大部分案例是都官方案例，推荐直接阅读官方资料。项目地址如下：
+openxlsx官方项目地址
+个人使用下来主要优势：
+不依赖java环境，很重要的一点
+读写速度可接受
+可设置条件格式，与Excel中『开始』选项卡的条件格式功能接近
+可批量插入ggplot2图
+可插入公式
+可渲染大部分Excel格式，并且效率相比部分python包高效
+可添加页眉页脚以及其他格式，方便直接打印
+功能完善并且在积极开发中
+本文使用版本信息如下:
+packageVersion(&amp;quot;openxlsx&amp;quot;)#&amp;gt; [1] &amp;#39;4.2.3&amp;#39;Ps:当数据量较大时，目前采用writexl::write_xlsx(dt,&#39;test.xlsx&#39;)输出Excel文件，这是我知道的现阶段输出Excel格式速度最快的包。该包的函数很简单，主要就是write_xlsx()功能。
+安装稳定版
+# 稳定版install.packages(&amp;quot;openxlsx&amp;quot;, dependencies = TRUE, repos = &amp;quot;https://mirrors.tuna.tsinghua.edu.cn/CRAN/&amp;quot;)开发版
+install.packages(c(&amp;quot;Rcpp&amp;quot;, &amp;quot;devtools&amp;quot;), dependencies = TRUE)library(devtools)install_github(&amp;quot;ycphs/openxlsx&amp;quot;)基础读写功能library(openxlsx)读取Excelread.xlsx()是读取函数，主要参数如下：
+read.xlsx(xlsxFile,sheet = 1,startRow = 1,colNames = TRUE,rowNames = FALSE,detectDates = FALSE,skipEmptyRows = TRUE,skipEmptyCols = TRUE,rows = NULL,cols = NULL,check.</description>
     </item>
     
     <item>
@@ -42,10 +119,10 @@ R包安装 数据处理包 我常用data.table处理数据,所以第一个安装
  安装R 直接安装 首先，登录服务器。mac用户利用ssh命令登录即可。win用户可下载MobaXterm软件登录服务器。请自行搜索相关资料。
 ssh root@192.168.2.237 直接安装Ubuntu源里面的R版本，版本可能会比较老旧，除非是你必须用最新版本的R，否则建议就先用该版本，等以后熟悉Linux命令后再重新安装R或者升级R。截止本文，直接安装能安装R-3.6.3版本。
 安装r-base即可安装完整版本，当时当你需要编译R包时还需要安装 r-base-dev，我们两个都安装，直接在命令行中执行即可。
-# 更新源 sudo apt update # R安装 sudo apt install r-base r-base-dev # 查看是否安装成功 命令行中运行R,应该是R-3.6.3版本，我已经升级了 R 命令行中运行R后出现如上画面，则R安装成功。
+# 更新源sudo apt update# R安装sudo apt install r-base r-base-dev# 查看是否安装成功 命令行中运行R,应该是R-3.6.3版本，我已经升级了R命令行中运行R后出现如上画面，则R安装成功。
 安装最新版本的R 安装最新版本的时候，可以自行搜索，关键词【How to install R 4.0.3 on Ubuntu 20.04】。一般是添加最新R源再正常安装即可，在写本文时R已经更新到4.0时代，可以安装到R-4.0.3版本。
 注意：添加源时需选择跟系统匹配的源。
-# 添加源 sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39; # 添加密钥 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 # 更新 sudo apt update # 安装 sudo apt install r-base r-base-core r-recommended r-base-dev 以上参考代码，需【翻墙】打开https://rtask.</description>
+# 添加源sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39;# 添加密钥sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9# 更新sudo apt update# 安装sudo apt install r-base r-base-core r-recommended r-base-dev以上参考代码，需【翻墙】打开https://rtask.</description>
     </item>
     
     <item>
@@ -60,14 +137,14 @@ github地址https://github.com/rstudio/blastula
 常规邮件发送 第一步生成发送邮件的邮箱凭证，第二步利用compose_email()函数构建邮件内容，第三步smtp_send()发送邮件。通过下面的官方案例解析，我们将会看到多种元素间可以通过c()与md()连接起来，让我们邮件正文拥有无限可能。
 生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
 重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
-create_smtp_creds_file(file = &#39;email_creds&#39;, user = &#39;zhongyf@example.com.hk&#39;, host = &#39;mail.example.com.hk&#39;, port = 25,use_ssl = FALSE) file:文件名为email_creds;
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@example.com.hk&#39;,host = &#39;mail.example.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
 user:发送邮件的邮件账户;
 host:邮件服务器，像mail.example.com.hk,是目前邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com，gmail邮箱是smtp.gmai.com不同邮件的host地址不一样
 port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
 use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
 可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
 构建邮件正文 以下代码是官方案例：
-#添加时间 date_time &amp;lt;- add_readable_time() # Create an image string using an on-disk 指定一个图像文件路径 # image file img_file_path &amp;lt;- system.file( &amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;, package = &amp;quot;blastula&amp;quot; ) #添加图片 转化成html文本 img_string &amp;lt;- add_image(file = img_file_path) # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中 # The compose_email() function allows us to easily create an email message.</description>
+#添加时间date_time &amp;lt;- add_readable_time() # Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)#添加图片 转化成html文本img_string &amp;lt;- add_image(file = img_file_path) # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
     </item>
     
     <item>
@@ -108,8 +185,8 @@ Sub 创建透视表() Sheets.Add ActiveWorkbook.PivotCaches.Create(SourceType:=x
 分别在cmd终端或者Anaconda Prompt里粘贴下面两行代码（每粘贴一行回车确认）。
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --set show_channel_urls yes
-# 创建新环境 conda create –n yuyin python=3.9 activate yuyin pip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5 pyttsx3代码如下：
-import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:&#39;) f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;) line = f.readlines() line = str(line) line = line.</description>
+# 创建新环境conda create –n yuyin python=3.9activate yuyinpip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5pyttsx3代码如下：
+import pyttsx3filename = input(&#39;请输入需转化语音的txt文件名称:&#39;)f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;)line = f.readlines()line = str(line)line = line.</description>
     </item>
     
     <item>
@@ -119,7 +196,7 @@ import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:
       
       <guid>/2020/12/02/dt%E5%8C%85%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/</guid>
       <description>说明 记录DT包使用案例
-案例  按钮  dat &amp;lt;- data.frame( &amp;quot;Title&amp;quot; = c( &amp;quot;A Random Walk Down Wall Street&amp;quot;, &amp;quot;Naked Statistics&amp;quot;, &amp;quot;Freakonomics&amp;quot; ), &amp;quot;Author&amp;quot; = c( &amp;quot;Burton G. Malkiel&amp;quot;, &amp;quot;Charles Wheelan&amp;quot;, &amp;quot;Steven D. Levitt and Stephen J. Dubner&amp;quot; ) ) library(DT) datatable(dat) datatable(dat, rownames = FALSE, # remove row numbers filter = &amp;quot;top&amp;quot;, # add filter on top of columns extensions = &amp;quot;Buttons&amp;quot;, # add download buttons options = list( autoWidth = TRUE, dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttons buttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttons pageLength = 5, # show first 5 entries, default is 10 order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order ) ) # Add links to the interactive table datatable(dat, rownames = FALSE, # remove row numbers filter = &amp;quot;top&amp;quot;, # add filter on top of columns extensions = &amp;quot;Buttons&amp;quot;, # add download buttons options = list( autoWidth = TRUE, dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttons buttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttons pageLength = 5, # show first 5 entries, default is 10 order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order ), escape = FALSE # to make URLs clickable ) 来源：https://www.</description>
+案例  按钮  dat &amp;lt;- data.frame(&amp;quot;Title&amp;quot; = c(&amp;quot;A Random Walk Down Wall Street&amp;quot;,&amp;quot;Naked Statistics&amp;quot;,&amp;quot;Freakonomics&amp;quot;),&amp;quot;Author&amp;quot; = c(&amp;quot;Burton G. Malkiel&amp;quot;,&amp;quot;Charles Wheelan&amp;quot;,&amp;quot;Steven D. Levitt and Stephen J. Dubner&amp;quot;))library(DT)datatable(dat)datatable(dat,rownames = FALSE, # remove row numbersfilter = &amp;quot;top&amp;quot;, # add filter on top of columnsextensions = &amp;quot;Buttons&amp;quot;, # add download buttonsoptions = list(autoWidth = TRUE,dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttonsbuttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttonspageLength = 5, # show first 5 entries, default is 10order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order))# Add links to the interactive tabledatatable(dat,rownames = FALSE, # remove row numbersfilter = &amp;quot;top&amp;quot;, # add filter on top of columnsextensions = &amp;quot;Buttons&amp;quot;, # add download buttonsoptions = list(autoWidth = TRUE,dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttonsbuttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttonspageLength = 5, # show first 5 entries, default is 10order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order),escape = FALSE # to make URLs clickable)来源：https://www.</description>
     </item>
     
     <item>
@@ -129,12 +206,12 @@ import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:
       
       <guid>/2020/12/01/git%E4%BD%BF%E7%94%A8/</guid>
       <description>git使用 需要更进一步学习了解userthis包
-library(usethis) ?use_github() edit_r_environ() #creat github use_github(protocol = &#39;https&#39;,auth_token = Sys.getenv(&amp;quot;GITHUB_PAT&amp;quot;)) upstream_url &amp;lt;- &amp;quot;git@github.com:&amp;lt;OWNER&amp;gt;/&amp;lt;REPO&amp;gt;.git&amp;quot; use_git_remote(name = &amp;quot;upstream&amp;quot;, url = upstream_url) 参考地址 https://www.youtube.com/watch?v=kL6L2MNqPHg&amp;amp;t=799s
+library(usethis)?use_github()edit_r_environ()#creat githubuse_github(protocol = &#39;https&#39;,auth_token = Sys.getenv(&amp;quot;GITHUB_PAT&amp;quot;))upstream_url &amp;lt;- &amp;quot;git@github.com:&amp;lt;OWNER&amp;gt;/&amp;lt;REPO&amp;gt;.git&amp;quot;use_git_remote(name = &amp;quot;upstream&amp;quot;, url = upstream_url)参考地址 https://www.youtube.com/watch?v=kL6L2MNqPHg&amp;amp;t=799s
 blogdown 关于github git的使用 https://bookdown.org/yihui/blogdown/github-pages.html</description>
     </item>
     
     <item>
-      <title>树莓派官方系统安装R-4.0.3</title>
+      <title>树莓派官方系统安装R-4.0-3</title>
       <link>/2020/12/01/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%98%E6%96%B9%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85r/</link>
       <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
       
@@ -142,7 +219,126 @@ blogdown 关于github git的使用 https://bookdown.org/yihui/blogdown/github-pa
       <description>树莓派安装R  参考资料 http://rolandtanglao.com/2020/10/28/p1-how-to-install-r-403-raspberry-pi4-debian10/
 https://stackoverflow.com/questions/57023388/cant-install-r-3-6-in-raspberry-pi-3-b-in-raspbian-stretch
 代码 先执行以下操作
-wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gz tar -zvxf pcre2-10.35.tar.gz cd pcre2-10.35 ./configure; make make install sudo apt-get install -y gfortran libreadline6-dev libx11-dev libxt-dev \ libpng-dev libjpeg-dev libcairo2-dev xvfb \ libbz2-dev libzstd-dev liblzma-dev \ libcurl4-openssl-dev \ texinfo texlive texlive-fonts-extra \ screen wget openjdk-8-jdk cd /usr/local/src sudo wget https://cran.rstudio.com/src/base/R-4/R-4.0.3.tar.gz sudo su tar zxvf R-4.0.3.tar.gz cd R-4.0.3 ./configure --enable-R-shlib #--with-blas --with-lapack #optional make make install cd .. rm -rf R-4.0.3* exit cd 部分R包依赖环境 sudo apt install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev Ubuntu系统安装R 树莓派Ubuntu系统安装R相对简单很多，正常更新源就能安装到最新版本。或者简单搜索即可。</description>
+wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gztar -zvxf pcre2-10.35.tar.gzcd pcre2-10.35./configure;makemake installsudo apt-get install -y gfortran libreadline6-dev libx11-dev libxt-dev \libpng-dev libjpeg-dev libcairo2-dev xvfb \libbz2-dev libzstd-dev liblzma-dev \libcurl4-openssl-dev \texinfo texlive texlive-fonts-extra \screen wget openjdk-8-jdkcd /usr/local/srcsudo wget https://cran.rstudio.com/src/base/R-4/R-4.0.3.tar.gzsudo sutar zxvf R-4.0.3.tar.gzcd R-4.0.3./configure --enable-R-shlib #--with-blas --with-lapack #optionalmakemake installcd ..rm -rf R-4.0.3*exitcd部分R包依赖环境 sudo apt install build-essential libcurl4-gnutls-dev libxml2-dev libssl-devUbuntu系统安装R 树莓派Ubuntu系统安装R相对简单很多，正常更新源就能安装到最新版本。或者简单搜索即可。</description>
+    </item>
+    
+    <item>
+      <title>Frp-穿透内网</title>
+      <link>/2020/11/25/frp-%E7%A9%BF%E9%80%8F%E5%86%85%E7%BD%91/</link>
+      <pubDate>Wed, 25 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/11/25/frp-%E7%A9%BF%E9%80%8F%E5%86%85%E7%BD%91/</guid>
+      <description>Frp穿透内网  frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。本文记录下。
+项目地址 中文地址：https://github.com/fatedier/frp/blob/dev/README_zh.md
+操作指引：https://gofrp.org/docs/setup/
+Youtube视频地址:https://www.youtube.com/watch?v=KeecUhhfIE8
+说明 frp 主要由客户端frpc和服务端frps组成，服务端通常部署在具有公网IP的机器上，客户端通常部署在需要穿透的内网服务所在的机器上。
+配置过程   修改frps.ini
+[common]bind_port = 7000 token = passwordvega2020  修改frpc.ini
+[common]server_addr = x.x.x.x #公网ipserver_port = 7000 [ssh]type = tcplocal_ip = 127.0.0.1local_port = 22remote_port = 6000[udp]type = udplocal_ip = 192.168.8.116local_port = 22remote_port = 6001[RDP]type = tcplocal_ip = 192.168.8.116local_port = 3389 #windows远程连接端口remote_port = 6002  启动</description>
+    </item>
+    
+    <item>
+      <title>批量创建透视表</title>
+      <link>/2020/11/12/batch-refresh-pivot-table-with-different-data-sources/</link>
+      <pubDate>Thu, 12 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/11/12/batch-refresh-pivot-table-with-different-data-sources/</guid>
+      <description>背景说明 当需要根据不用客户分发透视表时，意味着透视表需要重复做N次，之所以是透视表不是完全固定的报表，是透视表有一定的灵活性，可自助拉取报表。
+我们显然是不可能将事情重复做N次的，经过测试，以下是较为方便通用且成熟方案，除了速度上有一定缺陷。
+另外方案：
+  利用Power Bi的”行安全性“可以做到类似权限管控，数据源切割的效果，但是第一次做的工作量也较大，并且通用性没上面的好。
+  VBA 创建透视表，该任务本质上是利用不同的数据源制作相同的透视表，利用VBA代码自动生成透视表功能也能实现，但是编写VBA代码时工作量也较大，如果不是长期且高频使用，性价比不高。
+  构建基础文件 根据实际需求,利用 power pivot ，创建需求度量值，完成透视表，并调整好透视表格式。
+1.透视表
+  利用Excel Power Pivot 连接数据库并创建透视表
+  设置Power Pivot 免密刷新 Excel数据选项卡中的链接属性 修改为保存密码。或者利用windows身份认证免密刷新避免密码
+  2.刷新功能宏文件
+ 构建带宏的refresh.xls 文件  创建名为refresh.xls的文件，并在其中插入VBA代码，VBA代码如下：
+该代码实现刷新该文件下全部xlsx,xls后缀文件。
+Sub refresh()Dim wb As Excel.Workbookx = ThisWorkbook.Path &amp;amp; &amp;quot;\&amp;quot;f = Dir(x &amp;amp; &amp;quot;&amp;quot; &amp;amp; &amp;quot;*xls&amp;quot;)Do While f &amp;lt;&amp;gt; &amp;quot;&amp;quot;If f &amp;lt;&amp;gt; ThisWorkbook.Name ThenSet wb = Workbooks.</description>
+    </item>
+    
+    <item>
+      <title>李子漆youtube频道</title>
+      <link>/2020/10/27/%E6%9D%8E%E5%AD%90%E6%BC%86youtube%E9%A2%91%E9%81%93/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/10/27/%E6%9D%8E%E5%AD%90%E6%BC%86youtube%E9%A2%91%E9%81%93/</guid>
+      <description>说明 利用tuber package 的API获取youtube上李子漆频道的数据简单分析，了解视频受欢迎程度，以及评论如何。
+tuber package使用 github项目地址:https://github.com/soodoku/tuber 参考资料:https://cran.r-project.org/web/packages/tuber/vignettes/tuber-ex.html
+通过get_channel_stats()获取频道基础信息
+install.package(&#39;tuber&#39;)library(tuber)yt_oauth(app_id = &#39;&#39;,app_secret = &#39;&#39;)get_channel_stats(channel_id = channelid)共120个视频，1300万订阅，1927398752次观看
+获取120个视频的信息，包含视频id,title,publication_date,description,channel_id,channel_title,viewCount,likeCount,dislikeCount,favoriteCount,commentCount,url字段
+dt &amp;lt;- tuber::get_all_channel_video_stats(channelid)names(dt)频道各项数据 观看数 从上面可知，3千万观看数视频7个，大部分视频的观看数在2千万以下
+dt %&amp;gt;%mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7, Inf))) %&amp;gt;%group_by(观看数区间) %&amp;gt;%summarise(n())dt %&amp;gt;%ggplot(aes(viewCount)) +geom_histogram(bins = 50) +ggtitle(label = &amp;quot;频道视频观看数分布情况&amp;quot;) +ggthemes::theme_clean()&amp;ldquo;顶&amp;quot;视频数 被标记&amp;quot;顶&amp;quot;总数：30854396
+&amp;ldquo;踩&amp;quot;视频数 被标记&amp;quot;踩&amp;quot;总数：839231,远少于被&amp;quot;顶&amp;quot;数。
+评论数 评论数据 &amp;ldquo;顶数最多的视频评论&amp;rdquo; </description>
+    </item>
+    
+    <item>
+      <title>R交互表格-reactable</title>
+      <link>/2020/10/24/reactable-study/</link>
+      <pubDate>Sat, 24 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/10/24/reactable-study/</guid>
+      <description>介绍本文主要是翻译部分官方用法介绍,从而达到了解学习reactable包的目的。可用该包制作R的交互式数据表,在Rmarkdown或者shiny中都可使用,可自定义主题,可自定义CSS,自定义JS。
+想直接查看原网址，请点击官方Github地址。
+安装install.packages(&amp;quot;reactable&amp;quot;)devtools::install_github(&amp;quot;glin/reactable&amp;quot;)用法library(reactable)reactable(iris){&#34;x&#34;:{&#34;tag&#34;:{&#34;name&#34;:&#34;Reactable&#34;,&#34;attribs&#34;:{&#34;data&#34;:{&#34;Sepal.Length&#34;:[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5,5,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5,5.5,4.9,4.4,5.1,5,4.5,4.4,5,5.1,4.8,5.1,4.6,5.3,5,7,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5,5.9,6,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6,5.7,5.5,5.5,5.8,6,5.4,6,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5,5.6,5.7,5.7,6.2,5.1,5.7,6.3,5.8,7.1,6.3,6.5,7.6,4.9,7.3,6.7,7.2,6.5,6.4,6.8,5.7,5.8,6.4,6.5,7.7,7.7,6,6.9,5.6,7.7,6.3,6.7,7.2,6.2,6.1,6.4,7.2,7.4,7.9,6.4,6.3,6.1,7.7,6.3,6.4,6,6.9,6.7,6.9,5.8,6.8,6.7,6.7,6.3,6.5,6.2,5.9],&#34;Sepal.Width&#34;:[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1,3.7,3.4,3,3,4,4.4,3.9,3.5,3.8,3.8,3.4,3.7,3.6,3.3,3.4,3,3.4,3.5,3.4,3.2,3.1,3.4,4.1,4.2,3.1,3.2,3.5,3.6,3,3.4,3.5,2.3,3.2,3.5,3.8,3,3.8,3.2,3.7,3.3,3.2,3.2,3.1,2.3,2.8,2.8,3.3,2.4,2.9,2.7,2,3,2.2,2.9,2.9,3.1,3,2.7,2.2,2.5,3.2,2.8,2.5,2.8,2.9,3,2.8,3,2.9,2.6,2.4,2.4,2.7,2.7,3,3.4,3.1,2.3,3,2.5,2.6,3,2.6,2.3,2.7,3,2.9,2.9,2.5,2.8,3.3,2.7,3,2.9,3,3,2.5,2.9,2.5,3.6,3.2,2.7,3,2.5,2.8,3.2,3,3.8,2.6,2.2,3.2,2.8,2.8,2.7,3.3,3.2,2.8,3,2.8,3,2.8,3.8,2.8,2.8,2.6,3,3.4,3.1,3,3.1,3.1,3.1,2.7,3.2,3.3,3,2.5,3,3.4,3],&#34;Petal.Length&#34;:[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.4,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4,4.7,4.5,4.9,4,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4,4.9,4.7,4.3,4.4,4.8,5,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4,4.4,4.6,4,3.3,4.2,4.2,4.2,4.3,3,4.1,6,5.1,5.9,5.6,5.8,6.6,4.5,6.3,5.8,6.1,5.1,5.3,5.5,5,5.1,5.3,5.5,6.7,6.9,5,5.7,4.9,6.7,4.9,5.7,6,4.8,4.9,5.6,5.8,6.1,6.4,5.6,5.1,5.6,6.1,5.6,5.5,4.8,5.4,5.6,5.1,5.1,5.9,5.7,5.2,5,5.2,5.4,5.1],&#34;Petal.Width&#34;:[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1,0.2,0.2,0.1,0.1,0.2,0.4,0.4,0.3,0.3,0.3,0.2,0.4,0.2,0.5,0.2,0.2,0.4,0.2,0.2,0.2,0.2,0.4,0.1,0.2,0.2,0.2,0.2,0.1,0.2,0.2,0.3,0.3,0.2,0.6,0.4,0.3,0.2,0.2,0.2,0.2,1.4,1.5,1.5,1.3,1.5,1.3,1.6,1,1.3,1.4,1,1.5,1,1.4,1.3,1.4,1.5,1,1.5,1.1,1.8,1.3,1.5,1.2,1.3,1.4,1.4,1.7,1.5,1,1.1,1,1.2,1.6,1.5,1.6,1.5,1.3,1.3,1.3,1.2,1.4,1.2,1,1.3,1.2,1.3,1.3,1.1,1.3,2.5,1.9,2.1,1.8,2.2,2.1,1.7,1.8,1.8,2.5,2,1.9,2.1,2,2.4,2.3,1.8,2.2,2.3,1.5,2.3,2,2,1.8,2.1,1.8,1.8,1.8,2.1,1.6,1.9,2,2.2,1.5,1.4,2.3,2.4,1.8,1.8,2.1,2.4,2.3,1.9,2.3,2.5,2.3,1.9,2,2.3,1.8],&#34;Species&#34;:[&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;]},&#34;columns&#34;:[{&#34;accessor&#34;:&#34;Sepal.Length&#34;,&#34;name&#34;:&#34;Sepal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Sepal.Width&#34;,&#34;name&#34;:&#34;Sepal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Length&#34;,&#34;name&#34;:&#34;Petal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Width&#34;,&#34;name&#34;:&#34;Petal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Species&#34;,&#34;name&#34;:&#34;Species&#34;,&#34;type&#34;:&#34;factor&#34;}],&#34;defaultPageSize&#34;:10,&#34;paginationType&#34;:&#34;numbers&#34;,&#34;showPageInfo&#34;:true,&#34;minRows&#34;:1,&#34;dataKey&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;,&#34;key&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;},&#34;children&#34;:[]},&#34;class&#34;:&#34;reactR_markup&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}可以在R markdown文档中使用
+也可以在Shiny app中使用:
+library(shiny)library(reactable)ui &amp;lt;- fluidPage(reactableOutput(&amp;quot;table&amp;quot;))server &amp;lt;- function(input, output) {output$table &amp;lt;- renderReactable({reactable(iris)})}shinyApp(ui, server)示例基础用法用reactable()创建表格,该表格默认为可排序和分页:
+library(reactable)reactable(iris){&#34;x&#34;:{&#34;tag&#34;:{&#34;name&#34;:&#34;Reactable&#34;,&#34;attribs&#34;:{&#34;data&#34;:{&#34;Sepal.Length&#34;:[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5,5,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5,5.5,4.9,4.4,5.1,5,4.5,4.4,5,5.1,4.8,5.1,4.6,5.3,5,7,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5,5.9,6,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6,5.7,5.5,5.5,5.8,6,5.4,6,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5,5.6,5.7,5.7,6.2,5.1,5.7,6.3,5.8,7.1,6.3,6.5,7.6,4.9,7.3,6.7,7.2,6.5,6.4,6.8,5.7,5.8,6.4,6.5,7.7,7.7,6,6.9,5.6,7.7,6.3,6.7,7.2,6.2,6.1,6.4,7.2,7.4,7.9,6.4,6.3,6.1,7.7,6.3,6.4,6,6.9,6.7,6.9,5.8,6.8,6.7,6.7,6.3,6.5,6.2,5.9],&#34;Sepal.Width&#34;:[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1,3.7,3.4,3,3,4,4.4,3.9,3.5,3.8,3.8,3.4,3.7,3.6,3.3,3.4,3,3.4,3.5,3.4,3.2,3.1,3.4,4.1,4.2,3.1,3.2,3.5,3.6,3,3.4,3.5,2.3,3.2,3.5,3.8,3,3.8,3.2,3.7,3.3,3.2,3.2,3.1,2.3,2.8,2.8,3.3,2.4,2.9,2.7,2,3,2.2,2.9,2.9,3.1,3,2.7,2.2,2.5,3.2,2.8,2.5,2.8,2.9,3,2.8,3,2.9,2.6,2.4,2.4,2.7,2.7,3,3.4,3.1,2.3,3,2.5,2.6,3,2.6,2.3,2.7,3,2.9,2.9,2.5,2.8,3.3,2.7,3,2.9,3,3,2.5,2.9,2.5,3.6,3.2,2.7,3,2.5,2.8,3.2,3,3.8,2.6,2.2,3.2,2.8,2.8,2.7,3.3,3.2,2.8,3,2.8,3,2.8,3.8,2.8,2.8,2.6,3,3.4,3.1,3,3.1,3.1,3.1,2.7,3.2,3.3,3,2.5,3,3.4,3],&#34;Petal.Length&#34;:[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.4,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4,4.7,4.5,4.9,4,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4,4.9,4.7,4.3,4.4,4.8,5,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4,4.4,4.6,4,3.3,4.2,4.2,4.2,4.3,3,4.1,6,5.1,5.9,5.6,5.8,6.6,4.5,6.3,5.8,6.1,5.1,5.3,5.5,5,5.1,5.3,5.5,6.7,6.9,5,5.7,4.9,6.7,4.9,5.7,6,4.8,4.9,5.6,5.8,6.1,6.4,5.6,5.1,5.6,6.1,5.6,5.5,4.8,5.4,5.6,5.1,5.1,5.9,5.7,5.2,5,5.2,5.4,5.1],&#34;Petal.Width&#34;:[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1,0.2,0.2,0.1,0.1,0.2,0.4,0.4,0.3,0.3,0.3,0.2,0.4,0.2,0.5,0.2,0.2,0.4,0.2,0.2,0.2,0.2,0.4,0.1,0.2,0.2,0.2,0.2,0.1,0.2,0.2,0.3,0.3,0.2,0.6,0.4,0.3,0.2,0.2,0.2,0.2,1.4,1.5,1.5,1.3,1.5,1.3,1.6,1,1.3,1.4,1,1.5,1,1.4,1.3,1.4,1.5,1,1.5,1.1,1.8,1.3,1.5,1.2,1.3,1.4,1.4,1.7,1.5,1,1.1,1,1.2,1.6,1.5,1.6,1.5,1.3,1.3,1.3,1.2,1.4,1.2,1,1.3,1.2,1.3,1.3,1.1,1.3,2.5,1.9,2.1,1.8,2.2,2.1,1.7,1.8,1.8,2.5,2,1.9,2.1,2,2.4,2.3,1.8,2.2,2.3,1.5,2.3,2,2,1.8,2.1,1.8,1.8,1.8,2.1,1.6,1.9,2,2.2,1.5,1.4,2.3,2.4,1.8,1.8,2.1,2.4,2.3,1.9,2.3,2.5,2.3,1.9,2,2.3,1.8],&#34;Species&#34;:[&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;]},&#34;columns&#34;:[{&#34;accessor&#34;:&#34;Sepal.Length&#34;,&#34;name&#34;:&#34;Sepal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Sepal.Width&#34;,&#34;name&#34;:&#34;Sepal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Length&#34;,&#34;name&#34;:&#34;Petal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Width&#34;,&#34;name&#34;:&#34;Petal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Species&#34;,&#34;name&#34;:&#34;Species&#34;,&#34;type&#34;:&#34;factor&#34;}],&#34;defaultPageSize&#34;:10,&#34;paginationType&#34;:&#34;numbers&#34;,&#34;showPageInfo&#34;:true,&#34;minRows&#34;:1,&#34;dataKey&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;,&#34;key&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;},&#34;children&#34;:[]},&#34;class&#34;:&#34;reactR_markup&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}定义列由colDef()创建列定义的列表可自己定义列:
+reactable(iris[1:5, ], columns = list(Sepal.Length = colDef(name = &amp;quot;Sepal Length&amp;quot;),Sepal.</description>
+    </item>
+    
+    <item>
+      <title>Deploy plumber with docker</title>
+      <link>/2020/10/13/deploy-plumber-with-docker/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/10/13/deploy-plumber-with-docker/</guid>
+      <description>前言 最近部门同事有较多临时取数需求,但因其不熟悉SQL,Power Pivot等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装odbc package,导致没法使用现成plumber docker，如：docker pull trestletech/plumber 或 docker pull rstudio/plumber 等，需要自定义dockerfile构建docker镜像,现记录如下。
+构建dockerfile 从r-base构建R环境,然后安装R中安装包需要的环境如：libxml2-dev,libssl-dev等，但是linux系统命令都不太理解，以下代码为拼凑起来。
+其中 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 等部分可以参考微软官网，官网详细列出了各系统安装odbc驱动的代码。
+FROM r-baseRUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \git-core \libssl-dev \libcurl4-gnutls-devRUN apt-get update \&amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \apt-transport-https \curl \gnupg \unixodbc-dev \libxml2-dev \libcurl4-openssl-dev \libssl-dev \libsodium-dev \&amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \&amp;amp;&amp;amp; curl https://packages.</description>
+    </item>
+    
+    <item>
+      <title>R 包 reactable 学习</title>
+      <link>/2020/09/17/reactable/</link>
+      <pubDate>Thu, 17 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/09/17/reactable/</guid>
+      <description>介绍本文主要是翻译部分官方用法介绍,从而达到了解学习reactable包的目的。可用该包制作R的交互式数据表,在Rmarkdown或者shiny中都可使用,可自定义主题,可自定义CSS,自定义JS。
+想直接查看原网址，请点击官方Github地址。
+安装install.packages(&amp;quot;reactable&amp;quot;)devtools::install_github(&amp;quot;glin/reactable&amp;quot;)用法library(reactable)reactable(iris){&#34;x&#34;:{&#34;tag&#34;:{&#34;name&#34;:&#34;Reactable&#34;,&#34;attribs&#34;:{&#34;data&#34;:{&#34;Sepal.Length&#34;:[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5,5,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5,5.5,4.9,4.4,5.1,5,4.5,4.4,5,5.1,4.8,5.1,4.6,5.3,5,7,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5,5.9,6,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6,5.7,5.5,5.5,5.8,6,5.4,6,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5,5.6,5.7,5.7,6.2,5.1,5.7,6.3,5.8,7.1,6.3,6.5,7.6,4.9,7.3,6.7,7.2,6.5,6.4,6.8,5.7,5.8,6.4,6.5,7.7,7.7,6,6.9,5.6,7.7,6.3,6.7,7.2,6.2,6.1,6.4,7.2,7.4,7.9,6.4,6.3,6.1,7.7,6.3,6.4,6,6.9,6.7,6.9,5.8,6.8,6.7,6.7,6.3,6.5,6.2,5.9],&#34;Sepal.Width&#34;:[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1,3.7,3.4,3,3,4,4.4,3.9,3.5,3.8,3.8,3.4,3.7,3.6,3.3,3.4,3,3.4,3.5,3.4,3.2,3.1,3.4,4.1,4.2,3.1,3.2,3.5,3.6,3,3.4,3.5,2.3,3.2,3.5,3.8,3,3.8,3.2,3.7,3.3,3.2,3.2,3.1,2.3,2.8,2.8,3.3,2.4,2.9,2.7,2,3,2.2,2.9,2.9,3.1,3,2.7,2.2,2.5,3.2,2.8,2.5,2.8,2.9,3,2.8,3,2.9,2.6,2.4,2.4,2.7,2.7,3,3.4,3.1,2.3,3,2.5,2.6,3,2.6,2.3,2.7,3,2.9,2.9,2.5,2.8,3.3,2.7,3,2.9,3,3,2.5,2.9,2.5,3.6,3.2,2.7,3,2.5,2.8,3.2,3,3.8,2.6,2.2,3.2,2.8,2.8,2.7,3.3,3.2,2.8,3,2.8,3,2.8,3.8,2.8,2.8,2.6,3,3.4,3.1,3,3.1,3.1,3.1,2.7,3.2,3.3,3,2.5,3,3.4,3],&#34;Petal.Length&#34;:[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.4,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4,4.7,4.5,4.9,4,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4,4.9,4.7,4.3,4.4,4.8,5,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4,4.4,4.6,4,3.3,4.2,4.2,4.2,4.3,3,4.1,6,5.1,5.9,5.6,5.8,6.6,4.5,6.3,5.8,6.1,5.1,5.3,5.5,5,5.1,5.3,5.5,6.7,6.9,5,5.7,4.9,6.7,4.9,5.7,6,4.8,4.9,5.6,5.8,6.1,6.4,5.6,5.1,5.6,6.1,5.6,5.5,4.8,5.4,5.6,5.1,5.1,5.9,5.7,5.2,5,5.2,5.4,5.1],&#34;Petal.Width&#34;:[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1,0.2,0.2,0.1,0.1,0.2,0.4,0.4,0.3,0.3,0.3,0.2,0.4,0.2,0.5,0.2,0.2,0.4,0.2,0.2,0.2,0.2,0.4,0.1,0.2,0.2,0.2,0.2,0.1,0.2,0.2,0.3,0.3,0.2,0.6,0.4,0.3,0.2,0.2,0.2,0.2,1.4,1.5,1.5,1.3,1.5,1.3,1.6,1,1.3,1.4,1,1.5,1,1.4,1.3,1.4,1.5,1,1.5,1.1,1.8,1.3,1.5,1.2,1.3,1.4,1.4,1.7,1.5,1,1.1,1,1.2,1.6,1.5,1.6,1.5,1.3,1.3,1.3,1.2,1.4,1.2,1,1.3,1.2,1.3,1.3,1.1,1.3,2.5,1.9,2.1,1.8,2.2,2.1,1.7,1.8,1.8,2.5,2,1.9,2.1,2,2.4,2.3,1.8,2.2,2.3,1.5,2.3,2,2,1.8,2.1,1.8,1.8,1.8,2.1,1.6,1.9,2,2.2,1.5,1.4,2.3,2.4,1.8,1.8,2.1,2.4,2.3,1.9,2.3,2.5,2.3,1.9,2,2.3,1.8],&#34;Species&#34;:[&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;]},&#34;columns&#34;:[{&#34;accessor&#34;:&#34;Sepal.Length&#34;,&#34;name&#34;:&#34;Sepal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Sepal.Width&#34;,&#34;name&#34;:&#34;Sepal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Length&#34;,&#34;name&#34;:&#34;Petal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Width&#34;,&#34;name&#34;:&#34;Petal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Species&#34;,&#34;name&#34;:&#34;Species&#34;,&#34;type&#34;:&#34;factor&#34;}],&#34;defaultPageSize&#34;:10,&#34;paginationType&#34;:&#34;numbers&#34;,&#34;showPageInfo&#34;:true,&#34;minRows&#34;:1,&#34;dataKey&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;,&#34;key&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;},&#34;children&#34;:[]},&#34;class&#34;:&#34;reactR_markup&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}可以在R markdown文档中使用
+也可以在Shiny app中使用:
+library(shiny)library(reactable)ui &amp;lt;- fluidPage(reactableOutput(&amp;quot;table&amp;quot;))server &amp;lt;- function(input, output) {output$table &amp;lt;- renderReactable({reactable(iris)})}shinyApp(ui, server)示例基础用法用reactable()创建表格,该表格默认为可排序和分页:
+library(reactable)reactable(iris){&#34;x&#34;:{&#34;tag&#34;:{&#34;name&#34;:&#34;Reactable&#34;,&#34;attribs&#34;:{&#34;data&#34;:{&#34;Sepal.Length&#34;:[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5,5,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5,5.5,4.9,4.4,5.1,5,4.5,4.4,5,5.1,4.8,5.1,4.6,5.3,5,7,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5,5.9,6,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6,5.7,5.5,5.5,5.8,6,5.4,6,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5,5.6,5.7,5.7,6.2,5.1,5.7,6.3,5.8,7.1,6.3,6.5,7.6,4.9,7.3,6.7,7.2,6.5,6.4,6.8,5.7,5.8,6.4,6.5,7.7,7.7,6,6.9,5.6,7.7,6.3,6.7,7.2,6.2,6.1,6.4,7.2,7.4,7.9,6.4,6.3,6.1,7.7,6.3,6.4,6,6.9,6.7,6.9,5.8,6.8,6.7,6.7,6.3,6.5,6.2,5.9],&#34;Sepal.Width&#34;:[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1,3.7,3.4,3,3,4,4.4,3.9,3.5,3.8,3.8,3.4,3.7,3.6,3.3,3.4,3,3.4,3.5,3.4,3.2,3.1,3.4,4.1,4.2,3.1,3.2,3.5,3.6,3,3.4,3.5,2.3,3.2,3.5,3.8,3,3.8,3.2,3.7,3.3,3.2,3.2,3.1,2.3,2.8,2.8,3.3,2.4,2.9,2.7,2,3,2.2,2.9,2.9,3.1,3,2.7,2.2,2.5,3.2,2.8,2.5,2.8,2.9,3,2.8,3,2.9,2.6,2.4,2.4,2.7,2.7,3,3.4,3.1,2.3,3,2.5,2.6,3,2.6,2.3,2.7,3,2.9,2.9,2.5,2.8,3.3,2.7,3,2.9,3,3,2.5,2.9,2.5,3.6,3.2,2.7,3,2.5,2.8,3.2,3,3.8,2.6,2.2,3.2,2.8,2.8,2.7,3.3,3.2,2.8,3,2.8,3,2.8,3.8,2.8,2.8,2.6,3,3.4,3.1,3,3.1,3.1,3.1,2.7,3.2,3.3,3,2.5,3,3.4,3],&#34;Petal.Length&#34;:[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.4,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4,4.7,4.5,4.9,4,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4,4.9,4.7,4.3,4.4,4.8,5,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4,4.4,4.6,4,3.3,4.2,4.2,4.2,4.3,3,4.1,6,5.1,5.9,5.6,5.8,6.6,4.5,6.3,5.8,6.1,5.1,5.3,5.5,5,5.1,5.3,5.5,6.7,6.9,5,5.7,4.9,6.7,4.9,5.7,6,4.8,4.9,5.6,5.8,6.1,6.4,5.6,5.1,5.6,6.1,5.6,5.5,4.8,5.4,5.6,5.1,5.1,5.9,5.7,5.2,5,5.2,5.4,5.1],&#34;Petal.Width&#34;:[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1,0.2,0.2,0.1,0.1,0.2,0.4,0.4,0.3,0.3,0.3,0.2,0.4,0.2,0.5,0.2,0.2,0.4,0.2,0.2,0.2,0.2,0.4,0.1,0.2,0.2,0.2,0.2,0.1,0.2,0.2,0.3,0.3,0.2,0.6,0.4,0.3,0.2,0.2,0.2,0.2,1.4,1.5,1.5,1.3,1.5,1.3,1.6,1,1.3,1.4,1,1.5,1,1.4,1.3,1.4,1.5,1,1.5,1.1,1.8,1.3,1.5,1.2,1.3,1.4,1.4,1.7,1.5,1,1.1,1,1.2,1.6,1.5,1.6,1.5,1.3,1.3,1.3,1.2,1.4,1.2,1,1.3,1.2,1.3,1.3,1.1,1.3,2.5,1.9,2.1,1.8,2.2,2.1,1.7,1.8,1.8,2.5,2,1.9,2.1,2,2.4,2.3,1.8,2.2,2.3,1.5,2.3,2,2,1.8,2.1,1.8,1.8,1.8,2.1,1.6,1.9,2,2.2,1.5,1.4,2.3,2.4,1.8,1.8,2.1,2.4,2.3,1.9,2.3,2.5,2.3,1.9,2,2.3,1.8],&#34;Species&#34;:[&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;setosa&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;versicolor&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;,&#34;virginica&#34;]},&#34;columns&#34;:[{&#34;accessor&#34;:&#34;Sepal.Length&#34;,&#34;name&#34;:&#34;Sepal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Sepal.Width&#34;,&#34;name&#34;:&#34;Sepal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Length&#34;,&#34;name&#34;:&#34;Petal.Length&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Petal.Width&#34;,&#34;name&#34;:&#34;Petal.Width&#34;,&#34;type&#34;:&#34;numeric&#34;},{&#34;accessor&#34;:&#34;Species&#34;,&#34;name&#34;:&#34;Species&#34;,&#34;type&#34;:&#34;factor&#34;}],&#34;defaultPageSize&#34;:10,&#34;paginationType&#34;:&#34;numbers&#34;,&#34;showPageInfo&#34;:true,&#34;minRows&#34;:1,&#34;dataKey&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;,&#34;key&#34;:&#34;06335fb869e56cffc43ca66fd95baaec&#34;},&#34;children&#34;:[]},&#34;class&#34;:&#34;reactR_markup&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}定义列由colDef()创建列定义的列表可自己定义列:
+reactable(iris[1:5, ], columns = list(Sepal.Length = colDef(name = &amp;quot;Sepal Length&amp;quot;),Sepal.</description>
+    </item>
+    
+    <item>
+      <title>Send email with R</title>
+      <link>/2020/08/19/send-email/</link>
+      <pubDate>Wed, 19 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/19/send-email/</guid>
+      <description>[toc]
+前言 blastula包是新出来的发送邮件包，相比Rmail包，该包不依赖JAVA环境，可移植性更好，有时候同事的电脑上并没有配置安装好java环境，代码在他们的电脑上将会报错，而且java环境配置也有很多坑，Rmail包依赖java8的版本，其他的版本好像也会报错，这样比起来blastula包用起来舒服太多，而且 blastula包可以很容易地发送HTML电子邮件 ，消息可以具有三个内容区域（正文，标题和页脚），通过blastula::blocks()以及blastula::md()函数，我们可以插入Markdown文本，甚至是HTML片段
+github地址https://github.com/rstudio/blastula
+其他发送邮件包如RDCOMClient，sendmailR，mailR,emayili,gmailR等。
+常规邮件发送 第一步生成发送邮件的邮箱凭证，第二步利用compose_email()函数构建邮件内容，第三步smtp_send()发送邮件。通过下面的官方案例解析，我们将会看到多种元素间可以通过c()与md()连接起来，让我们邮件正文拥有无限可能。
+生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
+重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@example.com.hk&#39;,host = &#39;mail.example.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
+user:发送邮件的邮件账户;
+host:邮件服务器，像mail.example.com.hk,是目前邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com，gmail邮箱是smtp.gmai.com不同邮件的host地址不一样
+port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
+use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
+可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
+构建邮件正文 以下代码是官方案例：
+#添加时间date_time &amp;lt;- add_readable_time() # Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)#添加图片 转化成html文本img_string &amp;lt;- add_image(file = img_file_path) # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
     </item>
     
     <item>
@@ -155,14 +351,73 @@ wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gz tar -zvxf pcre2-10.35.tar.gz
 blastula包可以很容易地发送HTML电子邮件 。该消息可以具有三个内容区域（正文，标题和页脚），并且我们可以插入Markdown文本，基于块的组件,甚至HTML片段。
 生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
 重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
-create_smtp_creds_file(file = &#39;email_creds&#39;, user = &#39;zhongyf@ghzy.com.hk&#39;, host = &#39;mail.ghzy.com.hk&#39;, port = 25,use_ssl = FALSE) file:文件名为email_creds;
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@ghzy.com.hk&#39;,host = &#39;mail.ghzy.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
 user:发送邮件的邮件账户;
 host:邮件服务器，像mail.ghzy.com.hk,是目前公司的邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com,不同邮件的host地址不一样
 port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
 use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
 可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
 发送邮件 以下代码是官方案例：
-date_time &amp;lt;- add_readable_time() #添加时间 # Create an image string using an on-disk 指定一个图像文件路径 # image file img_file_path &amp;lt;- system.file( &amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;, package = &amp;quot;blastula&amp;quot; ) img_string &amp;lt;- add_image(file = img_file_path) #添加图片 转化成html文本 # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中 # The compose_email() function allows us to easily create an email message.</description>
+date_time &amp;lt;- add_readable_time() #添加时间# Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)img_string &amp;lt;- add_image(file = img_file_path) #添加图片 转化成html文本# compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
+    </item>
+    
+    <item>
+      <title>在linux上利用cronR部署定时任务</title>
+      <link>/2020/08/13/cronr/</link>
+      <pubDate>Thu, 13 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/13/cronr/</guid>
+      <description>Cron 基础 在linux上定时任务可直接利用命令部署。cron服务是Linux的内置服务，但它不会开机自动启动，可以每分钟执行任务。可以用以下命令启动和停止服务：
+/bin/systemctl start crond/bin/systemctl stop crond/bin/systemctl restart crond/bin/systemctl reload crond/bin/systemctl status crond#以上代码在centos7上测试成功Crontab 操作 crontab -u //设定某个用户的cron服务crontab -l //列出某个用户cron服务的详细内容crontab -r //删除某个用户的cron服务crontab -e //编辑某个用户的cron服务crontab -i //打印提示，输入yes等确认信息/var/spool/cron/root (以用户命名的文件) 是所有默认存放定时任务的文件/etc/cron.deny 该文件中所列出用户不允许使用crontab命令/etc/cron.allow 该文件中所列出用户允许使用crontab命令，且优先级高于/etc/cron.deny/var/log/cron 该文件存放cron服务的日志用以下crontab -e 打开编辑任务：
+* * * * * /usr/lib64/R/bin/Rscript &#39;/home/zyf/testcornR.R&#39; &amp;gt;&amp;gt; &#39;/home/zyf/testcornR.log&#39; 2&amp;gt;&amp;amp;1
+# Rscript 路径/usr/lib64/R/bin/Rscript # 待执行脚本完整路径/home/zyf/testcornR.R# 日志输出&amp;gt;&amp;gt; &#39;/home/zyf/testcornR.log&#39; 2&amp;gt;&amp;amp;1# 2&amp;gt;&amp;amp;1 重新定向 不太懂CronR设置定时任务 cronR包cran地址</description>
+    </item>
+    
+    <item>
+      <title>R集群计算</title>
+      <link>/2020/08/11/r%E9%9B%86%E7%BE%A4%E8%AE%A1%E7%AE%97/</link>
+      <pubDate>Tue, 11 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/11/r%E9%9B%86%E7%BE%A4%E8%AE%A1%E7%AE%97/</guid>
+      <description>R集群搭建以及并行计算 配置ssh免密登录 在两台IP地址不同的Linux(本次实验centos8)机器上面安装好R，然后每台机器都安装snow包，最后注意一点是，需要配置ssh的免密码登录，不同的linux用户需要配置自己的免密码登录，需要用到R集群的用户都需要使用自己的账户安装snow包。
+  检查是否需要密码登录
+ssh ip 
+  需要密码登录
+ssh-keygen -t rsa -P &#39;&#39; -f ~/.ssh/id_rsacat ~/.ssh/id_rsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keyschmod 600 ~/.ssh/authorized_keys  设置ssh免密到其他服务器
+ssh-copy-id ip1ssh-copy-id 1p2ssh-copy-id 1p3  删除免密
+vi ~/.ssh/authorized_keys
+  删除免密
+&amp;lt;https://blog.csdn.net/haveqing/article/details/106169760
+  R中创建集群 library(snow)workerList &amp;lt;- list(list(host = &amp;quot;47.116.48.107&amp;quot;, port = 10187, outfile = &amp;quot;~/log1.log&amp;quot;, rshcmd = &amp;quot;ssh -p 22&amp;quot;),list(host = &amp;quot;198.130.61.74&amp;quot;, port = 10187, outfile = &amp;quot;~/log2.</description>
+    </item>
+    
+    <item>
+      <title>Deploying Shiny</title>
+      <link>/2020/07/29/deploying-shiny/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/29/deploying-shiny/</guid>
+      <description>安装 官网资料：https://rstudio.com/products/shiny/download-server/
+第一步安装R
+sudo yum install R
+centos7 上可直接用上面命令安装R,但是在centos 8 安装会无法成功。因为R软件包没有被包含在 CentOS 8 的核心软件源中。我们需要从 EPEL 软件源中安装 R
+启用 EPEL 和 PowerTools 软件源
+sudo dnf install epel-release sudo dnf config-manager &amp;ndash;set-enabled PowerTools
+安装R输入：
+sudo yum install R
+查看R版本 R &amp;ndash;version
+第二步 安装shiny package
+sudo su -
+-c &amp;ldquo;R -e &amp;quot;install.packages(&amp;lsquo;shiny&amp;rsquo;, repos=&#39;https://cran.rstudio.com/&#39;)&amp;quot;&amp;rdquo;
+或者近入R后install.package(&#39;shiny&#39;) 安装
+第三步 下载安装shiny
+wget https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm
+sudo yum install &amp;ndash;nogpgcheck shiny-server-1.5.14.948-x86_64.rpm
+第四步 测试是否安装成功
+http://ip:3838
+ip地址如果是本机,可以换成localhost,或者是本机ip地址。如果是公网像云服务器,需要开放3838的端口后再测试。
+查看shiny-server 状态
+sudo systemctl status shiny-server</description>
     </item>
     
     <item>
@@ -182,7 +437,7 @@ sudo yum install R
 查看R版本 R &amp;ndash;version
 第二步 安装shiny package
 sudo su -
--c &amp;ldquo;R -e &amp;quot;install.packages(&amp;lsquo;shiny&amp;rsquo;, repos=&amp;lsquo;https://cran.rstudio.com/&#39;)&amp;quot;&amp;rdquo;
+-c &amp;ldquo;R -e &amp;quot;install.packages(&amp;lsquo;shiny&amp;rsquo;, repos=&#39;https://cran.rstudio.com/&#39;)&amp;quot;&amp;rdquo;
 或者近入R后install.package(&#39;shiny&#39;) 安装
 第三步 下载安装shiny
 wget https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm
@@ -192,6 +447,205 @@ http://ip:3838
 ip地址如果是本机,可以换成localhost,或者是本机ip地址。如果是公网像云服务器,需要开放3838的端口后再测试。
 查看shiny-server 状态
 sudo systemctl status shiny-server</description>
+    </item>
+    
+    <item>
+      <title>ODBC Driver 17 for SQL Server VS SQL Server</title>
+      <link>/2020/07/28/t/</link>
+      <pubDate>Tue, 28 Jul 2020 11:30:57 +0000</pubDate>
+      
+      <guid>/2020/07/28/t/</guid>
+      <description>在使用DBI包向数据库MSSQL导入数据时,发现更改连接驱动,效率有明显提升。现记录如下：
+环境sessionInfo()R 查看本机现有驱动library(odbc)drivers_tbl &amp;lt;- odbc::odbcListDrivers()head(drivers_tbl)模拟数据library(data.table)n &amp;lt;- 1e5dt &amp;lt;- data.table(a=1:n,b=rep(&amp;#39;a&amp;#39;,n),d=1:n * 1e4)测试con_1 &amp;lt;- dbConnect(odbc::odbc(), .connection_string = &amp;quot;driver={ODBC Driver 17 for SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456&amp;quot;, timeout = 10)con_2 &amp;lt;- dbConnect(odbc::odbc(), .connection_string = &amp;quot;driver={SQL Server};server=G1001014\\NEWMSSQL;database=test;uid=sa;pwd=123456&amp;quot;, timeout = 10)#测试次数nn &amp;lt;- 10result_1 &amp;lt;- vector(length = nn)result_2 &amp;lt;- vector(length = nn)for(i in 1:nn){#con_1tictoc::tic()DBI::dbWriteTable(conn = con_1,name = &amp;#39;test_table&amp;#39;,value = dt,overwrite=T)a &amp;lt;- tictoc::toc()result_1[i] &amp;lt;- a$toc-a$tic#con_2tictoc::tic()DBI::dbWriteTable(conn = con_2,name = &amp;#39;test_table&amp;#39;,value = dt,overwrite=T)a &amp;lt;- tictoc::toc()result_2[i] &amp;lt;- a$toc-a$tic}差异比较mean(result_1)mean(result_2)</description>
+    </item>
+    
+    <item>
+      <title>用R刷新透视表</title>
+      <link>/2020/07/26/refresh-excel-pivot-table-use-r/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/26/refresh-excel-pivot-table-use-r/</guid>
+      <description>在工作中需要批量刷新Excel透视表，现用R语言实现批量自动刷新。
+准备VBA代码 创建宏Excel 文件，另存为Refresh.xlsm，将宏命名为refresh。
+以下VB代码可实现Refresh.xlsm文件所在文件夹内的其余全部Excle 文件刷新。利用该功能可实现批量刷新。
+Sub refresh() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;#34;\&amp;#34; f = Dir(x &amp;amp; &amp;#34;&amp;#34; &amp;amp; &amp;#34;*xls&amp;#34;) Do While f &amp;lt;&amp;gt; &amp;#34;&amp;#34; If f &amp;lt;&amp;gt; ThisWorkbook.Name Then Set wb = Workbooks.Open(x &amp;amp; &amp;#34;&amp;#34; &amp;amp; f) ActiveWorkbook.RefreshAll wb.Save wb.Close End If f = Dir Loop End Sub 文件结构 创建文件夹refresh_backup,然后将需要刷新的文件放入其中。
+当透视表是通过连接数据库如MSSQL得到的透视表，利用Power Pivot 的Dax 建模的透视表在刷新时需要输入密码，需提前设置刷新时不需要密码。
+├─华东区 │ 刷新数据.xlsm │ 华东商品数据.xlsx │ 华东商品数据上海市.xlsx │ 华东商品数据加盟.xlsx │ 华东商品数据杭州市.xlsx │ 华东商品数据直营.</description>
+    </item>
+    
+    <item>
+      <title>ROracle包安装</title>
+      <link>/2020/07/25/roracle-install/</link>
+      <pubDate>Sat, 25 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/25/roracle-install/</guid>
+      <description>[toc]
+前言 需要连接oracle数据库时，可使用ROracle包，你搜索将会提示你用ROralce包，但是当你直接install.packages()时将会报错，你能简单搜索到的资料往往说得并不全面，让你一知半解，而且资料比较老。至此，发现让R与Oracle数据库交互，并不是一件特别简单的事情。至于为什么要连接，那当然是因为工作需要，经过一番折腾搜索资料，成功连接到oracle数据库，由于中文搜索引擎下能找到的有用且完整的资料有限，故将安装资料整理记录，分为win10下安装以及服务器上安装两部分。
+需要注意的是，无论在哪种系统下安装该包，你都需要有一定的计算机基础：
+  配置环境变量，后文中有在win中配置环境变量的gif图
+  配置rtools，因为该包需要编译，win中R-4.0后安装配置rtools资料，重点是下载后安装配置环境变量。rtools40安装包已放百度网盘。当你使用的R版是4.0版本之前的版本，需自行下载老版本的Rtools。
+  连接数据库，可以参考我的公众号『宇飞的世界』里面关于连接数据库字符串的文章。
+  ROracle包官网地址，可以下载到包源码，详情请点击地址前往官网。
+在linxu安装ROracle包需要依赖几个软件包，但是下载资料需要有账号且网络原因，故提供相关下载地址。
+百度网盘下载地址：
+链接：https://pan.baidu.com/s/1R5xUTpR7BlWDnlDojzO7fw 提取码：u1dz 复制这段内容后打开百度网盘手机App，操作更方便哦Note: ROracle包官方安装资料，适合有计算机背景以及英语好的人直接阅读。
+Win10安装 win系统下面安装相对简单，主要是我们熟悉的界面，像我不懂linxu的人直接在linux配置环境变量这些，简直太麻烦了，而且不知道对错。如果不是非得在linxu上面安装，建议大家就在win10系统中安装配置R语言环境。如果想体验服务器中的rstudio-server或者shiny-server，可以参考我的文章服务器中-R语言环境配置。
+ROracle包连接 第一次安装这个包时遇到了很多困难，吃尽苦头。安装需要分为三步：首先安装oracle客户端，其次配置好环境变量，最后安装包验证。
+  安装Oracle Instant Client
+需要安装oracle 客户端，选择64位安装，安装文件【win64_11gR2_client】在提供的云盘中，文件较大600M。
+  配置环境变量
+OCI_INC与OCI_LIB64两个环境变量，WIN10怎么配置环境变量，可以参照后文动图或自行搜索。下面两个环境变量的路径是第一步中你按照客户端的路径，可以根据你自己的选择做相应修改。路径中不要有中文或空格等特殊符号，建议直接装某盘下面，像我直接安装在C盘。
+#配置两个环境变量# step1 #OCI_INC=&#39;D:\app\zhongyf\product\11.2.0\client_1\oci\include&#39;# step 2#OCI_LIB64=&#39;D:\app\zhongyf\product\11.2.0\client_1\BIN&#39;#验证Sys.getenv(&#39;OCI_INC&#39;)Sys.getenv(&#39;OCI_LIB64&#39;)  配置Rtools
+提前配置好Rtools环境，如果已经安装配置好，请跳过。在R中运行以下检查是否安装配置成功，如果未安装成功，请参照官方资料安装配置
+Sys.which(&#39;make&#39;)  安装包
+可以直接在安装命令中修改安装镜像，或者在Rstudio中修改默认镜像地址。
+install.packages(&#39;ROracle&#39;,repos = &amp;quot;https://mirrors.tuna.tsinghua.edu.cn/CRAN/&amp;quot;) #改为国内镜像  验证
+library(ROracle)library(DBI)drv &amp;lt;-dbDriver(&amp;quot;Oracle&amp;quot;)connect.string &amp;lt;- &amp;quot;(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 172.</description>
+    </item>
+    
+    <item>
+      <title>数据处理-空值填充</title>
+      <link>/2020/07/21/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86-%E7%A9%BA%E5%80%BC%E5%A1%AB%E5%85%85/</link>
+      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/21/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86-%E7%A9%BA%E5%80%BC%E5%A1%AB%E5%85%85/</guid>
+      <description>加载包library(pacman)pacman::p_load(&amp;#39;data.table&amp;#39;)模拟数据x &amp;lt;- c(1,2,3,4,NA,5,NA,6,NA,NA,NA,7,NA)y &amp;lt;- c(1,2,3,4,NA,5,NA,6,NA,NA,NA,7,NA)dt &amp;lt;- data.table(x=c(1,2,3,4,NA,5,NA,6,NA,NA,NA,7,NA))填充模式const模式填充直接填充模式,type参数默认为const,当type=’const’时,fill参数有效,可指定填充.fill参数为数字或整数
+nafill(x,fill=0)## [1] 1 2 3 4 0 5 0 6 0 0 0 7 0setnafill(x = dt,type = &amp;#39;const&amp;#39;,fill = 0,cols = c(&amp;#39;x&amp;#39;))dt## x## 1: 1## 2: 2## 3: 3## 4: 4## 5: 0## 6: 5## 7: 0## 8: 6## 9: 0## 10: 0## 11: 0## 12: 7## 13: 0locf模式用前值填充,type参数设置为locf.</description>
+    </item>
+    
+    <item>
+      <title>Win10R语言定时任务</title>
+      <link>/2020/07/14/win10%E4%B8%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1-r%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Tue, 14 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/14/win10%E4%B8%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1-r%E8%AF%AD%E8%A8%80/</guid>
+      <description>定时任务 实际工作中，数据清洗工作中需要定时执行，比如从数仓跑固定报表后发邮件或者是按照一定业务逻辑整合数据。
+接下来就记录win10中的实现R语言的定时任务，共有两种方式，一种是win10自带的任务计划程序，另外一种是利用R包实现定时任务。需要注意的是Win下，R语言实现定时任务，需要用不带中文的脚本包裹真正的脚本来执行,因为直接执行的脚本包含中文时会报错。
+win10 自带 win10自带任务计划程序，在电脑左下角搜索【任务计划程序，进入win10任务计划程序。如下所示：
+Step 1: 点击创建任务
+常规选项：选择【不管用户是否登录都要运行】与【使用最高权限运行】
+Step2: 设置触发器
+选择触发器，点击新建，按照任务需求设置。
+Step 3：设置操作选项
+选择操作，点击新建。
+其中程序或脚本 请选择你的Rscript程序路径,如：D:\Program Files\R\R-4.0.2\bin\Rscript.exe，填写完整路径。
+添加参数(可选)A，即填写待执行的R脚本：C:\Users\zhongyf\Desktop\TEST.R ，填写完整路径。
+这里解释一下三个文本框内容的含义，
+【程序或脚本】文本框中填的是R编译器的名称，一般就是Rscript.exe
+【起始于】文本框中填的是R编译器的目录，上图中假设你的R编译器的完整路径是“【D:\Program Files\R\R-4.0.2\Rscript.exe】”
+【添加参数】文本框中填的是你的R程序的完整路径，这里假设在C盘的Users文件夹下面有一个叫做C:\Users\zhongyf\Desktop\TEST.R 的文件。
+将三部分连接在一起 R D:\Program Files\R\R-4.0.2\bin\Rscript.exe C:\Users\zhongyf\Desktop\TEST.R
+ R包实现定时任务 taskscheduleR包在WIN下实现定时任务。
+安装 包在CRAN上，安装很简单，运行
+install.packages(&amp;quot;taskscheduleR&amp;quot;)
+如果想要在Rstudio中可视化操作，需要安装：
+install.packages(&#39;miniUI&#39;)
+install.packages(&#39;shiny&#39;)
+脚本编写定时任务 在win10中 编写脚本Rscript.R，需要另外新建一个R脚本emailtasks.R，脚本内容为source(&amp;rsquo;./Rscript.R&amp;rsquo;,encoding = &amp;lsquo;utf-8&amp;rsquo;)`，通过这种方式可以避免脚本中包含中文无法执行的问题
+library(taskscheduleR)#需要定时执行的R脚本# emailtasks.R 文件的内容用source函数功能包裹起来的脚本myscript &amp;lt;- &amp;quot;C:/Users/admin/Desktop/timedtask/email/emailtasks.R&amp;quot;#创建定时任务taskscheduler_create(taskname = &amp;quot;dxc_tasks_email&amp;quot;, rscript = myscript, schedule = &amp;quot;DAILY&amp;quot;, starttime = &amp;quot;09:05&amp;quot;,startdate = format(Sys.Date(), &amp;quot;%Y/%m/%d&amp;quot;))#可以通过打开 【任务计划程序】查看任务是否添加成功# 删除任务# taskscheduler_delete(&#39;newtasks&#39;)# 运行任务# taskscheduler_runnow(&#39;dxc_tasks_email&#39;)linux上定时任务请查阅：http://www.</description>
+    </item>
+    
+    <item>
+      <title>linux系统安装R包环境依赖</title>
+      <link>/2020/07/06/linux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85r%E5%8C%85%E7%8E%AF%E5%A2%83%E4%BE%9D%E8%B5%96/</link>
+      <pubDate>Mon, 06 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/06/linux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85r%E5%8C%85%E7%8E%AF%E5%A2%83%E4%BE%9D%E8%B5%96/</guid>
+      <description>install xml2 package yum install openssl-develyum install libcurly libcurl-develyum install libxml2-devel yum install openssl-develyum install gcc gcc-c++ kernel-devel make</description>
+    </item>
+    
+    <item>
+      <title>Centos 8 install R and rstudio-server</title>
+      <link>/2020/06/19/centos-8-install-r-rstudio-shiny-server/</link>
+      <pubDate>Fri, 19 Jun 2020 10:07:30 +0000</pubDate>
+      
+      <guid>/2020/06/19/centos-8-install-r-rstudio-shiny-server/</guid>
+      <description>install R dnf install epel-releasednf install &#39;dnf-command(config-manager)&#39;dnf config-manager --set-enabled PowerToolsdnf install Rinstall Rstudio-server 可以通过官方页面安装 https://rstudio.com/products/rstudio/download-server/
+wget https://download2.rstudio.org/server/centos8/x86_64/rstudio-server-rhel-1.3.1056-x86_64.rpmsudo yum install rstudio-server-rhel-1.3.1056-x86_64.rpm利用docker安装 Rstudio
+ 安装docker  安装依赖
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.reposudo yum install docker-ce docker-ce-cli containerd.io如果报错：Problem: package docker-ce-3:19.03.4-3.el7.x86_64 requires containerd.io &amp;gt;= 1.2.2-3 那就先装新版的 containerd.io
+dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+安装 docker sudo yum install docker-ce docker-ce-cli
+sudo systemctl start dockerdocker --version#开机自启sudo systemctl enable docker 安装 rstudio-server  参考资料 https://hub.</description>
+    </item>
+    
+    <item>
+      <title>自动创建数据透视表</title>
+      <link>/2019/09/03/vba/</link>
+      <pubDate>Tue, 03 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/09/03/vba/</guid>
+      <description>为什么需要自动创建数据透视表 最近接到一项工作任务，需要制作大量同款数据透视表，但是使用区域以及层级不一样导致数据源不一样，依据一个模板批量复制后更改部分细节问题会有大量工作，需要一个个透视表取更改，因此萌发了VBA实现批量制作透视表的想法。
+基础透视表 本处基础透视表是指不需要从模型生成透视表，也不需要通过DAX函数添加度量值的情况下透视表。在这种情况下透视表可以通过录制宏实现VBA代码自动创建透视表。
+数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba
+Sub 创建透视表()Sheets.AddActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&amp;quot;表1&amp;quot; _, Version:=6).CreatePivotTable TableDestination:=&amp;quot;Sheet1!R3C1&amp;quot;, TableName _:=&amp;quot;数据透视表1&amp;quot;, DefaultVersion:=6Sheets(&amp;quot;Sheet1&amp;quot;).SelectCells(3, 1).SelectWith ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotCache.RefreshOnFileOpen = False.MissingItemsLimit = xlMissingItemsDefaultEnd With’数据透视表行列部分以及计算汇总字段ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).RepeatAllLabels xlRepeatLabelsWith ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotFields(&amp;quot;Species&amp;quot;).Orientation = xlRowField.Position = 1End WithActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).AddDataField ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot; _).PivotFields(&amp;quot;Petal.Width&amp;quot;), &amp;quot;求和项:Petal.Width&amp;quot;, xlSumEnd SubPower Pivot 透视表 工作中大部分时候都是带度量值的透视表，那就需要通过VBA直接生成度量值，主要步骤：第一步将表格添加到模型，第二步创建度量值，第三步创建透视表，拉取透视表。
+数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba/Powerpivot
+  将表格添加到模型
+第一步将表添加到模型，需要说明的是 ：将Sheet1添加到模型，并命名为ORA，这些参数需根据实际情况修改调整
+Sub 添加到模型()Sheets(&amp;quot;Sheet1&amp;quot;).ListObjects(1).Name = &amp;quot;ORA&amp;quot;WrkName = ActiveWorkbook.NameTblName = Sheets(&amp;quot;Sheet1&amp;quot;).</description>
+    </item>
+    
+    <item>
+      <title>vba连接数据库查询</title>
+      <link>/2019/07/06/vba/</link>
+      <pubDate>Sat, 06 Jul 2019 12:30:30 +0000</pubDate>
+      
+      <guid>/2019/07/06/vba/</guid>
+      <description>VBA代码 在Excle中插入宏代码保存，按照自己需求更改相应 sql 语句即可实现相应的功能。
+本宏实现获取最新门店库存的功能,sql语句为 SELECT * FROM [spb].[dbo].[BI_inventory_table] where convert(date,数据更新日期,23)= convert(date,GETDATE(),23)  。输入server_name 数据库 ip：localhost ，想要连接的数据库名：spb，DBA提供的数据库账户和密码 zhongyf,Zyf123456。
+Sub 获取最新库存() &amp;#39; Carl SQL Server Connection  &amp;#39;  &amp;#39; FOR THIS CODE TO WORK  &amp;#39; In VBE you need to go Tools References and check Microsoft Active X Data Objects 2.x library  &amp;#39;  Dim Cn As Object Dim Server_Name As String Dim Database_Name As String Dim User_ID As String Dim Password As String Dim SQLStr As String Dim rs As Object Set rs = CreateObject(&amp;#34;ADODB.</description>
+    </item>
+    
+    <item>
+      <title>DAX Status</title>
+      <link>/2019/05/28/dax-status/</link>
+      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/05/28/dax-status/</guid>
+      <description>下载 DAX Studio是针对Microsoft Tabular模型执行和分析DAX查询的终极工具,我们在PowerBI或Excel中写DAX公式有时会感觉不便携，用此工具能效解决问题。
+官网下载</description>
+    </item>
+    
+    <item>
+      <title>VBA批量调整Excel单元格格式</title>
+      <link>/2019/05/15/t/</link>
+      <pubDate>Wed, 15 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/05/15/t/</guid>
+      <description>代码 该宏代码实现某一文件夹内全部Excel文件的单元格格式调整。
+Sub 批量修改单元格格式() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;#34;\&amp;#34; f = Dir(x &amp;amp; &amp;#34;&amp;#34; &amp;amp; &amp;#34;*xls&amp;#34;) Do While f &amp;lt;&amp;gt; &amp;#34;&amp;#34; If f &amp;lt;&amp;gt; ThisWorkbook.Name Then Set wb = Workbooks.Open(x &amp;amp; &amp;#34;&amp;#34; &amp;amp; f) For Each Sheet In Sheets Sheet.Columns(&amp;#34;A:AZ&amp;#34;).Font.Name = &amp;#34;微软雅黑&amp;#34; Sheet.Columns(&amp;#34;A:AZ&amp;#34;).Font.Size = &amp;#34;10&amp;#34; Sheet.Range(&amp;#34;A:AZ&amp;#34;).EntireColumn.AutoFit Next Sheet wb.Save wb.Close End If f = Dir Loop End Sub </description>
+    </item>
+    
+    <item>
+      <title>Power BI 自定义配色</title>
+      <link>/2019/03/13/power-bi/</link>
+      <pubDate>Wed, 13 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/03/13/power-bi/</guid>
+      <description>在用Power BI 搭建仪表版过程中，往往会要求按照公司的配色需求调整。
+创建一下json文件，复制在TXT中,修改后缀名即可。其中颜色可自行更改，datacolors是颜色顺序可调整,最前面的颜色当图只有一个颜色时优先。
+{&amp;quot;name&amp;quot;: &amp;quot;zhongyf theme 1&amp;quot;,&amp;quot;dataColors&amp;quot;: [&amp;quot;#568410&amp;quot;, &amp;quot;#3A6108&amp;quot;, &amp;quot;#70A322&amp;quot;, &amp;quot;#915203&amp;quot;, &amp;quot;#D79A12&amp;quot;, &amp;quot;#bb7711&amp;quot;, &amp;quot;#114400&amp;quot;, &amp;quot;#aacc66&amp;quot;],&amp;quot;background&amp;quot;:&amp;quot;#FFFFFF&amp;quot;,&amp;quot;foreground&amp;quot;: &amp;quot;#000000&amp;quot;,&amp;quot;tableAccent&amp;quot;: &amp;quot;#568410&amp;quot;}详情请参阅 :
+https://docs.microsoft.com/zh-cn/power-bi/create-reports/desktop-report-themes</description>
+    </item>
+    
+    <item>
+      <title>利用VBA插入图片</title>
+      <link>/2018/08/13/vba/</link>
+      <pubDate>Mon, 13 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/08/13/vba/</guid>
+      <description>在工作过程中需要向Excel单元格中插入图片,VBA代码记录如下：
+&#39; insert photoSub insert_photo()On Error Resume NextDim dress$Set dig = Application.FileDialog(msoFileDialogFolderPicker)With dig.Showdress = .SelectedItems(1) &#39;选择文件夹地址End WithDim MR As RangeFor Each MR In SelectionIf Not IsEmpty(MR) ThenMR.SelectML = MR.LeftMT = MR.TopMW = MR.WidthMH = MR.HeightActiveSheet.Shapes.AddShape(msoShapeRectangle, ML, MT, MW, MH).SelectSelection.ShapeRange.Fill.UserPicture _dress &amp;amp; &amp;quot;\&amp;quot; &amp;amp; MR.Value &amp;amp; &amp;quot;.jpg&amp;quot; &#39;设置地址所在目录下以当前单元内容为名称的.jpg图片End IfNextEnd Sub使用方法：</description>
+    </item>
+    
+    <item>
+      <title>利用VBA拆分Excel</title>
+      <link>/2018/07/15/vba/</link>
+      <pubDate>Sun, 15 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/07/15/vba/</guid>
+      <description>在工作过程中需要按照Sheet拆分Excel,VBA代码记录如下：
+&#39; split sheetSub SaveAs()On Error Resume NextDim FolderPath As String, FolderName As String, BN As StringDim ReturnValue As IntegerBN = ActiveWorkbook.NameFolderPath = ThisWorkbook.PathFolderName = Mid(BN, 1, InStrRev(BN, &amp;quot;.&amp;quot;, Len(BN)) - 1)Dim MyFile As ObjectSet MyFile = CreateObject(&amp;quot;Scripting.FileSystemObject&amp;quot;)If MyFile.folderexists(FolderPath &amp;amp; &amp;quot;\&amp;quot; &amp;amp; FolderName &amp;amp; &amp;quot;-Saved&amp;quot;) ThenReturnValue = MsgBox(&amp;quot;文件夹已存在，是否更新内容？&amp;quot;, vbOKCancel, &amp;quot;Caution!&amp;quot;)If ReturnValue = 2 Then Exit SubElseMyFile.CreateFolder (FolderPath &amp;amp; &amp;quot;\&amp;quot; &amp;amp; FolderName &amp;amp; &amp;quot;-Saved&amp;quot;)Set MyFile = NothingEnd IfApplication.</description>
     </item>
     
   </channel>
