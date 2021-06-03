@@ -1,34 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>pyttsx3 on study notes</title>
-    <link>/tags/pyttsx3/</link>
-    <description>Recent content in pyttsx3 on study notes</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 14 Dec 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/pyttsx3/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>pyttsx3 -文字转语音</title>
-      <link>/2020/12/14/pyttsx3-%E6%96%87%E5%AD%97%E8%BD%AC%E8%AF%AD%E9%9F%B3/</link>
-      <pubDate>Mon, 14 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/2020/12/14/pyttsx3-%E6%96%87%E5%AD%97%E8%BD%AC%E8%AF%AD%E9%9F%B3/</guid>
-      <description>说明 有天突发奇想，想把一些书本转化成语音mp3格式，方便听。简单搜素后决定用python的pyttsx3库实现。
-代码 中间存在一些版本问题，后来实现miniconda 创建新环境实现。
-安装 1.安装 miniconda 进入网址 Miniconda - Conda
-下载 Python3 的 64-bit 版本即可。注意，最好是64位的版本（除非你的电脑是32位的）。这里选择3.X或者2.X没关系，都可以，但建议和课程一致选Python3版本。
-2.添加 conda 的镜像服务器 因为conda 下载文件要用到国外的服务器，速度一般会比较慢，我们可以通过增加一个清华的镜像服务器来解决。
-打开cmd终端或者Anaconda Prompt（快捷键： win+r ：然后输入cmd，回车）。
-分别在cmd终端或者Anaconda Prompt里粘贴下面两行代码（每粘贴一行回车确认）。
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --set show_channel_urls yes
-# 创建新环境conda create –n yuyin python=3.9activate yuyinpip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5pyttsx3代码如下：
-import pyttsx3filename = input(&#39;请输入需转化语音的txt文件名称:&#39;)f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;)line = f.readlines()line = str(line)line = line.</description>
-    </item>
-    
-  </channel>
-</rss>

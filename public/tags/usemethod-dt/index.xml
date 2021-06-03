@@ -1,25 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>usemethod DT on study notes</title>
-    <link>/tags/usemethod-dt/</link>
-    <description>Recent content in usemethod DT on study notes</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 02 Dec 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/usemethod-dt/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>DT包使用案例</title>
-      <link>/2020/12/02/dt%E5%8C%85%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/</link>
-      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/2020/12/02/dt%E5%8C%85%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/</guid>
-      <description>说明 记录DT包使用案例
-案例  按钮  dat &amp;lt;- data.frame(&amp;quot;Title&amp;quot; = c(&amp;quot;A Random Walk Down Wall Street&amp;quot;,&amp;quot;Naked Statistics&amp;quot;,&amp;quot;Freakonomics&amp;quot;),&amp;quot;Author&amp;quot; = c(&amp;quot;Burton G. Malkiel&amp;quot;,&amp;quot;Charles Wheelan&amp;quot;,&amp;quot;Steven D. Levitt and Stephen J. Dubner&amp;quot;))library(DT)datatable(dat)datatable(dat,rownames = FALSE, # remove row numbersfilter = &amp;quot;top&amp;quot;, # add filter on top of columnsextensions = &amp;quot;Buttons&amp;quot;, # add download buttonsoptions = list(autoWidth = TRUE,dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttonsbuttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttonspageLength = 5, # show first 5 entries, default is 10order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order))# Add links to the interactive tabledatatable(dat,rownames = FALSE, # remove row numbersfilter = &amp;quot;top&amp;quot;, # add filter on top of columnsextensions = &amp;quot;Buttons&amp;quot;, # add download buttonsoptions = list(autoWidth = TRUE,dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttonsbuttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttonspageLength = 5, # show first 5 entries, default is 10order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order),escape = FALSE # to make URLs clickable)来源：https://www.</description>
-    </item>
-    
-  </channel>
-</rss>
