@@ -23,12 +23,22 @@
   </url>
   
   <url>
+    <loc>/categories/r/</loc>
+    <lastmod>2021-06-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/categories/r-package/</loc>
     <lastmod>2021-06-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/2021/06/03/r-package-tidyr-study/</loc>
+    <lastmod>2021-06-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2021/06/03/r-version-update/</loc>
     <lastmod>2021-06-03T00:00:00+00:00</lastmod>
   </url>
   
@@ -53,12 +63,12 @@
   </url>
   
   <url>
-    <loc>/2021/05/29/m1%E5%8E%9F%E7%94%9Fr%E8%AF%AD%E8%A8%80/</loc>
-    <lastmod>2021-05-29T00:00:00+00:00</lastmod>
+    <loc>/tags/version-update/</loc>
+    <lastmod>2021-06-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/categories/r/</loc>
+    <loc>/2021/05/29/m1%E5%8E%9F%E7%94%9Fr%E8%AF%AD%E8%A8%80/</loc>
     <lastmod>2021-05-29T00:00:00+00:00</lastmod>
   </url>
   

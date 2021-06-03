@@ -6,10 +6,26 @@
     <description>Recent content in R on study notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 May 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Jun 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>R 版本更新</title>
+      <link>/2021/06/03/r-version-update/</link>
+      <pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/06/03/r-version-update/</guid>
+      <description>由于个人强迫症，当R新版出来时一定会尝试，所以怎么快捷方便更新R版本是个问题。有时升级到最新版本时想要保留当前版本，如果是自己本地环境可以任意折腾，但是更新服务器上R版本时需谨慎,尤其是部署了rstudio-server以及shiny-server时，即使出现问题不兼容也能退回旧版本。所以就服务器上R安装更新做如下记录。 由于对linux命令不太了解以及对linux上的R认知有限,难免出现错误,如有问题,望告知,谢谢.
+基础命令 开始安装更新之前先了解几个命令. 想要查看服务器上是否安装了R,安装了哪些版本,目前使用的版本的路径等等问题,可以用以下命令在终端执行
+ R版本  # Red hat centosrpm -qa |grep R-# Ubuntu$ dpkg -s r-base R位置  which R R_RHOME  R_RHOME安装更新 由于之前已经写过Ubuntu系统上R安装更新,本文主要记录Centos上R安装以及更新.另外会简单描述下win系统上R的安装以及更新.
+Linux 本文主要代码是Centos7上R语言的安装更新.由于有Rstudio出品的R的安装指引,在服务器上安装R已经是一件超级简单的事情,之所以有本文的笔记,主要是想让自己加深理解. 犹记得当初对linux一窍不通时安装R的迷茫与心累.第一次尝试服务器上安装R就是使用的阿里云的centos7系统安装,按照网上提供的教程yum install R很顺畅的就安装上了.但是当我想安装新版本R时,灾难就来临了.后面经过摸索,我使用R的环境已经从centos系统切换到buntu系统了.主要是感觉网上关于ubuntu和R的教程多一些.另外ubuntu桌面看起来让我对ubuntu有好感.
+Centos 系统软件包管理器安装 在centos7上安装R首先需要在系统上安装EPEL存储库。通过系统软件包安装R时which R返回结果是/usr/bin/R
+sudo yum install epel-releasesudo yum install RR --version截止到2021年5月7日，在centos7上通过上述代码可安装R3.6.0
+源安装Rstudio 采用Rstudio install R 方法安装指定版本R.通过该方式安装R时which R返回结果是通常是/usr/local/bin/R，好处是可以安装使用多版本的R，并在更新系统软件包时避免替换R的现有版本。和win系统下面安装多版本的R类似。
+ 先决条件  # Enable the Extra Packages for Enterprise Linux (EPEL) repositorysudo yum install https://dl.</description>
+    </item>
     
     <item>
       <title>M1原生R语言</title>
