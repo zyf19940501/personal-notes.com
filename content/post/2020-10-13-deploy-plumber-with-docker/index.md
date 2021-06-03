@@ -1,14 +1,15 @@
 ---
-title: Deploy plumber with docker
-author: 钟宇飞
+title: deploy plumber with docker
+author: 宇飞的世界
 date: '2020-10-13'
 slug: deploy-plumber-with-docker
 categories:
-  - R
-  - API
+  - R package
 tags:
   - plumber
 ---
+
+
 
 ## 前言
 
@@ -116,3 +117,4 @@ docker run -d -p 8082:8000 -v `pwd`/api.R:/plumber.R namedvega/ghzy:v8  /plumber
 ```
 http://457.123.48.107:8082/echos
 ```
+
