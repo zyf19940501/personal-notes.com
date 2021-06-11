@@ -1,0 +1,589 @@
+---
+title: 数据库与 R 包 dbplyr 交互
+author: 宇飞的世界
+date: '2021-06-11'
+slug: dbplyr-study
+categories:
+  - R package
+tags:
+  - dbplyr
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<html>
+<style> 
+p{
+  font-size:18px;
+  line-height:2.0em;
+}
+
+.hljs-comment{
+  font-family: Microsoft YaHei ;
+  font-style: normal;
+}
+</style>
+</html>
+
+
+## 前言
+
+dbplyr 将 dplyr 包的函数转化为 SQL 语句去服务器(数据库)获取数据,在数据量较大、计算较多时,将远程连接数据库中
+的表当作内存中的数据使用.当你使用的本机内存不够大时,可以充分利用服务器的性能(内存),这样做的好处不言而喻.
+
+至于为什么使用 dbplyr 而不是直接编写 SQL,本人觉得优势如下所示：
+
+- dbplyr 写起来简洁高效,基本跟用 dplyr 没有差别
+
+- 能利用数据库所在服务器的算力,配合上并行计算,在处理大量数据时,大大加快速度.
+
+- 不同数据库的语法存在差异,当源数据存在不同数据库时,用 R 包 dbplyr 和 dplyr 的统一语法,清洗数据加快效率
+
+- 通过 dplyr 动词方便实现复杂的逻辑,当逻辑越复杂时 dbplyr 的优势越明显,不用一层层嵌套语句.
+
+
+当然也有一些劣势,比如在SQL Server 中 SQL 可以跨库查询,但是 dbplyr 无法直接跨库查询.
+
+> dbplyr 在 oracle 可以跨不同 schema 查询
+
+[dbplyr项目地址](https://dbplyr.tidyverse.org/articles/dbplyr.html)
+
+
+
+## dbplyr 介绍
+
+我们想要在数据库中使用[dplyr](https://bookdown.org/zhongyufei/Data-Handling-in-R/Data-Manipulation-dplyr.html) ,需要先安装 dbplyr：
+
+```{r eval=FALSE}
+install.packages("dbplyr")
+```
+
+还需要有 R 包 DBI, DBI提供通用的接口,允许 dplyr 使用相同的代码函数处理不同的数据框,DBI 是 dbplyr 的依赖包,会跟随 dbplyr 安装.在我们使用dbplyr之前,需要确保已有数据库后端,比如常用的 `RMariaDB`,`RPostgres`,`RSQLite`,`odbc`,`ROracle`.如我常用 dbplyr 操作 MS SQL Server,就是使用 `odbc` 后端.
+
+在本文介绍中,我们将主要使用`RSQLite`后端,因为这个数据库完全嵌入在R包,不依赖本地数据库环境,也不需要设置数据库服务器.所以说SQLite非常适合演示 『dbplyr 与 数据库交互』.本文将通过演示与 SQLite 交互,学习使用 dbplyr 包;最后在实际案例中演示,dbplyr 通过后端`odbc` 与 MS SQL Server 交互.
+
+另外关于 R 语言 与数据库的交互,请参考我的[数据处理笔记](https://bookdown.org/zhongyufei/Data-Handling-in-R/database.html)数据库章节.
+
+## 连接数据库
+
+在 dbplyr 中使用数据库,首先需要通过`DBI::dbConnect()`连接数据库,关于怎么连接数据库详见数据处理笔记.
+
+使用RSQLite 创建内存数据库:
+
+```{r}
+library(dplyr)
+library(DBI)
+library(RSQLite)
+library(dbplyr)
+con <- dbConnect(SQLite(), dbname = ":memory:")
+```
+
+一般情况下,数据库存在另外一台服务器上,我们需要这样连接,以 MS SQL 举例:
+
+```{r eval=FALSE}
+con_study <- dbConnect(odbc::odbc(),
+  .connection_string =
+    "driver={ODBC Driver 17 for SQL Server};
+                    server=192.168.2.236;
+                    database=study;
+                    uid=zhongyf;
+                    pwd=Zyf123456", timeout = 10
+)
+```
+
+我们的临时内存数据库中暂时没有数据,需要我们将数据暂时保存到数据库中.通过`dplyr::copy_to()`即可:
+
+```{r}
+copy_to(con, nycflights13::flights, name = "flights")
+```
+
+
+现在在我们的临时数据库中已经有数据集了,我们可以通过`dbplyr::tbl()`来查看引用表:
+
+```{r}
+flights_db <- tbl(con, "flights")
+```
+
+当我们查看获取的数据时,我们发现和本地的数据源导入R后基本一样:
+
+```{r}
+flights_db
+```
+
+主要区别:我们看到数据源是来源数据库的远程数据源.
+
+## 查询数据库
+
+我们在数据库中交互式,通常使用 SQL 查询,dbplyr 的目的是自动生成 SQL,但是 SQL 是一种非常大的语言,dbplyr 并不能完全代替,但是作为数据分析常用的 SQL,dbplyr 大部分都能帮助我们自动生成,我们可以继续使用我们熟悉的 dplyr 动词.
+
+- select 
+
+```{r}
+flights_db %>% select(year:day, dep_delay, arr_delay)
+
+flights_db %>% filter(dep_delay > 240)
+
+flights_db %>%
+  group_by(dest) %>%
+  summarise(delay = mean(dep_time))
+```
+  
+
+普通的数据框和远程数据库查询之间的最重要区别在于,我们写的 R 代码被翻译成 SQL 并在远程服务器上的数据库中执行,而不是在本地的电脑上的 R 中执行.
+
+在处理数据库时,dbplyr的懒惰特性将:
+
+- 除非我们明确要求,否则数据将永远不在 R 中,也就是永远存在在远程服务器中.
+- 我们可以写很多 R 代码,最后将全部想做的事情,到最后再发给远程服务器的数据库中执行.
+
+如下所示:
+
+```{r}
+temp <- flights_db %>%
+  group_by(tailnum) %>%
+  summarise(delay = mean(arr_delay), n = n()) %>%
+  arrange(desc(delay)) %>%
+  filter(n > 100)
+```
+
+通过运行上述代码,我们发现基本没有运行时间,也就是说上述代码并没有真正和数据库交互运行.直到我们请求数据(打印),dplyr 才会生成 SQL ,并从数据库请求结果.即使是打印数据,也没有将全部的数据参与运行,尽可能少的拉取几行返回.
+
+通过`show_query()`我们可以看到 dplyr 生成的 SQL:
+
+```{r}
+temp %>% show_query()
+```
+
+当我们编写调试完 R 代码后,我们通过`collect()`将数据从远程数据库中拉取到本地R中.
+
+```{r}
+temp_tbl <- temp %>% collect()
+temp_tbl
+```
+
+
+
+## 函数解释
+
+### 内存数据库
+
+由于SQLite 是完全内嵌在 R 中,所以特别合适作为演示数据库,那怎么创建一个临时的数据库呢?如下所示:
+
+```{r}
+library(RSQLite)
+con <- dbConnect(SQLite(), dbname = ":memory:")
+```
+
+创建本地数据库 my-db.sqlite,通过这种方法创建的数据库会在当前目录下生成 my-db.sqlite 的文件,该文件即数据库文件.
+
+```{r}
+# 创建 my-db 并连接
+mydb <- dbConnect(RSQLite::SQLite(), "my-db.sqlite")
+# 断开连接
+dbDisconnect(mydb)
+# 删除数据库文件
+unlink("my-db.sqlite")
+```
+
+
+或者是通过`dbname = ""`建立,该方式会临时在磁盘建立数据库,在关闭连接时会自动删除.
+
+```{r}
+con <- dbConnect(SQLite(), dbname = "")
+```
+
+### tbl
+
+`tbl()`是 dplyr 里面的动词函数,是一个基于`src`调度的通用方法,从数据库中返回一个`tbl_dbi`对象.
+
+```{r eval=FALSE}
+tbl(src, from, ...)
+```
+
+src 是一个 DBIConnection 对象,from 参数要么是一个表明,要么是通过 `in_schema`指定的表名或者`sql`包裹的 sql 字符串.
+
+```{r}
+con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+copy_to(con, mtcars)
+DBI::dbListTables(con)
+```
+
+通过`in_schema`查看数据
+
+```{r}
+con %>% tbl(in_schema("temp", "mtcars")) %>% head(1)
+```
+
+通过`sql`查看数据
+
+```{r}
+con %>% tbl(sql("SELECT * FROM mtcars WHERE cyl = 8"))
+```
+
+
+### copy_to
+
+`copy_to()`是 dplyr 中的函数,该函数功能即将本地数据框上传到远程数据源(数据库).
+
+```{r eval=FALSE}
+copy_to(dest, df, name = deparse(substitute(df)), overwrite = FALSE, ...)
+```
+
+### compute 
+
+- compute 将计算后的结果作为临时表直接存在远程数据源中.
+
+- collect 将数据从远程数据源返回本地 R 中.
+
+- collapse 该函数不强制计算,但会强制生成 SQL,方便我们调试.
+
+
+
+```{r}
+if (require(dbplyr)) {
+  mtcars2 <- src_memdb() %>%
+    copy_to(mtcars, name = "mtcars2-cc", overwrite = TRUE)
+
+  remote <- mtcars2 %>%
+    filter(cyl == 8) %>%
+    select(mpg:drat)
+
+  # 计算查询 将结果保存在远程数据源中
+  compute(remote)
+
+  # 计算查询 将结果返回本次session
+  collect(remote)
+
+  # 基于生成的 SQL 创建一个查询
+  collapse(remote)
+}
+
+```
+
+
+
+### memdb_frame 系列
+
+`memdb_frame()`功能像`tibble::tibble()`,目的是在临时内存数据库中创建表.
+
+```{r eval=FALSE}
+
+# 创建临时内存数据库中的表
+memdb_frame(..., .name = unique_table_name())
+
+# 将df copy_to 到临时内存数据库中
+tbl_memdb(df, name = deparse(substitute(df)))
+
+# 临时内存数据库
+src_memdb()
+```
+
+```{r}
+library(dplyr)
+df <- memdb_frame(x = runif(100), y = runif(100))
+df %>% arrange(x)
+df %>% arrange(x) %>% show_query()
+
+mtcars_db <- tbl_memdb(mtcars)
+mtcars_db %>% group_by(cyl) %>% summarise(n = n()) %>% show_query()
+```
+
+
+
+
+### simulate_dbi 系列
+
+该系列函数设计用来测试 SQL 语句的生成,而不是真正的连接一个真实的数据库.如下所示:
+
+sqlite
+
+```{r}
+library(dplyr)
+df <- data.frame(x = 1, y = 2)
+
+df_sqlite <- tbl_lazy(df, con = simulate_sqlite())
+df_sqlite %>% summarise(x = sd(x, na.rm = TRUE)) %>% show_query()
+```
+
+mssql
+
+```{r}
+df <- data.frame(x = 1, y = 2)
+df_mssql <- tbl_lazy(df, con = simulate_mssql(version = "15.0"))
+df_mssql %>% summarise(x = sd(x, na.rm = TRUE)) %>% show_query()
+```
+
+simulate_oracle
+
+```{r}
+df <- data.frame(x = 1, y = 2)
+df_mssql <- tbl_lazy(df, con = simulate_oracle())
+df_mssql %>% summarise(z = paste0(x,y)) %>% show_query()
+```
+
+以上仅仅列出一小部分,更多函数以及用法请查看 [dbplyr的函数手册](https://cran.r-project.org/web/packages/dbplyr/dbplyr.pdf)
+
+### dbplyr 支持的动词
+
+大部分的 dplyr 的动词都支持,如 filter,count,tally,distinct,arrange,inner_join,left_join,intersect,union,setdiff,mutate,pull,select,rename,slice_min,slice_max,summarise等.
+
+支持 tidyr 中的动词:pivot_longer,pivot_wider,replace_na,uncount,expand,fill 等
+
+## 案例
+
+案例以连接 MS SQL Server 和 Oracle 两种数据库为主,我们通过使用 odbc 后端连接 SQL Server 后 使用 dplyr 查询数据库,使用 ROracle 后端连接 oracle 数据库.
+
+- 连接 mssql 
+
+```{r}
+library(DBI)
+# mssql
+con_mssql_spb <- dbConnect(odbc::odbc(),
+  .connection_string =
+    "driver={ODBC Driver 17 for SQL Server};
+                    server=172.16.88.2;
+                    database=spb;
+                    uid=zhongyf;
+                    pwd=Zyf123456", timeout = 10,encoding = 'gbk'
+)
+```
+
+- 连接 oracle
+
+```{r}
+library(ROracle)
+drv <- dbDriver("Oracle")
+connect.string <- "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)
+                    (HOST = 172.16.88.131)(PORT = 1521))
+                     (CONNECT_DATA = (SERVER = DEDICATED)(SERVICE_NAME = ghbi) ))"
+con <- dbConnect(drv, username = "pub_query", password = "pub_query", dbname = connect.string)
+```
+
+需要注意ROracle 包的安装,可以参考微信公众号文章[R包ROracle安装](https://mp.weixin.qq.com/s/QLwedZ5mTybqSXdHMTGRIw)安装 ROracle.
+
+
+### MS SQL Server
+
+
+1.2021-01-01至2021-05-01 期间每月销售情况?
+
+
+```{r}
+tbl(con_mssql_spb, "sales_order") %>%
+  filter(between(单据日期, "2021-01-01", "2021-05-31")) %>%
+  group_by(月 = month(单据日期)) %>%
+  summarise(
+    销售额 = sum(金额),
+    销售量 = sum(数量)
+  ) %>%
+  collect()
+```
+
+在上诉案例中需要注意 `group_by()` 中的`month()`函数,在 base R 中没有`month`函数,这涉及到 dbplyr中的一个特性:对于不认识的函数将会保留,那我们就可以使用相应数据库的原生函数.
+
+
+sql 实现
+
+```{sql connection=con_mssql_spb,out.width=0.5}
+SELECT month(单据日期) 月,
+  sum(金额) 销售额,
+  sum(数量) 销售量
+  FROM [spb].[dbo].[sales_order]
+  where 单据日期 between '2021-01-01' and '2021-05-31'
+  group by  month(单据日期)
+```
+
+我们看看 dplyr 生成的 SQL 语句
+
+```{r}
+tbl(con_mssql_spb, "sales_order") %>%
+  filter(between(单据日期, "2021-01-01", "2021-05-31")) %>%
+  group_by(月 = month(单据日期)) %>%
+  summarise(
+    销售额 = sum(金额),
+    销售量 = sum(数量)
+  ) %>%
+  show_query()
+```
+
+dplyr 生成的 SQL 语句和我们自己编写的语句存在差异,自动生成的 SQL 语句多了一层嵌套,另外`month(单据日期)` 被翻译为 SQL 中的`DATEPART(MONTH, "单据日期") AS "月" `
+
+> 不同数据库对时间日期的处理函数不一致.
+
+
+2.2021-01-01至2021-05-01 期间每个大区销售情况?
+
+```{r}
+# 门店信息表
+store_db <- tbl(con_mssql_spb, "store_table")
+temp <- tbl(con_mssql_spb, "sales_order") %>%
+  filter(between(单据日期, "2021-01-01", "2021-05-31")) %>%
+  left_join(store_db, by = "SHOP_NO") %>%
+  group_by(管辖区域) %>%
+  summarise(
+    销售额 = sum(金额),
+    销售量 = sum(数量)
+  ) %>%
+  arrange(desc(销售额))
+```
+
+```{r}
+temp %>%
+  show_query()
+
+temp %>%
+  collect()
+```
+
+
+
+SQL 实现
+
+```{sql connection=con_mssql_spb}
+SELECT st.管辖区域,
+  sum(sa.金额) 销售额,
+  sum(sa.数量) 销售量
+FROM [spb].[dbo].[sales_order] sa
+left join   [spb].[dbo].[store_table] st on sa.SHOP_NO = st.SHOP_NO
+where sa.单据日期 between '2021-01-01' and '2021-05-31'
+group by   st.管辖区域
+order by  sum(sa.金额) desc
+```
+
+通过对比 dplyr 翻译的 SQL 和原生的 SQL,发现 dplyr 翻译的 SQL 比原生 SQL 会复杂很多,没有优化,运行花费时间会比原生 SQL 长.
+
+
+2.近30天镜架销售超过100支的SKU,他们的销额,销量,折扣率,动销门店数,动销天数?
+
+
+```{r}
+# 门店信息表
+store_db <- tbl(con_mssql_spb, "store_table")
+# 商品信息表
+sku_db <- tbl(con_mssql_spb, "sku_table")
+
+temp <- tbl(con_mssql_spb, "sales_order") %>%
+  filter(单据日期 >= GETDATE() - 31L) %>%
+  # GETDATE 是数据库原生函数 思考为什么是减31
+  left_join(store_db, by = "SHOP_NO") %>%
+  left_join(sku_db, by = "SKU_NO") %>%
+  filter(分析大类 == "镜架") %>%
+  group_by(SKU_NO) %>%
+  summarise(
+    销售额 = sum(金额),
+    销售量 = sum(数量),
+    吊牌额 = sum(吊牌金额),
+    动销门店数 = n_distinct(if_else(数量 > 0, SHOP_NO, NA_character_)),
+    动销天数 = n_distinct(if_else(数量 > 0, 单据日期, NA_character_))
+  ) %>%
+  mutate(折扣率 = 销售额 / 吊牌额) %>%
+  filter(销售量 > 100) %>%
+  arrange(desc(销售量))
+```
+
+返回数据集
+
+```{r}
+temp_dt <- temp %>%
+  collect()
+
+temp_dt %>%
+  slice_head(n = 10)
+
+temp_dt %>%
+  slice_tail(n = 10)
+
+# 动效门店数最多
+temp_dt %>%
+  slice_max(动销门店数, n = 5)
+
+# 折扣最低
+temp_dt %>%
+  slice_min(折扣率, n = 5)
+```
+
+
+### Oracle
+
+连接 Oracle 数据库
+
+
+```{r}
+library(ROracle)
+drv <- dbDriver("Oracle")
+connect.string <- "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)
+                    (HOST = 172.16.88.131)(PORT = 1521))
+                     (CONNECT_DATA = (SERVER = DEDICATED)(SERVICE_NAME = ghbi) ))"
+con_oracle <- dbConnect(drv, username = "pub_query", password = "pub_query", dbname = connect.string)
+```
+
+注意 Oracle 中的 Schema 概念，我也不是太明白，但是通过 dbplyr 连接时需要主要，如下所示:
+
+```{r}
+tbl(con_oracle, in_schema(schema = "DW", table = "DW_SALE_SHOP_F"))
+```
+
+如果遇到乱码,通过设置语言环境变量即可,详见我的数据处理笔记数据库章节.
+
+在 Oracle 中处理日期问题:2021-01-01至2021-05-01 期间每月销售情况?
+
+```{r}
+tbl(con_oracle, in_schema(schema = "DW", table = "DW_SALE_SHOP_F")) %>%
+  filter(between(
+    BILL_DATE1, to_date("2021-01-01", "yyyy-mm-dd"),
+    to_date("2021-05-31", "yyyy-mm-dd")
+  )) %>%
+  group_by(月 = month(BILL_DATE1)) %>%
+  summarise(
+    销售额 = sum(BILL_MONEY2),
+    销售量 = sum(POS_QTY)
+  ) %>%
+  collect()
+```
+
+SQL 实现
+
+```{sql connection=con_oracle}
+select EXTRACT(month from BILL_DATE1)月 ,
+  sum(BILL_MONEY2) 销售额 ,
+  sum(BILL_QTY) 销售量 
+from DW.DW_SALE_SHOP_F t
+where BILL_DATE1 between date'2021-01-01' and date'2021-05-23' 
+group by  EXTRACT(month from BILL_DATE1)
+```
+
+
+目前我使用的 Oracle 是 12C的版本,该版本目前不支持 month 函数,但是通过 dplyr 生成的 SQL 可以正确运行.不得不说,dplyr 在后台转化为 SQL 时做了很多工作.
+
+
+### 其他数据库
+
+其他数据库由于使用不多,但是基本常用的数据库都支持良好,大家可以放心使用.
+
+
+## dbplyr 总结
+
+通过上述讲解,我们大概清楚 dbplyr 的作用?将 dplyr 动词转化为 SQL,将生成的 SQL 的发送到远程数据库执行,最后将结果返回.
+
+dbplyr 中最基础的几个函数:
+
+- tbl / in_schema
+- show_query /explain
+- collect
+- sql
+
+由于 dbplyr 的内容比较多,我接触使用也没有太深入,大家可以自行浏览[dbplyr项目地址](https://dbplyr.tidyverse.org/articles/dbplyr.html)学习.我们只需掌握最基本的几个函数,能用 dplyr 动词从数据库中获取想要的数据即可.
+
+
+## 参考资料
+
+1.https://cran.r-project.org/web/packages/dbplyr/vignettes/dbplyr.html
+
+2.https://cran.r-project.org/web/packages/dbplyr/vignettes/sql.html
+
+3.https://cran.r-project.org/web/packages/dbplyr/vignettes/translation-verb.html
+
+4.https://cran.r-project.org/web/packages/dbplyr/vignettes/new-backend.html
