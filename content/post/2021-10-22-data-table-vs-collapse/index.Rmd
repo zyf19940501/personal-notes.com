@@ -182,6 +182,8 @@ ftransform(df,吊牌价 = BILL_QTY * PRICE) |>
 ftransform(df,BILL_QTY = BILL_QTY * 2) #修改了原始 df 的数据
 ```
 
+
+
 删除列
 
 ```{r}
@@ -194,6 +196,12 @@ df |> ncol()
 ```{r}
 ftransformv(df,vars = c('BILL_QTY','BILL_MONEY'),FUN = \ (x){x*2}) |> 
   fselect(SHOP_NO,BILL_DATE,BILL_QTY,BILL_MONEY)
+```
+
+额外参数
+
+```{r}
+ftransformv(df,vars = 'BILL_MONEY',FUN = \(x,y,z){x/(y*z)},list(y=BILL_QTY,z=PRICE))
 ```
 
 
