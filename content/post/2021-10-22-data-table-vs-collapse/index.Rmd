@@ -220,6 +220,6 @@ dt[,colnames(dt[,.(BILL_QTY,BILL_MONEY)]):=lapply(.SD[,.(BILL_QTY,BILL_MONEY)],\
 data.table 中的批量操作方便给新列重新命名。
 
 
-
+zhongyf
 
 
