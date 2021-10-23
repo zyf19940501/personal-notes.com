@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>李子漆youtube频道 - study notes</title>
@@ -82,7 +82,7 @@
 <p>github项目地址:<a href="https://github.com/soodoku/tuber">https://github.com/soodoku/tuber</a>
 参考资料:<a href="https://cran.r-project.org/web/packages/tuber/vignettes/tuber-ex.html">https://cran.r-project.org/web/packages/tuber/vignettes/tuber-ex.html</a></p>
 <p>通过<code>get_channel_stats()</code>获取频道基础信息</p>
-<pre><code class="language-{r}" data-lang="{r}">install.package('tuber')
+<pre tabindex="0"><code class="language-{r}" data-lang="{r}">install.package('tuber')
 library(tuber)
 
 
@@ -90,13 +90,13 @@ yt_oauth(app_id = '',app_secret = '')
 get_channel_stats(channel_id = channelid)
 </code></pre><p>共120个视频，1300万订阅，1927398752次观看</p>
 <p>获取120个视频的信息，包含视频id,title,publication_date,description,channel_id,channel_title,viewCount,likeCount,dislikeCount,favoriteCount,commentCount,url字段</p>
-<pre><code>dt &lt;- tuber::get_all_channel_video_stats(channelid)
+<pre tabindex="0"><code>dt &lt;- tuber::get_all_channel_video_stats(channelid)
 names(dt)
 </code></pre><h3 id="频道各项数据">频道各项数据</h3>
 <h4 id="观看数">观看数</h4>
 <p><img src="/img/2020-10-27/%E9%A2%91%E9%81%93%E8%A7%82%E7%9C%8B%E6%95%B0.svg" alt="p1"></p>
 <p>从上面可知，3千万观看数视频7个，大部分视频的观看数在2千万以下</p>
-<pre><code>dt %&gt;%
+<pre tabindex="0"><code>dt %&gt;%
   mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7, Inf))) %&gt;%
   group_by(观看数区间) %&gt;%
   summarise(n())

@@ -25,7 +25,7 @@
   2.刷新功能宏文件
  构建带宏的refresh.xls 文件  创建名为refresh.xls的文件，并在其中插入VBA代码，VBA代码如下：
 该代码实现刷新该文件下全部xlsx,xls后缀文件。
-Sub refresh() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;quot;\&amp;quot; f = Dir(x &amp;amp; &amp;quot;&amp;quot; &amp;amp; &amp;quot;*xls&amp;quot;) Do While f &amp;lt;&amp;gt; &amp;quot;&amp;quot; If f &amp;lt;&amp;gt; ThisWorkbook.Name Then Set wb = Workbooks.</description>
+Sub refresh()Dim wb As Excel.Workbookx = ThisWorkbook.Path &amp;amp; &amp;quot;\&amp;quot;f = Dir(x &amp;amp; &amp;quot;&amp;quot; &amp;amp; &amp;quot;*xls&amp;quot;)Do While f &amp;lt;&amp;gt; &amp;quot;&amp;quot;If f &amp;lt;&amp;gt; ThisWorkbook.Name ThenSet wb = Workbooks.</description>
     </item>
     
   </channel>

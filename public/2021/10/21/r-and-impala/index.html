@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>R 连接 impala - study notes</title>
@@ -96,7 +96,7 @@
 <p>由于很早之前在浏览GitHub时看到过 <a href="https://github.com/ianmcook/implyr">implyr</a> 包，所以这次很自然而然想到了。</p>
 <h4 id="impala-驱动">impala 驱动</h4>
 <p>通过查看 implyr 项目的介绍，知道了如何将 R 与 impala 连接。</p>
-<pre><code>library(implyr)
+<pre tabindex="0"><code>library(implyr)
 drv &lt;- odbc::odbc()
 impala &lt;- src_impala(
   drv = drv,
@@ -110,27 +110,27 @@ impala &lt;- src_impala(
 
 </code></pre><p>现在问题的关键是找到相应的驱动文件，Google 查找 impala 的odbc驱动信息。<a href="https://www.cloudera.com/downloads/connectors/hive/odbc/2-6-1.html">impala odbc 下载</a>，通过下载链接下载相应版本的驱动，Linux系统上需要下载的驱动文件名称为<code>ClouderaImpalaODBC-[Version]-[Release].x86_64.rpm</code>，安装完成后文件路径一般在<code>/opt/cloudera/impalaodbc directory</code>。</p>
 <p>不同的系统安装方式不一样，Red Hat Enterprise Linux or CentOS 系统安装命令如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yum --nogpgcheck localinstall <span style="color:#f92672">[</span>RPMFileName<span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yum --nogpgcheck localinstall <span style="color:#f92672">[</span>RPMFileName<span style="color:#f92672">]</span>
 </code></pre></div><p>接下来按照<a href="https://docs.cloudera.com/documentation/other/connectors/impala-odbc/latest/Cloudera-ODBC-Driver-for-Impala-Install-Guide.pdf">说明</a>配置 Cloudera ODBC Driver for Impala 驱动。</p>
 <h4 id="cloudera-odbc-driver-for-impala-驱动配置">Cloudera ODBC Driver for Impala 驱动配置</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 查看版本</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 查看版本</span>
 odbc_config --version
 <span style="color:#75715e"># 查看ODBC配置文件存放的位置</span>
 odbc_config --odbcini
 odbc_config --odbcinstini
 </code></pre></div><p>修改 odbcinst.ini 文件<code>vi /etc/odbcinst.ini</code>，配置 Cloudera ODBC Driver for Impala，增加如下内容：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>Cloudera ODBC Driver <span style="color:#66d9ef">for</span> Impala<span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>Cloudera ODBC Driver <span style="color:#66d9ef">for</span> Impala<span style="color:#f92672">]</span>
 Description<span style="color:#f92672">=</span>Cloudera ODBC Driver <span style="color:#66d9ef">for</span> Impala
 Driver<span style="color:#f92672">=</span>/opt/cloudera/impalaodbc/lib/64/libclouderaimpalaodbc64.so
 </code></pre></div><p>odbc配置完成后通过如下 R 代码检查机器上是否已经正常配置 Cloudera ODBC Driver for Impala 驱动。</p>
-<pre><code>odbc::odbcListDrivers(keep='Cloudera ODBC Driver for Impala')
+<pre tabindex="0"><code>odbc::odbcListDrivers(keep='Cloudera ODBC Driver for Impala')
 </code></pre><p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/1634709558793-1a2c913c-6c05-4c82-a9a1-19c33f6939ed.png" alt="odbc driver success"></p>
 <p>如上所示，表示配置成功，我们接下来使用 R 连接集群。</p>
 <h3 id="连接集群">连接集群</h3>
 <p>依据 implyr 官网的提示，第一次连接时一直连接失败，如下所示：
 <img src="https://cdn.nlark.com/yuque/0/2021/png/21373830/1631717150398-91417689-27b1-4c22-91b7-defc95821b6b.png" alt="1631717143(1).png">
 后来通过阅读说明了解到增加 AuthMech 参数即可成功连接。</p>
-<pre><code>library(implyr)
+<pre tabindex="0"><code>library(implyr)
 drv &lt;- odbc::odbc()
 impala &lt;- src_impala(
   drv = drv,
@@ -147,7 +147,7 @@ impala &lt;- src_impala(
 <p><strong>第一次连接时，不知道该参数，连接一直失败，搞得心力交瘁。</strong>  关于<a href="https://docs.cloudera.com/documentation/enterprise/latest/topics/impala_odbc.html">impala odbc 配置</a>的详细参数，请自行阅读了解。</p>
 <hr>
 <p>成功连接后，我们即可使用 dbplyr 包查询获取数据，充分利用集群的算力。</p>
-<pre><code>tbl(impala,in_schema('BDC_DWS','DWS_DAY_ORG_PRO_SAL_DS')) |&gt; 
+<pre tabindex="0"><code>tbl(impala,in_schema('BDC_DWS','DWS_DAY_ORG_PRO_SAL_DS')) |&gt; 
   filter(period_sdate &gt;= '2021-01-01') |&gt; 
   group_by(smonth=month(period_sdate)) |&gt; 
   summarise(sal_act_amt = sum(SAL_ACT_AMT,na.rm = TRUE),
@@ -155,7 +155,7 @@ impala &lt;- src_impala(
 </code></pre><hr>
 <p>需要注意的是，在使用 dbplyr 时，时间类函数支持不是特别友好，在 impala 中体现更加明显。比如上诉代码无法正确按照月份汇总，但是将代码生成的<code>sql</code>在客户端中执行能正确获取结果。</p>
 <p>后来通过尝试发现如下方式能正确按照月份汇总。</p>
-<pre><code>tbl(impala,in_schema('BDC_DWS','DWS_DAY_ORG_PRO_SAL_DS')) |&gt; 
+<pre tabindex="0"><code>tbl(impala,in_schema('BDC_DWS','DWS_DAY_ORG_PRO_SAL_DS')) |&gt; 
   filter(period_sdate&gt;='2021-10-15') |&gt; 
   mutate(smonth = EXTRACT(period_sdate,'month'))|&gt; 
   group_by(period_sdate,smonth) |&gt; 
@@ -163,7 +163,7 @@ impala &lt;- src_impala(
             all_sal_act_qty = sum(ALL_SAL_ACT_QTY,na.rm = TRUE)) 
 </code></pre><p>关键在于<code>EXTRACT(period_sdate,'month')</code>，利用 dbplyr 将不能识别的函数不会转化的特性。
 比较上下两种方式自动生成的<code>sql</code>差异发现差异主要是<code>extract</code>函数用法的差异，可能和 impala 版本有关，我们暂时不深究原因。</p>
-<pre><code>EXTRACT(year FROM NOW());
+<pre tabindex="0"><code>EXTRACT(year FROM NOW());
 
 EXTRACT(NOW(), 'year');
 </code></pre><h2 id="rjdbc-连接">RJDBC 连接</h2>
@@ -171,7 +171,7 @@ EXTRACT(NOW(), 'year');
 <ul>
 <li>hive 查询</li>
 </ul>
-<pre><code>library('DBI')
+<pre tabindex="0"><code>library('DBI')
 library('RJDBC')
 # hive 查询 【更改端口】
 drv&lt;- JDBC(&quot;org.apache.hive.jdbc.HiveDriver&quot;,  list.files(&quot;/opt/cloudera/parcels/CDH-6.0.0-1.cdh6.0.0.p0.537114/lib/hive/lib&quot;,pattern=&quot;jar$&quot;, full.names=T, recursive=TRUE))
@@ -184,18 +184,18 @@ dbGetQuery(conn,sql)
 <li>impala查询</li>
 </ul>
 <p>和 hive 查询的区别：改端口以及域名或者是host地址。</p>
-<pre><code>library('DBI')library('RJDBC')
+<pre tabindex="0"><code>library('DBI')library('RJDBC')
 drv&lt;- JDBC(&quot;org.apache.hive.jdbc.HiveDriver&quot;,  list.files(&quot;/opt/cloudera/parcels/CDH-6.0.0-1.cdh6.0.0.p0.537114/lib/hive/lib&quot;,pattern=&quot;jar$&quot;, full.names=T, recursive=TRUE))
 conn&lt;- dbConnect(drv, sprintf('jdbc:hive2://host:21051/default'),'lv.d.sz', 'JHjLXpyQ')
 </code></pre><p>如果能够配置odbc驱动通过<code>implyr</code>连接，建议不用 RJDBC 连接。</p>
 <h2 id="rodbc-连接">RODBC 连接</h2>
 <p>通过前面的 odbc 配置，配置dsn。鉴于速度以及兼容性原因，不推荐用该方式连接。</p>
-<pre><code>library(RODBC)con &lt;- RODBC::odbcConnect(dsn = 'impalaodbc',uid = 'username',pwd = 'password')
+<pre tabindex="0"><code>library(RODBC)con &lt;- RODBC::odbcConnect(dsn = 'impalaodbc',uid = 'username',pwd = 'password')
 res &lt;- odbcQuery(con,'select * from table')
 </code></pre><h2 id="补充说明">补充说明</h2>
 <h3 id="写入impala">写入impala</h3>
 <p>关于将计算后的结果写入 impala 请参考官方介绍</p>
-<pre><code>dbExecute(impala_spider_analysis_ods, &quot;CREATE TABLE flights (
+<pre tabindex="0"><code>dbExecute(impala_spider_analysis_ods, &quot;CREATE TABLE flights (
     year SMALLINT,
     month TINYINT,
     day TINYINT,
@@ -217,12 +217,12 @@ res &lt;- odbcQuery(con,'select * from table')
     time_hour TIMESTAMP)
   ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
   LOCATION '/user/hive/warehouse/spider_analysis_ods.db'&quot;)
-</code></pre><pre><code>write.table(flights, file = &quot;flights&quot;, quote = FALSE, sep = &quot;\t&quot;, na = &quot;\\N&quot;, row.names = FALSE, col.names = FALSE)
+</code></pre><pre tabindex="0"><code>write.table(flights, file = &quot;flights&quot;, quote = FALSE, sep = &quot;\t&quot;, na = &quot;\\N&quot;, row.names = FALSE, col.names = FALSE)
 system(&quot;hdfs dfs -put flights /user/hive/warehouse/flights/000000_0&quot;) # 有删除之前已经存在的数据风险
 </code></pre><p>｜以上写入未经过验证，可能存在破坏性</p>
 <h3 id="python-连接-imapla">python 连接 imapla</h3>
 <p>如下代码是使用python通过hive 或者 impala 连接到集群。</p>
-<pre><code>from impala.dbapi import connect
+<pre tabindex="0"><code>from impala.dbapi import connect
 from impala.util import as_pandas
 import pandas as pd
 

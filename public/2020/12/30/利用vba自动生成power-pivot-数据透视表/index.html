@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>利用VBA自动生成Power Pivot 数据透视表 - study notes</title>
@@ -96,7 +96,7 @@
 </li>
 <li>
 <p>拉取透视表，即将相应维度以及度量值放在透视表的 【行】，【列】，【值】，【筛选】上。</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="/img/2020-12-30/布局.png" alt="透视表布局" style="zoom:75%;" /></p>
 </li>
 </ol>
 <p>透视表数据源来源：透视表的数据源可以区分为本地数据源或外部数据源，一般默认本地数据源为Excel等为主的文本文件，外部数据源以数据库为主，本文中的透视表数据源来源于本地Excel。</p>
@@ -105,7 +105,7 @@
 <p>基础透视表是指不需要从模型生成透视表，也不需要通过<code>DAX</code>函数添加度量值的情况下透视表。</p>
 <p>在这种情况下，透视表可以通过录制宏实现<code>VBA</code>代码自动创建透视表。讲道理，看多了这几段代码能勉强认识看懂，但是不是完全理解，大家如果需要用，自己多录制几段宏代码就ok了。</p>
 <p>演示数据以及代码下载地址：<a href="https://gitee.com/zhongyufei/excel/tree/master/vba">https://gitee.com/zhongyufei/excel/tree/master/vba</a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">创建透视表</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">创建透视表</span>()
     Sheets.Add
     ActiveWorkbook.PivotCaches.Create(SourceType:<span style="color:#f92672">=</span>xlDatabase, SourceData:<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;表1&#34;</span> _
         , Version:<span style="color:#f92672">=</span>6).CreatePivotTable TableDestination:<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Sheet1!R3C1&#34;</span>, TableName _
@@ -138,18 +138,18 @@
 <li>
 <p>将表格添加到模型</p>
 <p>将工作簿中<code>Sheet1</code>工作表明细添加到模型中，你需要先转化为&quot;表格&quot;表格式，快捷键<code>Ctrl+t</code></p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="/img/2020-12-30/转化为表格.gif" alt="转化" style="zoom:50%;" /></p>
 <p>第一步将表添加到模型，需要说明的是 ：将Sheet1添加到模型，并命名为ORA，这些参数需根据实际情况修改调整。<code>Sheet1</code>即工作簿sheet默认命名。</p>
 <p>主要参数解释：</p>
 <p>name 参数是连接名称，</p>
 <p>Description：连接的描述，</p>
 <p>ConnectionString：连接的字符串，即工作簿的路径，在演示代码时可以打印查看，</p>
 <p>lCmdtype：是连接方式，针对连接Excel或数据库方式不一，<a href="https://docs.microsoft.com/en-us/office/vba/api/excel.xlcmdtype">参考官网</a>，连接数据库需要选着&quot;xlCmdSql&quot;</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="/img/2020-12-30/参数.png" alt="连接方式" style="zoom:75%;" /></p>
 <p>CreateModelConnection：是否将表添加到模型</p>
 <p>ImportRelationships：是否创建关系，如果选择是，后期可以在多个表中建立表关系</p>
 <p>以上参数为个人理解，可能有误，也没有动力完全求证。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">添加到模型</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">添加到模型</span>()
 Sheets(<span style="color:#e6db74">&#34;Sheet1&#34;</span>).ListObjects(1).Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ORA&#34;</span>
 WrkName <span style="color:#f92672">=</span> ActiveWorkbook.Name
 TblName <span style="color:#f92672">=</span> Sheets(<span style="color:#e6db74">&#34;Sheet1&#34;</span>).ListObjects(1).Name
@@ -175,7 +175,7 @@ TblName <span style="color:#f92672">=</span> Sheets(<span style="color:#e6db74">
 <li>
 <p>在模型中添加度量值</p>
 <p><code>MeasureName</code>参数指定度量值名称，<code>AssociatedTable</code>度量值写进模型表中，<code>Formula</code>指定度量值，<code>FormatInformation</code>指定度量值的数据格式，<code> Description</code>度量值描述，为了省事这个参数在下面代码中都没有修改。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">添加度量值</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">添加度量值</span>()
 <span style="color:#75715e">&#39;Declare your variables.
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">Dim</span> myModel <span style="color:#f92672">As</span> Model
 <span style="color:#66d9ef">Dim</span> myModelTables <span style="color:#f92672">As</span> ModelTables
@@ -218,7 +218,7 @@ tabll <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39
 <p>创建透视表</p>
 <p>首先创建新的sheet 并命名为&quot;透视表&quot;,并指定透视表创建的位置<code>Worksheets(&quot;透视表&quot;).Cells(5, 3)</code>，第五行第三列的位置创建透视表。在我们多开Excel时，并创建了多个透视表，再新建透视表时会依据透视表个数依次指定透视表名称，“数据透视表1”，“数据透视表2”，“数据透视表3”，“数据透视表4”，“数据透视表5”。在以下代码中定义了<code>Pivottablename</code>参数可以用来指定透视表名称，方便最后一步拉取透视表字段。</p>
 <p><code>  Version:=xlPivotTableVersion15)</code>参数指定数据透视表版本</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">创建透视表</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">创建透视表</span>()
   Sheets.Add.Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;透视表&#34;</span>
   <span style="color:#66d9ef">Dim</span> Pivottablename <span style="color:#f92672">As</span> <span style="color:#66d9ef">String</span>
   <span style="color:#66d9ef">Dim</span> PowerPivotCache <span style="color:#f92672">As</span> Excel.PivotCache
@@ -247,7 +247,7 @@ tabll <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39
    <span style="color:#66d9ef">Set</span> PowerPivotCache <span style="color:#f92672">=</span> <span style="color:#66d9ef">Nothing</span>
 <span style="color:#66d9ef">End</span> <span style="color:#66d9ef">Sub</span>
 </code></pre></div><p>以上代码可简写为：</p>
-<pre><code>Sub 创建透视表()
+<pre tabindex="0"><code>Sub 创建透视表()
 
   Sheets.Add.Name = &quot;透视表&quot;
   '定义表以及定义透视表缓存
@@ -272,7 +272,7 @@ End Sub
 <p>最后一步拉取透视表</p>
 <p><code>Orientation=xlRowField</code> 代表透视表中的行，<code>Orientation = xlColumnField</code>参数代表透视表中的列，<code>Position = 1,Position = 2</code>参数代表透视中的行位置或者顺序。代码最后一部分即透视表中的值。</p>
 <p>注意<code>Pivottablename</code>这个是引用的创建透视表中的值，代表当前透视表名称。分开执行时须指定<code>Pivottablename</code>的值，默认情况下为数据透视表1</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">按照需求拉透视表</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">按照需求拉透视表</span>()
    <span style="color:#75715e">&#39;拉透视表过程
 </span><span style="color:#75715e"></span>
     Application.WindowState <span style="color:#f92672">=</span> xlMaximized
@@ -302,7 +302,7 @@ End Sub
 <p>调整数据透视表格式：可通过录制宏代码调整格式，以下代码可批量调整一个文件夹下所有Excel文件全部sheet的格式</p>
 </li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">调整格式</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb"><span style="color:#66d9ef">Sub</span> <span style="color:#a6e22e">调整格式</span>()
 <span style="color:#66d9ef">Dim</span> a
 <span style="color:#75715e">&#39;a = Dir(&#34;C:\Users\zhongyf\Desktop\work\output\*.XLSX&#34;)&#39; 将xlsx结尾的所有文件打开
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">Do</span> <span style="color:#75715e">&#39;遍历目录下的所有指定格式的文件名

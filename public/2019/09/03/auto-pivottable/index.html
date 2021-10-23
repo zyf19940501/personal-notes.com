@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>auto pivottable - study notes</title>
@@ -81,7 +81,7 @@
 <h4 id="基础透视表">基础透视表</h4>
 <p>本处基础透视表是指不需要从模型生成透视表，也不需要通过DAX函数添加度量值的情况下透视表。在这种情况下透视表可以通过录制宏实现VBA代码自动创建透视表。</p>
 <p>数据以及代码下载地址：<a href="https://gitee.com/zhongyufei/excel/tree/master/vba">https://gitee.com/zhongyufei/excel/tree/master/vba</a></p>
-<pre><code>Sub 创建透视表()
+<pre tabindex="0"><code>Sub 创建透视表()
     Sheets.Add
     ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&quot;表1&quot; _
         , Version:=6).CreatePivotTable TableDestination:=&quot;Sheet1!R3C1&quot;, TableName _
@@ -115,7 +115,7 @@ End Sub
 <p>第一步将表添加到模型，需要说明的是 ：将Sheet1添加到模型，并命名为ORA，这些参数需根据实际情况修改调整</p>
 </li>
 </ul>
-<pre><code>Sub 添加到模型()
+<pre tabindex="0"><code>Sub 添加到模型()
 Sheets(&quot;Sheet1&quot;).ListObjects(1).Name = &quot;ORA&quot;
 WrkName = ActiveWorkbook.Name
 TblName = Sheets(&quot;Sheet1&quot;).ListObjects(1).Name
@@ -140,7 +140,7 @@ End Sub
 <li>在模型中添加度量值</li>
 </ul>
 <p><code>MeasureName</code>参数指定度量值名称，<code>AssociatedTable</code>度量值写进模型表中，<code>Formula</code>指定度量值，<code>FormatInformation</code>指定度量值的数据格式，<code> Description</code>度量值描述。</p>
-<pre><code>Sub 添加度量值()
+<pre tabindex="0"><code>Sub 添加度量值()
 'Declare your variables.
 Dim myModel As Model
 Dim myModelTables As ModelTables
@@ -185,7 +185,7 @@ End Sub
 <p><code>  Version:=xlPivotTableVersion15)</code>参数指定数据透视表版本</p>
 </li>
 </ul>
-<pre><code>Sub 创建透视表()
+<pre tabindex="0"><code>Sub 创建透视表()
 Sheets.Add.Name = &quot;透视表&quot;
 Dim Pivottablename As String
 Dim PowerPivotCache As Excel.PivotCache
@@ -214,7 +214,7 @@ DefaultVersion:=xlPivotTableVersion15)
  Set PowerPivotCache = Nothing
 End Sub
 </code></pre><p>以上代码可简写为：</p>
-<pre><code>Sub 创建透视表()
+<pre tabindex="0"><code>Sub 创建透视表()
 
 Sheets.Add.Name = &quot;透视表&quot;
 '定义表以及定义透视表缓存
@@ -241,7 +241,7 @@ End Sub
 <p>注意<code>Pivottablename</code>这个是引用的创建透视表中的值，代表当前透视表名称。分开执行时须指定<code>Pivottablename</code>的值，默认情况下为数据透视表1</p>
 </li>
 </ul>
-<pre><code>Sub 按照需求拉透视表()
+<pre tabindex="0"><code>Sub 按照需求拉透视表()
    '拉透视表过程
 
     Application.WindowState = xlMaximized
@@ -269,7 +269,7 @@ End Sub
 </code></pre><ul>
 <li>调整数据透视表格式：可通过录制宏代码调整格式，以下代码可批量调整一个文件夹下所有Excel文件全部sheet的格式</li>
 </ul>
-<pre><code>Sub 调整格式()
+<pre tabindex="0"><code>Sub 调整格式()
 Dim a
 'a = Dir(&quot;C:\Users\zhongyf\Desktop\work\output\*.XLSX&quot;)' 将xlsx结尾的所有文件打开
 Do '遍历目录下的所有指定格式的文件名

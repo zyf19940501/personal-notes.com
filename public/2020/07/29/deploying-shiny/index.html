@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>Shiny部署 - study notes</title>
@@ -110,7 +110,7 @@ sudo dnf config-manager &ndash;set-enabled PowerTools</p>
 </ul>
 <p>进入 <code>sudo vim /etc/shiny-server/shiny-server.conf</code></p>
 <p>添加</p>
-<pre><code>location /demo1{ #/demo1 访问app.R的网址后缀
+<pre tabindex="0"><code>location /demo1{ #/demo1 访问app.R的网址后缀
          app_dir /home/shiny/shinyapp/demo1; #app.R所在文件夹
         log_dir /var/log/shiny-server/demo1;#app.R日志所在文件夹
 }
@@ -149,7 +149,7 @@ server {
 </ul>
 <p><code>sudo systemctl restart shiny-server</code></p>
 <h4 id="部署官方服务器">部署官方服务器</h4>
-<pre><code>#本地安装rsconnect 
+<pre tabindex="0"><code>#本地安装rsconnect 
 install.packages('rsconnect')
 library(rsconnect)
 
@@ -162,7 +162,7 @@ devtools::install_github(&quot;rstudio/rsconnect&quot;)
 https://www.shinyapps.io/
 
 </code></pre><p>测试部署</p>
-<pre><code>#复制该代码到R窗口下运行
+<pre tabindex="0"><code>#复制该代码到R窗口下运行
 rsconnect::setAccountInfo(name='genomenetwork',
               token='869F3553609D3A17C74FA157528D58C8',
               secret='&lt;SECRET&gt;')
@@ -179,7 +179,7 @@ deployApp()
 https://genomenetwork.shinyapps.io/001-hello/
 
 </code></pre><h4 id="检查报错">检查报错</h4>
-<pre><code>#应用启动失败，一般是依赖包问题，好好查看报错信息
+<pre tabindex="0"><code>#应用启动失败，一般是依赖包问题，好好查看报错信息
 #日志
 sudo cat /var/log/shiny-server/demo/
 #重启
@@ -188,7 +188,7 @@ sudo systemctl restart shiny-server;
 sudo vim /etc/shiny-server/shiny-server.conf
 </code></pre><p>由于Shiny Server为了保证性能，所以非敏感性的错误日志被设置了自动清除，每当你出现了错误，
 要去看日志定位问题的时候，这个日志就刚好被自动清除了。可做如下调整</p>
-<pre><code>sudo vi /etc/shiny-server/shiny-server.conf
+<pre tabindex="0"><code>sudo vi /etc/shiny-server/shiny-server.conf
 run_as shiny;
 access_log /var/log/shiny-server/access.log default;  # 增加记录访问
 preserve_logs true;                                   # 禁止自动清除日志

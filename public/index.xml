@@ -6,20 +6,7 @@
     <description>Recent content on study notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>R 包 data.table 与 collapse 比较</title>
-      <link>/2021/10/22/data-table-vs-collapse/</link>
-      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/2021/10/22/data-table-vs-collapse/</guid>
-      <description>前言 当我知道 collapse 包时，我第一时间去 GitHub 上查看该项目。由于我长期使用 data.table 包处理数据，所以特别想知道他们之间的优劣势，通过查看基准测试，发现两个项目各有所长。由于我是一名零售行业数据分析师，需要的数据处理函数以及逻辑相对比较简单，接下来就两个 R 包在数据处理上的差异做简单的记录，主要比较相同的处理逻辑语法上的差异。
-官方的手册中已有相关介绍，可自行前往阅读。
- 基础用法 # 加载包 library(collapse) library(data.table) # 准备测试数据 # collapse data df &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) # data.table data dt &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) |&amp;gt; setDT() 行列选择 列选择，新出来的数据处理框架基本都支持列名索引和数字索引的方式选择列，建议使用列名索引。
-collapse 行列选择与tidyverse系列相似,支持列名索引以及数字索引。
- 列选择  collapse  df |&amp;gt; fselect(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() df |&amp;gt; fselect(1:3,12) |&amp;gt; head() data.table  dt[,.(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY)] |&amp;gt; head() dt[,c(1:3,12)] |&amp;gt; head()  子集(行选择)  collapse  # 筛选子集 行列同时 fsubset(df,SHOP_NO ==&amp;quot;999842&amp;quot; &amp;amp; BILL_MONEY&amp;gt;10,BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() 简写方式, sbt()是的fsubset()简写。</description>
-    </item>
-    
+    <lastBuildDate>Thu, 21 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R 连接 impala</title>
       <link>/2021/10/21/r-and-impala/</link>
@@ -43,12 +30,12 @@ odbc 连接 驱动配置 hive 驱动 通过 odbc 方式连接，主要问题是�
       <guid>/2021/06/03/r-version-update/</guid>
       <description>由于个人强迫症，当R新版出来时一定会尝试，所以怎么快捷方便更新R版本是个问题。有时升级到最新版本时想要保留当前版本，如果是自己本地环境可以任意折腾，但是更新服务器上R版本时需谨慎,尤其是部署了rstudio-server以及shiny-server时，即使出现问题不兼容也能退回旧版本。所以就服务器上R安装更新做如下记录。 由于对linux命令不太了解以及对linux上的R认知有限,难免出现错误,如有问题,望告知,谢谢.
 基础命令 开始安装更新之前先了解几个命令. 想要查看服务器上是否安装了R,安装了哪些版本,目前使用的版本的路径等等问题,可以用以下命令在终端执行
- R版本  # Red hat centos rpm -qa |grep R- # Ubuntu $ dpkg -s r-base  R位置  which R  R_RHOME  R_RHOME 安装更新 由于之前已经写过Ubuntu系统上R安装更新,本文主要记录Centos上R安装以及更新.另外会简单描述下win系统上R的安装以及更新.
+ R版本  # Red hat centosrpm -qa |grep R-# Ubuntu$ dpkg -s r-base R位置  which R R_RHOME  R_RHOME安装更新 由于之前已经写过Ubuntu系统上R安装更新,本文主要记录Centos上R安装以及更新.另外会简单描述下win系统上R的安装以及更新.
 Linux 本文主要代码是Centos7上R语言的安装更新.由于有Rstudio出品的R的安装指引,在服务器上安装R已经是一件超级简单的事情,之所以有本文的笔记,主要是想让自己加深理解. 犹记得当初对linux一窍不通时安装R的迷茫与心累.第一次尝试服务器上安装R就是使用的阿里云的centos7系统安装,按照网上提供的教程yum install R很顺畅的就安装上了.但是当我想安装新版本R时,灾难就来临了.后面经过摸索,我使用R的环境已经从centos系统切换到buntu系统了.主要是感觉网上关于ubuntu和R的教程多一些.另外ubuntu桌面看起来让我对ubuntu有好感.
 Centos 系统软件包管理器安装 在centos7上安装R首先需要在系统上安装EPEL存储库。通过系统软件包安装R时which R返回结果是/usr/bin/R
-sudo yum install epel-release sudo yum install R R --version 截止到2021年5月7日，在centos7上通过上述代码可安装R3.6.0
+sudo yum install epel-releasesudo yum install RR --version截止到2021年5月7日，在centos7上通过上述代码可安装R3.6.0
 源安装Rstudio 采用Rstudio install R 方法安装指定版本R.通过该方式安装R时which R返回结果是通常是/usr/local/bin/R，好处是可以安装使用多版本的R，并在更新系统软件包时避免替换R的现有版本。和win系统下面安装多版本的R类似。
- 先决条件  # Enable the Extra Packages for Enterprise Linux (EPEL) repository sudo yum install https://dl.</description>
+ 先决条件  # Enable the Extra Packages for Enterprise Linux (EPEL) repositorysudo yum install https://dl.</description>
     </item>
     
     <item>
@@ -64,7 +51,7 @@ sudo yum install epel-release sudo yum install R R --version 截止到2021年5�
 bookdown 在我们使用 bookdown 创建项目后，生成的项目文件中有一个名叫 style.css 的文件，我们修改该文件即可。
 打开 style.css，在最后添加即可。
 code span.co { color: #60a0b0; font-style: normal; } 完整 style.css 如下所示：
-p.caption { color: #777; margin-top: 10px; } p code { white-space: inherit; } pre { word-break: normal; word-wrap: normal; } pre code { white-space: inherit; } code span.co { color: #60a0b0; font-style: normal; } 在修改完 style.</description>
+p.caption {color: #777;margin-top: 10px;}p code {white-space: inherit;}pre {word-break: normal;word-wrap: normal;}pre code {white-space: inherit;}code span.co { color: #60a0b0;font-style: normal;}在修改完 style.</description>
     </item>
     
     <item>
@@ -80,7 +67,7 @@ rstudio preview下载地址。
  因为本人是商业数据分析师，所以测试内容仅仅只是简单的数据处理的R包，如tidyverse,data.table,rmarkdown,bookdown,readxl,openxlsx等
  R安装  官网安装  官网下载正常安装即可，或者通过homebrew安装。
 R包安装 数据处理包 我常用data.table处理数据,所以第一个安装的R包是data.table，正常安装。接下来安装tidyverse报错，看原因是stringi没办法正确安装，解决办法如下：
- stringi  packageurl &amp;lt;- &amp;quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&amp;quot; install.packages(packageurl, repos=NULL, type=&amp;quot;source&amp;quot;) 安装stringi包后，tidyverse即可正常使用。
+ stringi  packageurl &amp;lt;- &amp;quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&amp;quot;install.packages(packageurl, repos=NULL, type=&amp;quot;source&amp;quot;)安装stringi包后，tidyverse即可正常使用。
 数据库相关 对于我常用的odbc,DBI都可以正常安装，甚至我成功安装SQL SERVER的驱动，如下所示：
 但是无法正常连接数据库，据说微软计划下一个版本的odbc会支持m1. .
 至于其他的数据库比如mysql，我想是可以成功，没测试。</description>
@@ -114,10 +101,10 @@ Prophet is open source software released by Facebook’s Core Data Science team.
  安装R 直接安装 首先，登录服务器。mac用户利用ssh命令登录即可。win用户可下载MobaXterm软件登录服务器。请自行搜索相关资料。
 ssh root@192.168.2.237 直接安装Ubuntu源里面的R版本，版本可能会比较老旧，除非是你必须用最新版本的R，否则建议就先用该版本，等以后熟悉Linux命令后再重新安装R或者升级R。截止本文，直接安装能安装R-3.6.3版本。
 安装r-base即可安装完整版本，当时当你需要编译R包时还需要安装 r-base-dev，我们两个都安装，直接在命令行中执行即可。
-# 更新源 sudo apt update # R安装 sudo apt install r-base r-base-dev # 查看是否安装成功 命令行中运行R,应该是R-3.6.3版本，我已经升级了 R 命令行中运行R后出现如上画面，则R安装成功。
+# 更新源sudo apt update# R安装sudo apt install r-base r-base-dev# 查看是否安装成功 命令行中运行R,应该是R-3.6.3版本，我已经升级了R命令行中运行R后出现如上画面，则R安装成功。
 安装最新版本的R 安装最新版本的时候，可以自行搜索，关键词【How to install R 4.0.3 on Ubuntu 20.04】。一般是添加最新R源再正常安装即可，在写本文时R已经更新到4.0时代，可以安装到R-4.0.3版本。
 注意：添加源时需选择跟系统匹配的源。
-# 添加源 sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39; # 添加密钥 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 # 更新 sudo apt update # 安装 sudo apt install r-base r-base-core r-recommended r-base-dev 以上参考代码，需【翻墙】打开https://rtask.</description>
+# 添加源sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39;# 添加密钥sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9# 更新sudo apt update# 安装sudo apt install r-base r-base-core r-recommended r-base-dev以上参考代码，需【翻墙】打开https://rtask.</description>
     </item>
     
     <item>
@@ -132,14 +119,14 @@ github地址https://github.com/rstudio/blastula
 常规邮件发送 第一步生成发送邮件的邮箱凭证，第二步利用compose_email()函数构建邮件内容，第三步smtp_send()发送邮件。通过下面的官方案例解析，我们将会看到多种元素间可以通过c()与md()连接起来，让我们邮件正文拥有无限可能。
 生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
 重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
-create_smtp_creds_file(file = &#39;email_creds&#39;, user = &#39;zhongyf@example.com.hk&#39;, host = &#39;mail.example.com.hk&#39;, port = 25,use_ssl = FALSE) file:文件名为email_creds;
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@example.com.hk&#39;,host = &#39;mail.example.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
 user:发送邮件的邮件账户;
 host:邮件服务器，像mail.example.com.hk,是目前邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com，gmail邮箱是smtp.gmai.com不同邮件的host地址不一样
 port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
 use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
 可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
 构建邮件正文 以下代码是官方案例：
-#添加时间 date_time &amp;lt;- add_readable_time() # Create an image string using an on-disk 指定一个图像文件路径 # image file img_file_path &amp;lt;- system.file( &amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;, package = &amp;quot;blastula&amp;quot; ) #添加图片 转化成html文本 img_string &amp;lt;- add_image(file = img_file_path) # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中 # The compose_email() function allows us to easily create an email message.</description>
+#添加时间date_time &amp;lt;- add_readable_time() # Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)#添加图片 转化成html文本img_string &amp;lt;- add_image(file = img_file_path) # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
     </item>
     
     <item>
@@ -180,8 +167,8 @@ Sub 创建透视表() Sheets.Add ActiveWorkbook.PivotCaches.Create(SourceType:=x
 分别在cmd终端或者Anaconda Prompt里粘贴下面两行代码（每粘贴一行回车确认）。
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --set show_channel_urls yes
-# 创建新环境 conda create –n yuyin python=3.9 activate yuyin pip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5 pyttsx3代码如下：
-import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:&#39;) f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;) line = f.readlines() line = str(line) line = line.</description>
+# 创建新环境conda create –n yuyin python=3.9activate yuyinpip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5pyttsx3代码如下：
+import pyttsx3filename = input(&#39;请输入需转化语音的txt文件名称:&#39;)f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;)line = f.readlines()line = str(line)line = line.</description>
     </item>
     
     <item>
@@ -191,7 +178,7 @@ import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:
       
       <guid>/2020/12/02/dt%E5%8C%85%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B/</guid>
       <description>说明 记录DT包使用案例
-案例  按钮  dat &amp;lt;- data.frame( &amp;quot;Title&amp;quot; = c( &amp;quot;A Random Walk Down Wall Street&amp;quot;, &amp;quot;Naked Statistics&amp;quot;, &amp;quot;Freakonomics&amp;quot; ), &amp;quot;Author&amp;quot; = c( &amp;quot;Burton G. Malkiel&amp;quot;, &amp;quot;Charles Wheelan&amp;quot;, &amp;quot;Steven D. Levitt and Stephen J. Dubner&amp;quot; ) ) library(DT) datatable(dat) datatable(dat, rownames = FALSE, # remove row numbers filter = &amp;quot;top&amp;quot;, # add filter on top of columns extensions = &amp;quot;Buttons&amp;quot;, # add download buttons options = list( autoWidth = TRUE, dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttons buttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttons pageLength = 5, # show first 5 entries, default is 10 order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order ) ) # Add links to the interactive table datatable(dat, rownames = FALSE, # remove row numbers filter = &amp;quot;top&amp;quot;, # add filter on top of columns extensions = &amp;quot;Buttons&amp;quot;, # add download buttons options = list( autoWidth = TRUE, dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttons buttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttons pageLength = 5, # show first 5 entries, default is 10 order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order ), escape = FALSE # to make URLs clickable ) 来源：https://www.</description>
+案例  按钮  dat &amp;lt;- data.frame(&amp;quot;Title&amp;quot; = c(&amp;quot;A Random Walk Down Wall Street&amp;quot;,&amp;quot;Naked Statistics&amp;quot;,&amp;quot;Freakonomics&amp;quot;),&amp;quot;Author&amp;quot; = c(&amp;quot;Burton G. Malkiel&amp;quot;,&amp;quot;Charles Wheelan&amp;quot;,&amp;quot;Steven D. Levitt and Stephen J. Dubner&amp;quot;))library(DT)datatable(dat)datatable(dat,rownames = FALSE, # remove row numbersfilter = &amp;quot;top&amp;quot;, # add filter on top of columnsextensions = &amp;quot;Buttons&amp;quot;, # add download buttonsoptions = list(autoWidth = TRUE,dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttonsbuttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttonspageLength = 5, # show first 5 entries, default is 10order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order))# Add links to the interactive tabledatatable(dat,rownames = FALSE, # remove row numbersfilter = &amp;quot;top&amp;quot;, # add filter on top of columnsextensions = &amp;quot;Buttons&amp;quot;, # add download buttonsoptions = list(autoWidth = TRUE,dom = &amp;quot;Blfrtip&amp;quot;, # location of the download buttonsbuttons = c(&amp;quot;copy&amp;quot;, &amp;quot;csv&amp;quot;, &amp;quot;excel&amp;quot;, &amp;quot;pdf&amp;quot;, &amp;quot;print&amp;quot;), # download buttonspageLength = 5, # show first 5 entries, default is 10order = list(0, &amp;quot;asc&amp;quot;) # order the title column by ascending order),escape = FALSE # to make URLs clickable)来源：https://www.</description>
     </item>
     
     <item>
@@ -201,7 +188,7 @@ import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:
       
       <guid>/2020/12/01/git%E4%BD%BF%E7%94%A8/</guid>
       <description>git使用 需要更进一步学习了解userthis包
-library(usethis) ?use_github() edit_r_environ() #creat github use_github(protocol = &#39;https&#39;,auth_token = Sys.getenv(&amp;quot;GITHUB_PAT&amp;quot;)) upstream_url &amp;lt;- &amp;quot;git@github.com:&amp;lt;OWNER&amp;gt;/&amp;lt;REPO&amp;gt;.git&amp;quot; use_git_remote(name = &amp;quot;upstream&amp;quot;, url = upstream_url) 参考地址 https://www.youtube.com/watch?v=kL6L2MNqPHg&amp;amp;t=799s
+library(usethis)?use_github()edit_r_environ()#creat githubuse_github(protocol = &#39;https&#39;,auth_token = Sys.getenv(&amp;quot;GITHUB_PAT&amp;quot;))upstream_url &amp;lt;- &amp;quot;git@github.com:&amp;lt;OWNER&amp;gt;/&amp;lt;REPO&amp;gt;.git&amp;quot;use_git_remote(name = &amp;quot;upstream&amp;quot;, url = upstream_url)参考地址 https://www.youtube.com/watch?v=kL6L2MNqPHg&amp;amp;t=799s
 blogdown 关于github git的使用 https://bookdown.org/yihui/blogdown/github-pages.html</description>
     </item>
     
@@ -214,7 +201,7 @@ blogdown 关于github git的使用 https://bookdown.org/yihui/blogdown/github-pa
       <description>树莓派安装R  参考资料 http://rolandtanglao.com/2020/10/28/p1-how-to-install-r-403-raspberry-pi4-debian10/
 https://stackoverflow.com/questions/57023388/cant-install-r-3-6-in-raspberry-pi-3-b-in-raspbian-stretch
 代码 先执行以下操作
-wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gz tar -zvxf pcre2-10.35.tar.gz cd pcre2-10.35 ./configure; make make install sudo apt-get install -y gfortran libreadline6-dev libx11-dev libxt-dev \ libpng-dev libjpeg-dev libcairo2-dev xvfb \ libbz2-dev libzstd-dev liblzma-dev \ libcurl4-openssl-dev \ texinfo texlive texlive-fonts-extra \ screen wget openjdk-8-jdk cd /usr/local/src sudo wget https://cran.rstudio.com/src/base/R-4/R-4.0.3.tar.gz sudo su tar zxvf R-4.0.3.tar.gz cd R-4.0.3 ./configure --enable-R-shlib #--with-blas --with-lapack #optional make make install cd .. rm -rf R-4.0.3* exit cd 部分R包依赖环境 sudo apt install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev Ubuntu系统安装R 树莓派Ubuntu系统安装R相对简单很多，正常更新源就能安装到最新版本。或者简单搜索即可。</description>
+wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gztar -zvxf pcre2-10.35.tar.gzcd pcre2-10.35./configure;makemake installsudo apt-get install -y gfortran libreadline6-dev libx11-dev libxt-dev \libpng-dev libjpeg-dev libcairo2-dev xvfb \libbz2-dev libzstd-dev liblzma-dev \libcurl4-openssl-dev \texinfo texlive texlive-fonts-extra \screen wget openjdk-8-jdkcd /usr/local/srcsudo wget https://cran.rstudio.com/src/base/R-4/R-4.0.3.tar.gzsudo sutar zxvf R-4.0.3.tar.gzcd R-4.0.3./configure --enable-R-shlib #--with-blas --with-lapack #optionalmakemake installcd ..rm -rf R-4.0.3*exitcd部分R包依赖环境 sudo apt install build-essential libcurl4-gnutls-dev libxml2-dev libssl-devUbuntu系统安装R 树莓派Ubuntu系统安装R相对简单很多，正常更新源就能安装到最新版本。或者简单搜索即可。</description>
     </item>
     
     <item>
@@ -229,8 +216,8 @@ wget ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.gz tar -zvxf pcre2-10.35.tar.gz
 Youtube视频地址:https://www.youtube.com/watch?v=KeecUhhfIE8
 说明 frp 主要由客户端frpc和服务端frps组成，服务端通常部署在具有公网IP的机器上，客户端通常部署在需要穿透的内网服务所在的机器上。
 配置过程   修改frps.ini
-[common] bind_port = 7000 token = passwordvega2020   修改frpc.ini
-[common] server_addr = x.x.x.x #公网ip server_port = 7000 [ssh] type = tcp local_ip = 127.0.0.1 local_port = 22 remote_port = 6000 [udp] type = udp local_ip = 192.168.8.116 local_port = 22 remote_port = 6001 [RDP] type = tcp local_ip = 192.168.8.116 local_port = 3389 #windows远程连接端口 remote_port = 6002   启动</description>
+[common]bind_port = 7000 token = passwordvega2020  修改frpc.ini
+[common]server_addr = x.x.x.x #公网ipserver_port = 7000 [ssh]type = tcplocal_ip = 127.0.0.1local_port = 22remote_port = 6000[udp]type = udplocal_ip = 192.168.8.116local_port = 22remote_port = 6001[RDP]type = tcplocal_ip = 192.168.8.116local_port = 3389 #windows远程连接端口remote_port = 6002  启动</description>
     </item>
     
     <item>
@@ -251,7 +238,7 @@ Youtube视频地址:https://www.youtube.com/watch?v=KeecUhhfIE8
   2.刷新功能宏文件
  构建带宏的refresh.xls 文件  创建名为refresh.xls的文件，并在其中插入VBA代码，VBA代码如下：
 该代码实现刷新该文件下全部xlsx,xls后缀文件。
-Sub refresh() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;quot;\&amp;quot; f = Dir(x &amp;amp; &amp;quot;&amp;quot; &amp;amp; &amp;quot;*xls&amp;quot;) Do While f &amp;lt;&amp;gt; &amp;quot;&amp;quot; If f &amp;lt;&amp;gt; ThisWorkbook.Name Then Set wb = Workbooks.</description>
+Sub refresh()Dim wb As Excel.Workbookx = ThisWorkbook.Path &amp;amp; &amp;quot;\&amp;quot;f = Dir(x &amp;amp; &amp;quot;&amp;quot; &amp;amp; &amp;quot;*xls&amp;quot;)Do While f &amp;lt;&amp;gt; &amp;quot;&amp;quot;If f &amp;lt;&amp;gt; ThisWorkbook.Name ThenSet wb = Workbooks.</description>
     </item>
     
     <item>
@@ -263,10 +250,10 @@ Sub refresh() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;quot
       <description>说明 利用tuber package 的API获取youtube上李子漆频道的数据简单分析，了解视频受欢迎程度，以及评论如何。
 tuber package使用 github项目地址:https://github.com/soodoku/tuber 参考资料:https://cran.r-project.org/web/packages/tuber/vignettes/tuber-ex.html
 通过get_channel_stats()获取频道基础信息
-install.package(&#39;tuber&#39;) library(tuber) yt_oauth(app_id = &#39;&#39;,app_secret = &#39;&#39;) get_channel_stats(channel_id = channelid) 共120个视频，1300万订阅，1927398752次观看
+install.package(&#39;tuber&#39;)library(tuber)yt_oauth(app_id = &#39;&#39;,app_secret = &#39;&#39;)get_channel_stats(channel_id = channelid)共120个视频，1300万订阅，1927398752次观看
 获取120个视频的信息，包含视频id,title,publication_date,description,channel_id,channel_title,viewCount,likeCount,dislikeCount,favoriteCount,commentCount,url字段
-dt &amp;lt;- tuber::get_all_channel_video_stats(channelid) names(dt) 频道各项数据 观看数 从上面可知，3千万观看数视频7个，大部分视频的观看数在2千万以下
-dt %&amp;gt;% mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7, Inf))) %&amp;gt;% group_by(观看数区间) %&amp;gt;% summarise(n()) dt %&amp;gt;% ggplot(aes(viewCount)) + geom_histogram(bins = 50) + ggtitle(label = &amp;quot;频道视频观看数分布情况&amp;quot;) + ggthemes::theme_clean() &amp;ldquo;顶&amp;quot;视频数 被标记&amp;quot;顶&amp;quot;总数：30854396
+dt &amp;lt;- tuber::get_all_channel_video_stats(channelid)names(dt)频道各项数据 观看数 从上面可知，3千万观看数视频7个，大部分视频的观看数在2千万以下
+dt %&amp;gt;%mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7, Inf))) %&amp;gt;%group_by(观看数区间) %&amp;gt;%summarise(n())dt %&amp;gt;%ggplot(aes(viewCount)) +geom_histogram(bins = 50) +ggtitle(label = &amp;quot;频道视频观看数分布情况&amp;quot;) +ggthemes::theme_clean()&amp;ldquo;顶&amp;quot;视频数 被标记&amp;quot;顶&amp;quot;总数：30854396
 &amp;ldquo;踩&amp;quot;视频数 被标记&amp;quot;踩&amp;quot;总数：839231,远少于被&amp;quot;顶&amp;quot;数。
 评论数 评论数据 &amp;ldquo;顶数最多的视频评论&amp;rdquo; </description>
     </item>
@@ -280,7 +267,7 @@ dt %&amp;gt;% mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7
       <description>前言 最近部门同事有较多临时取数需求,但因其不熟悉SQL,Power Pivot等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装odbc package,导致没法使用现成plumber docker，如：docker pull trestletech/plumber 或 docker pull rstudio/plumber 等，需要自定义dockerfile构建docker镜像,现记录如下。
 构建dockerfile 从r-base构建R环境,然后安装R中安装包需要的环境如：libxml2-dev,libssl-dev等，但是linux系统命令都不太理解，以下代码为拼凑起来。
 其中 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 等部分可以参考微软官网，官网详细列出了各系统安装odbc驱动的代码。
-FROM r-base RUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \ git-core \ libssl-dev \ libcurl4-gnutls-dev RUN apt-get update \ &amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \ apt-transport-https \ curl \ gnupg \ unixodbc-dev \ libxml2-dev \ libcurl4-openssl-dev \ libssl-dev \ libsodium-dev \ &amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ &amp;amp;&amp;amp; curl https://packages.</description>
+FROM r-baseRUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \git-core \libssl-dev \libcurl4-gnutls-devRUN apt-get update \&amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \apt-transport-https \curl \gnupg \unixodbc-dev \libxml2-dev \libcurl4-openssl-dev \libssl-dev \libsodium-dev \&amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \&amp;amp;&amp;amp; curl https://packages.</description>
     </item>
     
     <item>
@@ -293,14 +280,14 @@ FROM r-base RUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \ git-c
 blastula包可以很容易地发送HTML电子邮件 。该消息可以具有三个内容区域（正文，标题和页脚），并且我们可以插入Markdown文本，基于块的组件,甚至HTML片段。
 生成凭证 生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。
 重要邮箱邮件可用create_smtp_creds_key( id = &amp;quot;gmail&amp;quot;, user = &amp;quot;user_name@gmail.com&amp;quot;, provider = &amp;quot;gmail&amp;quot; )方式创建
-create_smtp_creds_file(file = &#39;email_creds&#39;, user = &#39;zhongyf@ghzy.com.hk&#39;, host = &#39;mail.ghzy.com.hk&#39;, port = 25,use_ssl = FALSE) file:文件名为email_creds;
+create_smtp_creds_file(file = &#39;email_creds&#39;,user = &#39;zhongyf@ghzy.com.hk&#39;,host = &#39;mail.ghzy.com.hk&#39;,port = 25,use_ssl = FALSE)file:文件名为email_creds;
 user:发送邮件的邮件账户;
 host:邮件服务器，像mail.ghzy.com.hk,是目前公司的邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com,不同邮件的host地址不一样
 port:邮件服务器端口地址，一般默认是25，QQ的port为465或587
 use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。
 可搜索关键词[QQ邮箱开启SMTP方法如何授权]1查看详情
 发送邮件 以下代码是官方案例：
-date_time &amp;lt;- add_readable_time() #添加时间 # Create an image string using an on-disk 指定一个图像文件路径 # image file img_file_path &amp;lt;- system.file( &amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;, package = &amp;quot;blastula&amp;quot; ) img_string &amp;lt;- add_image(file = img_file_path) #添加图片 转化成html文本 # compose_email函数创建邮件消息，可以将字符向量合并到消息正文中 # The compose_email() function allows us to easily create an email message.</description>
+date_time &amp;lt;- add_readable_time() #添加时间# Create an image string using an on-disk 指定一个图像文件路径# image fileimg_file_path &amp;lt;-system.file(&amp;quot;img&amp;quot;, &amp;quot;pexels-photo-267151.jpeg&amp;quot;,package = &amp;quot;blastula&amp;quot;)img_string &amp;lt;- add_image(file = img_file_path) #添加图片 转化成html文本# compose_email函数创建邮件消息，可以将字符向量合并到消息正文中# The compose_email() function allows us to easily create an email message.</description>
     </item>
     
     <item>
@@ -353,11 +340,11 @@ sudo systemctl status shiny-server</description>
       <description>为什么需要自动创建数据透视表 最近接到一项工作任务，需要制作大量同款数据透视表，但是使用区域以及层级不一样导致数据源不一样，依据一个模板批量复制后更改部分细节问题会有大量工作，需要一个个透视表取更改，因此萌发了VBA实现批量制作透视表的想法。
 基础透视表 本处基础透视表是指不需要从模型生成透视表，也不需要通过DAX函数添加度量值的情况下透视表。在这种情况下透视表可以通过录制宏实现VBA代码自动创建透视表。
 数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba
-Sub 创建透视表() Sheets.Add ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&amp;quot;表1&amp;quot; _ , Version:=6).CreatePivotTable TableDestination:=&amp;quot;Sheet1!R3C1&amp;quot;, TableName _ :=&amp;quot;数据透视表1&amp;quot;, DefaultVersion:=6 Sheets(&amp;quot;Sheet1&amp;quot;).Select Cells(3, 1).Select With ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotCache .RefreshOnFileOpen = False .MissingItemsLimit = xlMissingItemsDefault End With ’数据透视表行列部分以及计算汇总字段 ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).RepeatAllLabels xlRepeatLabels With ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotFields(&amp;quot;Species&amp;quot;) .Orientation = xlRowField .Position = 1 End With ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).AddDataField ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot; _ ).PivotFields(&amp;quot;Petal.Width&amp;quot;), &amp;quot;求和项:Petal.Width&amp;quot;, xlSum End Sub Power Pivot 透视表 工作中大部分时候都是带度量值的透视表，那就需要通过VBA直接生成度量值，主要步骤：第一步将表格添加到模型，第二步创建度量值，第三步创建透视表，拉取透视表。
+Sub 创建透视表()Sheets.AddActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&amp;quot;表1&amp;quot; _, Version:=6).CreatePivotTable TableDestination:=&amp;quot;Sheet1!R3C1&amp;quot;, TableName _:=&amp;quot;数据透视表1&amp;quot;, DefaultVersion:=6Sheets(&amp;quot;Sheet1&amp;quot;).SelectCells(3, 1).SelectWith ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotCache.RefreshOnFileOpen = False.MissingItemsLimit = xlMissingItemsDefaultEnd With’数据透视表行列部分以及计算汇总字段ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).RepeatAllLabels xlRepeatLabelsWith ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).PivotFields(&amp;quot;Species&amp;quot;).Orientation = xlRowField.Position = 1End WithActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot;).AddDataField ActiveSheet.PivotTables(&amp;quot;数据透视表1&amp;quot; _).PivotFields(&amp;quot;Petal.Width&amp;quot;), &amp;quot;求和项:Petal.Width&amp;quot;, xlSumEnd SubPower Pivot 透视表 工作中大部分时候都是带度量值的透视表，那就需要通过VBA直接生成度量值，主要步骤：第一步将表格添加到模型，第二步创建度量值，第三步创建透视表，拉取透视表。
 数据以及代码下载地址：https://gitee.com/zhongyufei/excel/tree/master/vba/Powerpivot
   将表格添加到模型
 第一步将表添加到模型，需要说明的是 ：将Sheet1添加到模型，并命名为ORA，这些参数需根据实际情况修改调整
-  Sub 添加到模型() Sheets(&amp;quot;Sheet1&amp;quot;).ListObjects(1).Name = &amp;quot;ORA&amp;quot; WrkName = ActiveWorkbook.</description>
+  Sub 添加到模型()Sheets(&amp;quot;Sheet1&amp;quot;).ListObjects(1).Name = &amp;quot;ORA&amp;quot;WrkName = ActiveWorkbook.</description>
     </item>
     
   </channel>

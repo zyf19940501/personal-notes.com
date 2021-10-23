@@ -6,20 +6,7 @@
     <description>Recent content in R package on study notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r-package/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>R 包 data.table 与 collapse 比较</title>
-      <link>/2021/10/22/data-table-vs-collapse/</link>
-      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/2021/10/22/data-table-vs-collapse/</guid>
-      <description>前言 当我知道 collapse 包时，我第一时间去 GitHub 上查看该项目。由于我长期使用 data.table 包处理数据，所以特别想知道他们之间的优劣势，通过查看基准测试，发现两个项目各有所长。由于我是一名零售行业数据分析师，需要的数据处理函数以及逻辑相对比较简单，接下来就两个 R 包在数据处理上的差异做简单的记录，主要比较相同的处理逻辑语法上的差异。
-官方的手册中已有相关介绍，可自行前往阅读。
- 基础用法 # 加载包 library(collapse) library(data.table) # 准备测试数据 # collapse data df &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) # data.table data dt &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) |&amp;gt; setDT() 行列选择 列选择，新出来的数据处理框架基本都支持列名索引和数字索引的方式选择列，建议使用列名索引。
-collapse 行列选择与tidyverse系列相似,支持列名索引以及数字索引。
- 列选择  collapse  df |&amp;gt; fselect(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() df |&amp;gt; fselect(1:3,12) |&amp;gt; head() data.table  dt[,.(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY)] |&amp;gt; head() dt[,c(1:3,12)] |&amp;gt; head()  子集(行选择)  collapse  # 筛选子集 行列同时 fsubset(df,SHOP_NO ==&amp;quot;999842&amp;quot; &amp;amp; BILL_MONEY&amp;gt;10,BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() 简写方式, sbt()是的fsubset()简写。</description>
-    </item>
-    
+    <lastBuildDate>Thu, 21 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r-package/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R 连接 impala</title>
       <link>/2021/10/21/r-and-impala/</link>
@@ -56,7 +43,7 @@ Prophet is open source software released by Facebook’s Core Data Science team.
       <description>前言 最近部门同事有较多临时取数需求,但因其不熟悉SQL,Power Pivot等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装odbc package,导致没法使用现成plumber docker，如：docker pull trestletech/plumber 或 docker pull rstudio/plumber 等，需要自定义dockerfile构建docker镜像,现记录如下。
 构建dockerfile 从r-base构建R环境,然后安装R中安装包需要的环境如：libxml2-dev,libssl-dev等，但是linux系统命令都不太理解，以下代码为拼凑起来。
 其中 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 等部分可以参考微软官网，官网详细列出了各系统安装odbc驱动的代码。
-FROM r-base RUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \ git-core \ libssl-dev \ libcurl4-gnutls-dev RUN apt-get update \ &amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \ apt-transport-https \ curl \ gnupg \ unixodbc-dev \ libxml2-dev \ libcurl4-openssl-dev \ libssl-dev \ libsodium-dev \ &amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ &amp;amp;&amp;amp; curl https://packages.</description>
+FROM r-baseRUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \git-core \libssl-dev \libcurl4-gnutls-devRUN apt-get update \&amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \apt-transport-https \curl \gnupg \unixodbc-dev \libxml2-dev \libcurl4-openssl-dev \libssl-dev \libsodium-dev \&amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \&amp;amp;&amp;amp; curl https://packages.</description>
     </item>
     
   </channel>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>Rmarkdown 代码块修改中文注释斜体 - study notes</title>
@@ -88,12 +88,12 @@
 <p>在我们使用 bookdown 创建项目后，生成的项目文件中有一个名叫 style.css 的文件，我们修改该文件即可。</p>
 <p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/bookdown-%E5%88%9D%E5%A7%8B-%E6%96%87%E4%BB%B6%E6%A0%91-1622539879663.png" alt="bookdown-文件树"></p>
 <p>打开 style.css，在最后添加即可。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#f92672">code</span> <span style="color:#f92672">span</span>.<span style="color:#a6e22e">co</span> { 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#f92672">code</span> <span style="color:#f92672">span</span>.<span style="color:#a6e22e">co</span> { 
     <span style="color:#66d9ef">color</span>: <span style="color:#ae81ff">#60a0b0</span>;
     <span style="color:#66d9ef">font-style</span>: <span style="color:#66d9ef">normal</span>;
  }
 </code></pre></div><p>完整 style.css 如下所示：</p>
-<pre><code>p.caption {
+<pre tabindex="0"><code>p.caption {
   color: #777;
   margin-top: 10px;
 }
@@ -117,13 +117,13 @@ code span.co {
 <p>经过上面的修改，我记起Rmarkdown 中代码块注释同样是斜体，解决方法如下：</p>
 <p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/rmarkdown%E4%B8%AD%E6%96%87%E6%AD%A3%E5%B8%B8%E6%B3%A8%E9%87%8A-1622540428792.png" alt="rmarkdown中文正常注释"></p>
 <p>首先自己配置一个 style.css 文件，注意  style.css 文件 和 Rmarkdown文件在统一路径下。css 文件如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#75715e">/* 主要是将font-style 设置为normal */</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#75715e">/* 主要是将font-style 设置为normal */</span>
 .<span style="color:#a6e22e">hljs-comment</span>{
   <span style="color:#66d9ef">font-family</span>: Microsoft YaHei ;
   <span style="color:#66d9ef">font-style</span>: <span style="color:#66d9ef">normal</span>;
 }
 </code></pre></div><p>再在 Rmarkdown 的 yaml 中引入 css 文件；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 <span style="color:#f92672">title</span>: <span style="color:#e6db74">&#34;Rmarkdown 中文注释&#34;</span>
 <span style="color:#f92672">output</span>: 
   <span style="color:#f92672">html_document</span>:
@@ -133,7 +133,7 @@ code span.co {
 <p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/html-rmarkdown%E4%B8%AD%E6%96%87%E6%B3%A8%E9%87%8A-1622541106681.png" alt=""></p>
 <h2 id="blogdown">blogdown</h2>
 <p>那我们在用 blogdown 写博文的时候，同样的问题该如何解决呢？通过在正文中引入 css 即可</p>
-<pre><code>&lt;html&gt;
+<pre tabindex="0"><code>&lt;html&gt;
 &lt;style&gt; 
 .hljs-comment{
   font-family: Microsoft YaHei ;

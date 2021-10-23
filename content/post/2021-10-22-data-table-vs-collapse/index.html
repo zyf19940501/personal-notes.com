@@ -141,4 +141,15 @@ df |&gt; ncol()</code></pre>
 <p>分组聚合</p>
 <pre class="r"><code>dt[,.(销量 = sum(BILL_QTY)),by=.(SHOP_NO)]</code></pre>
 </div>
+<div id="列重命名" class="section level3">
+<h3>列重命名</h3>
+<pre class="r"><code>frename(df,BILL_QTY = qty, BILL_MONEY = money ) |&gt; 
+  head(2)
+
+frename(df, tolower, cols = .c(BILL_QTY, BILL_MONEY)) %&gt;% head(2)</code></pre>
+<p>自定义函数改名</p>
+<pre class="r"><code>frename(iris, paste, &quot;new&quot;, sep = &quot;_&quot;, cols = 1:2)</code></pre>
+<p>改变数据框</p>
+<pre class="r"><code>setrename(df,BILL_QTY = qty, BILL_MONEY = money ) </code></pre>
+</div>
 </div>

@@ -16,7 +16,7 @@
       <description>前言 最近部门同事有较多临时取数需求,但因其不熟悉SQL,Power Pivot等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装odbc package,导致没法使用现成plumber docker，如：docker pull trestletech/plumber 或 docker pull rstudio/plumber 等，需要自定义dockerfile构建docker镜像,现记录如下。
 构建dockerfile 从r-base构建R环境,然后安装R中安装包需要的环境如：libxml2-dev,libssl-dev等，但是linux系统命令都不太理解，以下代码为拼凑起来。
 其中 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 等部分可以参考微软官网，官网详细列出了各系统安装odbc驱动的代码。
-FROM r-base RUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \ git-core \ libssl-dev \ libcurl4-gnutls-dev RUN apt-get update \ &amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \ apt-transport-https \ curl \ gnupg \ unixodbc-dev \ libxml2-dev \ libcurl4-openssl-dev \ libssl-dev \ libsodium-dev \ &amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ &amp;amp;&amp;amp; curl https://packages.</description>
+FROM r-baseRUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \git-core \libssl-dev \libcurl4-gnutls-devRUN apt-get update \&amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \apt-transport-https \curl \gnupg \unixodbc-dev \libxml2-dev \libcurl4-openssl-dev \libssl-dev \libsodium-dev \&amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \&amp;amp;&amp;amp; curl https://packages.</description>
     </item>
     
   </channel>

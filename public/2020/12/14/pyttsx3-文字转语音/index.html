@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>pyttsx3 -文字转语音 - study notes</title>
@@ -90,13 +90,13 @@
 <p>分别在cmd终端或者Anaconda Prompt里粘贴下面两行代码（每粘贴一行回车确认）。</p>
 <p><code>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</code></p>
 <p><code>conda config --set show_channel_urls yes</code></p>
-<pre><code># 创建新环境
+<pre tabindex="0"><code># 创建新环境
 conda create –n yuyin python=3.9
 activate yuyin
 pip install pyinstaller 
 pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py  --hidden-import=pyttsx3.drivers.sapi5
 </code></pre><p>pyttsx3代码如下：</p>
-<pre><code>import pyttsx3
+<pre tabindex="0"><code>import pyttsx3
 filename = input('请输入需转化语音的txt文件名称:')
 f = open(filename,'r',encoding = 'utf-8')
 line = f.readlines()

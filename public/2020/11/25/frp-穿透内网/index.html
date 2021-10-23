@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>Frp-穿透内网 - study notes</title>
@@ -89,13 +89,13 @@
 <ol>
 <li>
 <p>修改frps.ini</p>
-<pre><code>[common]
+<pre tabindex="0"><code>[common]
 bind_port = 7000 
 token = passwordvega2020
 </code></pre></li>
 <li>
 <p>修改frpc.ini</p>
-<pre><code>[common]
+<pre tabindex="0"><code>[common]
 server_addr = x.x.x.x #公网ip
 server_port = 7000  
 
@@ -121,13 +121,13 @@ remote_port = 6002
 <p>启动</p>
 <p>配置vbs文件，并加入开机自启动：<code>cmd shell:startup</code></p>
 <p>windows 后台运行</p>
-<pre><code>Set ws = WScript.CreateObject(&quot;WScript.Shell&quot;)
+<pre tabindex="0"><code>Set ws = WScript.CreateObject(&quot;WScript.Shell&quot;)
 ws.Run &quot;C:\frp_0.34.3_windows_amd64\frpc.exe -c C:\frp_0.34.3_windows_amd64\frpc.ini&quot;,0
 </code></pre></li>
 </ol>
 <p>​        linux 后台运行</p>
 <p>frps 运行 <code>systemctl start frps</code>,开机启动<code>systemctl enable frps</code></p>
-<pre><code>#服务器运行服务创建：
+<pre tabindex="0"><code>#服务器运行服务创建：
 vi /lib/systemd/system/frps.service
 
 Fprs服务命令：
@@ -143,7 +143,7 @@ ExecStart=/root/frp/frps -c /root/frp/frps.ini  #此处安实际情况修改
 [Install]
 WantedBy=multi-user.target
 
-</code></pre><pre><code>#客户端运行服务创建：
+</code></pre><pre tabindex="0"><code>#客户端运行服务创建：
 vi /lib/systemd/system/frpc.service
 
 Fprc服务命令：

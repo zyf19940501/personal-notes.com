@@ -16,10 +16,10 @@
       <description>说明 利用tuber package 的API获取youtube上李子漆频道的数据简单分析，了解视频受欢迎程度，以及评论如何。
 tuber package使用 github项目地址:https://github.com/soodoku/tuber 参考资料:https://cran.r-project.org/web/packages/tuber/vignettes/tuber-ex.html
 通过get_channel_stats()获取频道基础信息
-install.package(&#39;tuber&#39;) library(tuber) yt_oauth(app_id = &#39;&#39;,app_secret = &#39;&#39;) get_channel_stats(channel_id = channelid) 共120个视频，1300万订阅，1927398752次观看
+install.package(&#39;tuber&#39;)library(tuber)yt_oauth(app_id = &#39;&#39;,app_secret = &#39;&#39;)get_channel_stats(channel_id = channelid)共120个视频，1300万订阅，1927398752次观看
 获取120个视频的信息，包含视频id,title,publication_date,description,channel_id,channel_title,viewCount,likeCount,dislikeCount,favoriteCount,commentCount,url字段
-dt &amp;lt;- tuber::get_all_channel_video_stats(channelid) names(dt) 频道各项数据 观看数 从上面可知，3千万观看数视频7个，大部分视频的观看数在2千万以下
-dt %&amp;gt;% mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7, Inf))) %&amp;gt;% group_by(观看数区间) %&amp;gt;% summarise(n()) dt %&amp;gt;% ggplot(aes(viewCount)) + geom_histogram(bins = 50) + ggtitle(label = &amp;quot;频道视频观看数分布情况&amp;quot;) + ggthemes::theme_clean() &amp;ldquo;顶&amp;quot;视频数 被标记&amp;quot;顶&amp;quot;总数：30854396
+dt &amp;lt;- tuber::get_all_channel_video_stats(channelid)names(dt)频道各项数据 观看数 从上面可知，3千万观看数视频7个，大部分视频的观看数在2千万以下
+dt %&amp;gt;%mutate(观看数区间 = cut(x = viewCount, breaks = c(0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7, Inf))) %&amp;gt;%group_by(观看数区间) %&amp;gt;%summarise(n())dt %&amp;gt;%ggplot(aes(viewCount)) +geom_histogram(bins = 50) +ggtitle(label = &amp;quot;频道视频观看数分布情况&amp;quot;) +ggthemes::theme_clean()&amp;ldquo;顶&amp;quot;视频数 被标记&amp;quot;顶&amp;quot;总数：30854396
 &amp;ldquo;踩&amp;quot;视频数 被标记&amp;quot;踩&amp;quot;总数：839231,远少于被&amp;quot;顶&amp;quot;数。
 评论数 评论数据 &amp;ldquo;顶数最多的视频评论&amp;rdquo; </description>
     </item>

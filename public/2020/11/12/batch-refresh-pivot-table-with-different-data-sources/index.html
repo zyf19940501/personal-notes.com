@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>批量创建透视表 - study notes</title>
@@ -105,7 +105,7 @@
 </ul>
 <p>创建名为<code>refresh.xls</code>的文件，并在其中插入<code>VBA</code>代码，VBA代码如下：</p>
 <p>该代码实现刷新该文件下全部<code>xlsx</code>,<code>xls</code>后缀文件。</p>
-<pre><code>Sub refresh()
+<pre tabindex="0"><code>Sub refresh()
 Dim wb As Excel.Workbook
 x = ThisWorkbook.Path &amp; &quot;\&quot;
 f = Dir(x &amp; &quot;&quot; &amp; &quot;*xls&quot;)
@@ -126,7 +126,7 @@ End Sub
 <li>创建<code>vbs</code>脚本</li>
 </ul>
 <p>打开Txt文本文件，将以下代码复制，并另存为<code>refreshs.vbs</code>.</p>
-<pre><code>Set objExcel = CreateObject(&quot;Excel.Application&quot;)
+<pre tabindex="0"><code>Set objExcel = CreateObject(&quot;Excel.Application&quot;)
 objExcel.Visible = False
 objExcel.DisplayAlerts=False
 Set wb = objExcel.Workbooks.Open(&quot;C:\Users\zhongyf\Desktop\make-power-pivot\data\refreshs.xls&quot;)
@@ -136,11 +136,11 @@ objExcel.Application.quit
 </code></pre><ul>
 <li>R中调用脚本</li>
 </ul>
-<pre><code>pathofvbscript = './refreshs.vbs'
+<pre tabindex="0"><code>pathofvbscript = './refreshs.vbs'
 shell(shQuote(normalizePath(pathofvbscript)), &quot;cscript&quot;, flag = &quot;//nologo&quot;)
 </code></pre><h2 id="完整r脚本">完整R脚本</h2>
 <p>定义函数,并按照拆分维度依次执行</p>
-<pre><code>refresh_power_pivot &lt;- function(dt) {
+<pre tabindex="0"><code>refresh_power_pivot &lt;- function(dt) {
   # connect database--------
   con &lt;- dbConnect(odbc::odbc(), .connection_string = &quot;driver={ODBC Driver 17 for SQL Server};server=172.16.88.2;database=test;uid=zhongyf;pwd=Zyf123456&quot;, timeout = 10)
   DBI::dbWriteTable(conn = con, name = &quot;split_table&quot;, value = dt, overwrite = TRUE)

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>R 版本更新 - study notes</title>
@@ -84,7 +84,7 @@
 <ul>
 <li>R版本</li>
 </ul>
-<pre><code># Red hat centos
+<pre tabindex="0"><code># Red hat centos
 rpm -qa |grep R-
 
 # Ubuntu
@@ -92,11 +92,11 @@ $ dpkg -s r-base
 </code></pre><ul>
 <li>R位置</li>
 </ul>
-<pre><code>which R
+<pre tabindex="0"><code>which R
 </code></pre><ul>
 <li>R_RHOME</li>
 </ul>
-<pre><code>R_RHOME
+<pre tabindex="0"><code>R_RHOME
 </code></pre><h1 id="安装更新">安装更新</h1>
 <p>由于之前已经写过Ubuntu系统上<a href="https://mp.weixin.qq.com/s/ggoolYtWpjn-NqOVNQyn8A">R安装更新</a>,本文主要记录Centos上R安装以及更新.另外会简单描述下win系统上R的安装以及更新.</p>
 <h2 id="linux">Linux</h2>
@@ -105,7 +105,7 @@ $ dpkg -s r-base
 <h3 id="centos">Centos</h3>
 <h4 id="系统软件包管理器安装">系统软件包管理器安装</h4>
 <p>在centos7上安装R首先需要在系统上安装<a href="https://linuxize.com/post/how-to-enable-epel-repository-on-centos/">EPEL存储库</a>。通过系统软件包安装R时<code>which R</code>返回结果是<code>/usr/bin/R</code></p>
-<pre><code>sudo yum install epel-release
+<pre tabindex="0"><code>sudo yum install epel-release
 sudo yum install R
 R --version
 </code></pre><p>截止到2021年5月7日，在centos7上通过上述代码可安装R3.6.0</p>
@@ -115,7 +115,7 @@ R --version
 <ul>
 <li>先决条件</li>
 </ul>
-<pre><code># Enable the Extra Packages for Enterprise Linux (EPEL) repository
+<pre tabindex="0"><code># Enable the Extra Packages for Enterprise Linux (EPEL) repository
 sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
 
 # On RHEL 7, enable the Optional repository
@@ -128,21 +128,21 @@ sudo yum-config-manager --enable &quot;rhel-*-optional-rpms&quot;
 </code></pre><ul>
 <li>指定版本</li>
 </ul>
-<pre><code>export R_VERSION=3.6.3
+<pre tabindex="0"><code>export R_VERSION=3.6.3
 </code></pre><ul>
 <li>下载安装 R</li>
 </ul>
-<pre><code>curl -O https://cdn.rstudio.com/r/centos-7/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
+<pre tabindex="0"><code>curl -O https://cdn.rstudio.com/r/centos-7/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
 sudo yum install R-${R_VERSION}-1-1.x86_64.rpm
 </code></pre><ul>
 <li>检查版本</li>
 </ul>
-<pre><code>/opt/R/${R_VERSION}/bin/R --version
+<pre tabindex="0"><code>/opt/R/${R_VERSION}/bin/R --version
 </code></pre><ul>
 <li>创建软连接</li>
 </ul>
 <p>仅仅在第一次安装时需要</p>
-<pre><code>sudo ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
+<pre tabindex="0"><code>sudo ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
 sudo ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
 </code></pre><h4 id="更新系统软件包">更新系统软件包</h4>
 <p>该种方式是通过更新系统软件包的源地址从而更新软件.ubuntu install R 中就是通过这种方式更新R,这种方式是更新R版本,而不是多种版本共存.建议采用Rstudio的提供的指引让多版本R共存.</p>
@@ -150,10 +150,10 @@ sudo ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
 <p>对于ubuntu上R语言环境搭建已经写过相关文章,请参考<a href="https://www.yuque.com/zyufei/rstudy/ubuntu-install-r">Ubuntu install R</a>.</p>
 <h3 id="利用r包更新r">利用R包更新R</h3>
 <p>R包<code>ropenblas</code><a href="https://prdm0.github.io/ropenblas/">项目地址</a>.简单测试过,没有成功,也没有深究原因,暂时先搁置.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#34;ropenblas&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#34;ropenblas&#34;</span>)
 ropenblas<span style="color:#f92672">::</span><span style="color:#a6e22e">rcompiler</span>()
 </code></pre></div><p>执行上述命令退出R后,R无法正常启动.<a href="https://stackoverflow.com/questions/62857928/error-of-install-r-in-linux-red-haterror-while-loading-shared-libraries-librbl">解决方案</a>如下:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">mv <span style="color:#f92672">/</span>usr<span style="color:#f92672">/</span>lib64<span style="color:#f92672">/</span>R<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>libRrefblas.so <span style="color:#f92672">/</span>usr<span style="color:#f92672">/</span>lib64<span style="color:#f92672">/</span>R<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>libRblas.so
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">mv <span style="color:#f92672">/</span>usr<span style="color:#f92672">/</span>lib64<span style="color:#f92672">/</span>R<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>libRrefblas.so <span style="color:#f92672">/</span>usr<span style="color:#f92672">/</span>lib64<span style="color:#f92672">/</span>R<span style="color:#f92672">/</span>lib<span style="color:#f92672">/</span>libRblas.so
 </code></pre></div><h2 id="问题">问题</h2>
 <ol>
 <li>如果第一次安装是采用系统软件包管理器安装R,后面采用源安装其它版本,想要切换成源安装的指定版本改如何解决?</li>
@@ -167,10 +167,10 @@ ropenblas<span style="color:#f92672">::</span><span style="color:#a6e22e">rcompi
 <p>历史<a href="https://cran.r-project.org/bin/windows/base/old/">R版本</a></p>
 <p><a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools安装</a>
 关于Rtools的环境变量配置请查阅win10下环境变量配置.</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/win-10%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.png" style="zoom:67%;" /></p>
 <h3 id="更新">更新</h3>
 <p>win系统下更新可以通过执行新版exe文件,也可以通过<code>installr</code>包更新,<a href="http://talgalili.github.io/installr/">项目地址</a>.</p>
-<pre><code>if(!require(&quot;installr&quot;)) install.packages('installr')
+<pre tabindex="0"><code>if(!require(&quot;installr&quot;)) install.packages('installr')
 library(&quot;installr&quot;)
 updateR() 
 </code></pre><h1 id="安装包">安装包</h1>
@@ -179,9 +179,9 @@ updateR()
 <li>将历史R版本的R包复制到新版本R中</li>
 <li>重新安装 本处记录本人常用R包安装代码</li>
 </ol>
-<pre><code># 通常root账户下载的R包存放地址
+<pre tabindex="0"><code># 通常root账户下载的R包存放地址
 /opt/R/4.0.3/lib/R/library
-</code></pre><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#34;pacman&#34;</span>, repos <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://mirrors.tuna.tsinghua.edu.cn/CRAN/&#34;</span>)
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#34;pacman&#34;</span>, repos <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://mirrors.tuna.tsinghua.edu.cn/CRAN/&#34;</span>)
 
 <span style="color:#75715e">## 常用R包</span>
 allpackages <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;Rcpp&#34;</span>, <span style="color:#e6db74">&#34;tidyverse&#34;</span>, <span style="color:#e6db74">&#34;echarts4r&#34;</span>, <span style="color:#e6db74">&#34;lubridate&#34;</span>, <span style="color:#e6db74">&#34;pedquant&#34;</span>, <span style="color:#e6db74">&#34;data.table&#34;</span>, <span style="color:#e6db74">&#34;DT&#34;</span>, <span style="color:#e6db74">&#34;DBI&#34;</span>, <span style="color:#e6db74">&#34;odbc&#34;</span>, <span style="color:#e6db74">&#34;devtools&#34;</span>, <span style="color:#e6db74">&#34;ROracle&#34;</span>, <span style="color:#e6db74">&#34;reactable&#34;</span>, <span style="color:#e6db74">&#34;shiny&#34;</span>, <span style="color:#e6db74">&#34;blogdown&#34;</span>,<span style="color:#e6db74">&#39;future.apply&#39;</span>,<span style="color:#e6db74">&#39;shinydashboard&#39;</span>,<span style="color:#e6db74">&#39;dataPreparation&#39;</span>,<span style="color:#e6db74">&#39;shinydashboard&#39;</span>,<span style="color:#e6db74">&#39;shinyWidgets&#39;</span>,<span style="color:#e6db74">&#39;furrr&#39;</span>,<span style="color:#e6db74">&#39;,shinycssloaders&#39;</span>,<span style="color:#e6db74">&#39;crosstalk&#39;</span>,<span style="color:#e6db74">&#39;shinythemes&#39;</span>)
@@ -242,14 +242,14 @@ allpackages <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e"
 </tbody>
 </table>
 <p>Oracle数据库的语言环境变量设置.</p>
-<pre><code>sudo cd /opt/R/4.0.5/lib/R/etc
+<pre tabindex="0"><code>sudo cd /opt/R/4.0.5/lib/R/etc
 vim  Renviron
 </code></pre><p>将相关变量进行配置,即将下面环境变量复制进去，R在启动前会读取该环境变量的设置。</p>
-<pre><code>Sys.setenv(NLS_LANG=&quot;SIMPLIFIED CHINESE_CHINA.AL32UTF8&quot;)
+<pre tabindex="0"><code>Sys.setenv(NLS_LANG=&quot;SIMPLIFIED CHINESE_CHINA.AL32UTF8&quot;)
 </code></pre><p>关于这部分由于对linux系统实在不熟悉,仅仅只是将自己可能遇见的问题记录,不敢随便修改配置文件.</p>
 <h2 id="依赖环境">依赖环境</h2>
 <p>在使用usethis包创建Rprofile时,需安装usethis包,但是该包需要依赖环境.</p>
-<pre><code> # usethis install 
+<pre tabindex="0"><code> # usethis install 
  ImageMagick-c++-devel
  libgit2-devel
 </code></pre><h1 id="参考资料">参考资料</h1>

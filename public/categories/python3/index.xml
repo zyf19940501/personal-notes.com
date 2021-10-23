@@ -22,8 +22,8 @@
 分别在cmd终端或者Anaconda Prompt里粘贴下面两行代码（每粘贴一行回车确认）。
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --set show_channel_urls yes
-# 创建新环境 conda create –n yuyin python=3.9 activate yuyin pip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5 pyttsx3代码如下：
-import pyttsx3 filename = input(&#39;请输入需转化语音的txt文件名称:&#39;) f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;) line = f.readlines() line = str(line) line = line.</description>
+# 创建新环境conda create –n yuyin python=3.9activate yuyinpip install pyinstaller pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py --hidden-import=pyttsx3.drivers.sapi5pyttsx3代码如下：
+import pyttsx3filename = input(&#39;请输入需转化语音的txt文件名称:&#39;)f = open(filename,&#39;r&#39;,encoding = &#39;utf-8&#39;)line = f.readlines()line = str(line)line = line.</description>
     </item>
     
   </channel>

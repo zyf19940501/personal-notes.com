@@ -23,10 +23,10 @@
  安装R 直接安装 首先，登录服务器。mac用户利用ssh命令登录即可。win用户可下载MobaXterm软件登录服务器。请自行搜索相关资料。
 ssh root@192.168.2.237 直接安装Ubuntu源里面的R版本，版本可能会比较老旧，除非是你必须用最新版本的R，否则建议就先用该版本，等以后熟悉Linux命令后再重新安装R或者升级R。截止本文，直接安装能安装R-3.6.3版本。
 安装r-base即可安装完整版本，当时当你需要编译R包时还需要安装 r-base-dev，我们两个都安装，直接在命令行中执行即可。
-# 更新源 sudo apt update # R安装 sudo apt install r-base r-base-dev # 查看是否安装成功 命令行中运行R,应该是R-3.6.3版本，我已经升级了 R 命令行中运行R后出现如上画面，则R安装成功。
+# 更新源sudo apt update# R安装sudo apt install r-base r-base-dev# 查看是否安装成功 命令行中运行R,应该是R-3.6.3版本，我已经升级了R命令行中运行R后出现如上画面，则R安装成功。
 安装最新版本的R 安装最新版本的时候，可以自行搜索，关键词【How to install R 4.0.3 on Ubuntu 20.04】。一般是添加最新R源再正常安装即可，在写本文时R已经更新到4.0时代，可以安装到R-4.0.3版本。
 注意：添加源时需选择跟系统匹配的源。
-# 添加源 sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39; # 添加密钥 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 # 更新 sudo apt update # 安装 sudo apt install r-base r-base-core r-recommended r-base-dev 以上参考代码，需【翻墙】打开https://rtask.</description>
+# 添加源sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/&#39;# 添加密钥sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9# 更新sudo apt update# 安装sudo apt install r-base r-base-core r-recommended r-base-dev以上参考代码，需【翻墙】打开https://rtask.</description>
     </item>
     
   </channel>

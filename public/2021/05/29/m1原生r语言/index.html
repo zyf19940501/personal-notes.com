@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>M1原生R语言 - study notes</title>
@@ -88,7 +88,7 @@
 <ul>
 <li>官网安装</li>
 </ul>
-<p><!-- raw HTML omitted -->
+<p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16216711112163.png" alt="m1-r" style="zoom:50%;" />
 官网下载正常安装即可，或者通过homebrew安装。</p>
 <h2 id="r包安装">R包安装</h2>
 <h3 id="数据处理包">数据处理包</h3>
@@ -96,12 +96,12 @@
 <ul>
 <li>stringi</li>
 </ul>
-<pre><code>packageurl &lt;- &quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&quot;
+<pre tabindex="0"><code>packageurl &lt;- &quot;https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.1.7.tar.gz&quot;
 install.packages(packageurl, repos=NULL, type=&quot;source&quot;)
 </code></pre><p>安装stringi包后，tidyverse即可正常使用。</p>
 <h3 id="数据库相关">数据库相关</h3>
 <p>对于我常用的odbc,DBI都可以正常安装，甚至我成功安装SQL SERVER的驱动，如下所示：</p>
-<p><!-- raw HTML omitted --></p>
+<p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/image-20210529202342513.png" alt="odbc-driver" style="zoom:50%;" /></p>
 <p>但是无法正常连接数据库，据说微软计划下一个版本的odbc会支持m1.
 <img src="images/odbc-driver-fail.png" alt="odbc-fail">.</p>
 <p>至于其他的数据库比如mysql，我想是可以成功，没测试。</p>

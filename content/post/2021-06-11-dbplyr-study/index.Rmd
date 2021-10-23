@@ -11,7 +11,7 @@ tags:
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,eval = FALSE)
 ```
 
 
@@ -326,7 +326,7 @@ df_mssql %>% summarise(z = paste0(x,y)) %>% show_query()
 
 - 连接 mssql 
 
-```{r}
+```{r eval=FALSE}
 library(DBI)
 # mssql
 con_mssql_spb <- dbConnect(odbc::odbc(),
@@ -341,7 +341,7 @@ con_mssql_spb <- dbConnect(odbc::odbc(),
 
 - 连接 oracle
 
-```{r}
+```{r eval=FALSE}
 library(ROracle)
 drv <- dbDriver("Oracle")
 connect.string <- "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)
@@ -359,7 +359,7 @@ con <- dbConnect(drv, username = "pub_query", password = "pub_query", dbname = c
 1.2021-01-01至2021-05-01 期间每月销售情况?
 
 
-```{r}
+```{r eval=FALSE}
 tbl(con_mssql_spb, "sales_order") %>%
   filter(between(单据日期, "2021-01-01", "2021-05-31")) %>%
   group_by(月 = month(单据日期)) %>%
@@ -375,7 +375,7 @@ tbl(con_mssql_spb, "sales_order") %>%
 
 sql 实现
 
-```{sql connection=con_mssql_spb,out.width=0.5}
+```{sql eval=FALSE}
 SELECT month(单据日期) 月,
   sum(金额) 销售额,
   sum(数量) 销售量
@@ -386,7 +386,7 @@ SELECT month(单据日期) 月,
 
 我们看看 dplyr 生成的 SQL 语句
 
-```{r}
+```{r eval=FALSE}
 tbl(con_mssql_spb, "sales_order") %>%
   filter(between(单据日期, "2021-01-01", "2021-05-31")) %>%
   group_by(月 = month(单据日期)) %>%
@@ -404,7 +404,7 @@ dplyr 生成的 SQL 语句和我们自己编写的语句存在差异,自动生�
 
 2.2021-01-01至2021-05-01 期间每个大区销售情况?
 
-```{r}
+```{r eval=FALSE}
 # 门店信息表
 store_db <- tbl(con_mssql_spb, "store_table")
 temp <- tbl(con_mssql_spb, "sales_order") %>%
@@ -418,7 +418,7 @@ temp <- tbl(con_mssql_spb, "sales_order") %>%
   arrange(desc(销售额))
 ```
 
-```{r}
+```{r eval=FALSE}
 temp %>%
   show_query()
 
@@ -430,7 +430,7 @@ temp %>%
 
 SQL 实现
 
-```{sql connection=con_mssql_spb}
+```{sql }
 SELECT st.管辖区域,
   sum(sa.金额) 销售额,
   sum(sa.数量) 销售量
@@ -447,7 +447,7 @@ order by  sum(sa.金额) desc
 2.近30天镜架销售超过100支的SKU,他们的销额,销量,折扣率,动销门店数,动销天数?
 
 
-```{r}
+```{r eval=FALSE}
 # 门店信息表
 store_db <- tbl(con_mssql_spb, "store_table")
 # 商品信息表
@@ -474,7 +474,7 @@ temp <- tbl(con_mssql_spb, "sales_order") %>%
 
 返回数据集
 
-```{r}
+```{r eval=FALSE}
 temp_dt <- temp %>%
   collect()
 
@@ -499,7 +499,7 @@ temp_dt %>%
 连接 Oracle 数据库
 
 
-```{r}
+```{r eval=FALSE}
 library(ROracle)
 drv <- dbDriver("Oracle")
 connect.string <- "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)
@@ -510,7 +510,7 @@ con_oracle <- dbConnect(drv, username = "pub_query", password = "pub_query", dbn
 
 注意 Oracle 中的 Schema 概念，我也不是太明白，但是通过 dbplyr 连接时需要主要，如下所示:
 
-```{r}
+```{r eval=FALSE}
 tbl(con_oracle, in_schema(schema = "DW", table = "DW_SALE_SHOP_F"))
 ```
 
@@ -518,7 +518,7 @@ tbl(con_oracle, in_schema(schema = "DW", table = "DW_SALE_SHOP_F"))
 
 在 Oracle 中处理日期问题:2021-01-01至2021-05-01 期间每月销售情况?
 
-```{r}
+```{r eval=FALSE}
 tbl(con_oracle, in_schema(schema = "DW", table = "DW_SALE_SHOP_F")) %>%
   filter(between(
     BILL_DATE1, to_date("2021-01-01", "yyyy-mm-dd"),
@@ -534,7 +534,7 @@ tbl(con_oracle, in_schema(schema = "DW", table = "DW_SALE_SHOP_F")) %>%
 
 SQL 实现
 
-```{sql connection=con_oracle}
+```{sql eval=FALSE}
 select EXTRACT(month from BILL_DATE1)月 ,
   sum(BILL_MONEY2) 销售额 ,
   sum(BILL_QTY) 销售量 

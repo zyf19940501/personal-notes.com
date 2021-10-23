@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.83.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
 
 <title>deploy plumber with docker - study notes</title>
@@ -82,7 +82,7 @@
 <p>从<code>r-base</code>构建<code>R</code>环境,然后安装<code>R</code>中安装包需要的环境如：<code>libxml2-dev</code>,<code>libssl-dev</code>等，但是linux系统命令都不太理解，以下代码为拼凑起来。</p>
 <p>其中 <code>curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \</code> 等部分可以参考<a href="https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15">微软官网</a>，官网详细列出了各系统安装odbc驱动的代码。</p>
 <p><img src="/img/2020-10-14/p1.png" alt="p1"></p>
-<pre><code>FROM r-base
+<pre tabindex="0"><code>FROM r-base
 
 RUN apt-get update -qq &amp;&amp; apt-get install -y \
     git-core \
@@ -119,7 +119,7 @@ ENTRYPOINT [&quot;R&quot;, &quot;-e&quot;, &quot;pr &lt;- plumber::plumb(command
 
 </code></pre><h2 id="构建docker镜像">构建docker镜像</h2>
 <p>在服务上新建文件夹，并将以上<code>dockerfile</code>移动到该文件夹并确保系统已经正常启动docker,注意<code>build</code>命令最后的点，表示当前文件夹，方便找到<code>dockerfile</code></p>
-<pre><code># docker status
+<pre tabindex="0"><code># docker status
 systemctl  status docker
 # 构建docker 镜像
 docker build -t namedvega/ghzy:v8 name . 
@@ -129,7 +129,7 @@ docker images
 <p>具体<code>docker</code>运行参数请参阅官网。 <code>-d</code>以后台模型运行，<code>-p 8082:8000</code> 服务器的8082端口影视docker的8000端口（dockerfile指定）。</p>
 <p>-v <code>pwd</code> 参数时运行docker时服务器当前文件夹下的api.R文件，也就是我们的api文件。本文测试api.R文件如下：</p>
 <p><strong>注意脚本最后一句需换行</strong></p>
-<pre><code>library(plumber)
+<pre tabindex="0"><code>library(plumber)
 library(odbc)
 
 # plumber.R
@@ -149,9 +149,9 @@ function(){
   DBI::dbGetInfo(con)
 }
 
-</code></pre><pre><code>docker run -d -p 8082:8000 -v `pwd`/api.R:/plumber.R namedvega/ghzy:v8  /plumber.R
+</code></pre><pre tabindex="0"><code>docker run -d -p 8082:8000 -v `pwd`/api.R:/plumber.R namedvega/ghzy:v8  /plumber.R
 </code></pre><h2 id="测试api">测试api</h2>
-<pre><code>http://457.123.48.107:8082/echos
+<pre tabindex="0"><code>http://457.123.48.107:8082/echos
 </code></pre>
     </div>
   </article>

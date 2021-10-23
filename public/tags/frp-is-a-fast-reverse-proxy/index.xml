@@ -19,8 +19,8 @@
 Youtube视频地址:https://www.youtube.com/watch?v=KeecUhhfIE8
 说明 frp 主要由客户端frpc和服务端frps组成，服务端通常部署在具有公网IP的机器上，客户端通常部署在需要穿透的内网服务所在的机器上。
 配置过程   修改frps.ini
-[common] bind_port = 7000 token = passwordvega2020   修改frpc.ini
-[common] server_addr = x.x.x.x #公网ip server_port = 7000 [ssh] type = tcp local_ip = 127.0.0.1 local_port = 22 remote_port = 6000 [udp] type = udp local_ip = 192.168.8.116 local_port = 22 remote_port = 6001 [RDP] type = tcp local_ip = 192.168.8.116 local_port = 3389 #windows远程连接端口 remote_port = 6002   启动</description>
+[common]bind_port = 7000 token = passwordvega2020  修改frpc.ini
+[common]server_addr = x.x.x.x #公网ipserver_port = 7000 [ssh]type = tcplocal_ip = 127.0.0.1local_port = 22remote_port = 6000[udp]type = udplocal_ip = 192.168.8.116local_port = 22remote_port = 6001[RDP]type = tcplocal_ip = 192.168.8.116local_port = 3389 #windows远程连接端口remote_port = 6002  启动</description>
     </item>
     
   </channel>

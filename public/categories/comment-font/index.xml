@@ -20,7 +20,7 @@
 bookdown 在我们使用 bookdown 创建项目后，生成的项目文件中有一个名叫 style.css 的文件，我们修改该文件即可。
 打开 style.css，在最后添加即可。
 code span.co { color: #60a0b0; font-style: normal; } 完整 style.css 如下所示：
-p.caption { color: #777; margin-top: 10px; } p code { white-space: inherit; } pre { word-break: normal; word-wrap: normal; } pre code { white-space: inherit; } code span.co { color: #60a0b0; font-style: normal; } 在修改完 style.</description>
+p.caption {color: #777;margin-top: 10px;}p code {white-space: inherit;}pre {word-break: normal;word-wrap: normal;}pre code {white-space: inherit;}code span.co { color: #60a0b0;font-style: normal;}在修改完 style.</description>
     </item>
     
   </channel>
