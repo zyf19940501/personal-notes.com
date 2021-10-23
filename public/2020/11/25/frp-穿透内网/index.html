@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>Frp-穿透内网 - study notes</title>
+<meta property="og:title" content="Frp-穿透内网 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">Frp-穿透内网</h1>
+
+    
+    <span class="article-date">2020-11-25</span>
+    
+
+    <div class="article-content">
+      <h3 id="frp穿透内网">Frp穿透内网</h3>
+<hr>
+<p>frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。本文记录下。</p>
+<h4 id="项目地址">项目地址</h4>
+<p>中文地址：<a href="https://github.com/fatedier/frp/blob/dev/README_zh.md">https://github.com/fatedier/frp/blob/dev/README_zh.md</a></p>
+<p>操作指引：<a href="https://gofrp.org/docs/setup/">https://gofrp.org/docs/setup/</a></p>
+<p><code>Youtube</code>视频地址:<a href="https://www.youtube.com/watch?v=KeecUhhfIE8">https://www.youtube.com/watch?v=KeecUhhfIE8</a></p>
+<h4 id="说明">说明</h4>
+<p>frp 主要由客户端frpc和服务端frps组成，服务端通常部署在具有公网IP的机器上，客户端通常部署在需要穿透的内网服务所在的机器上。</p>
+<h4 id="配置过程">配置过程</h4>
+<ol>
+<li>
+<p>修改frps.ini</p>
+<pre><code>[common]
+bind_port = 7000 
+token = passwordvega2020
+</code></pre></li>
+<li>
+<p>修改frpc.ini</p>
+<pre><code>[common]
+server_addr = x.x.x.x #公网ip
+server_port = 7000  
+
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 22
+remote_port = 6000
+
+[udp]
+type = udp
+local_ip = 192.168.8.116
+local_port = 22
+remote_port = 6001
+
+[RDP]
+type = tcp
+local_ip = 192.168.8.116
+local_port = 3389  #windows远程连接端口
+remote_port = 6002
+</code></pre></li>
+<li>
+<p>启动</p>
+<p>配置vbs文件，并加入开机自启动：<code>cmd shell:startup</code></p>
+<p>windows 后台运行</p>
+<pre><code>Set ws = WScript.CreateObject(&quot;WScript.Shell&quot;)
+ws.Run &quot;C:\frp_0.34.3_windows_amd64\frpc.exe -c C:\frp_0.34.3_windows_amd64\frpc.ini&quot;,0
+</code></pre></li>
+</ol>
+<p>​        linux 后台运行</p>
+<p>frps 运行 <code>systemctl start frps</code>,开机启动<code>systemctl enable frps</code></p>
+<pre><code>#服务器运行服务创建：
+vi /lib/systemd/system/frps.service
+
+Fprs服务命令：
+[Unit]
+Description=fraps service
+After=network.target syslog.target
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=/root/frp/frps -c /root/frp/frps.ini  #此处安实际情况修改
+
+[Install]
+WantedBy=multi-user.target
+
+</code></pre><pre><code>#客户端运行服务创建：
+vi /lib/systemd/system/frpc.service
+
+Fprc服务命令：
+[Unit]
+Description=fraps service
+After=network.target syslog.target
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=/root/frp/frpc -c /root/frp/frpc.ini  
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

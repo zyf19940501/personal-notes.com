@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R package on study notes</title>
+    <link>/categories/r-package/</link>
+    <description>Recent content in R package on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r-package/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R 包 data.table 与 collapse 比较</title>
+      <link>/2021/10/22/data-table-vs-collapse/</link>
+      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/10/22/data-table-vs-collapse/</guid>
+      <description>前言 当我知道 collapse 包时，我第一时间去 GitHub 上查看该项目。由于我长期使用 data.table 包处理数据，所以特别想知道他们之间的优劣势，通过查看基准测试，发现两个项目各有所长。由于我是一名零售行业数据分析师，需要的数据处理函数以及逻辑相对比较简单，接下来就两个 R 包在数据处理上的差异做简单的记录，主要比较相同的处理逻辑语法上的差异。
+官方的手册中已有相关介绍，可自行前往阅读。
+ 基础用法 # 加载包 library(collapse) library(data.table) # 准备测试数据 # collapse data df &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) # data.table data dt &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) |&amp;gt; setDT() 行列选择 列选择，新出来的数据处理框架基本都支持列名索引和数字索引的方式选择列，建议使用列名索引。
+collapse 行列选择与tidyverse系列相似,支持列名索引以及数字索引。
+ 列选择  collapse  df |&amp;gt; fselect(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() df |&amp;gt; fselect(1:3,12) |&amp;gt; head() data.table  dt[,.(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY)] |&amp;gt; head() dt[,c(1:3,12)] |&amp;gt; head()  子集(行选择)  collapse  # 筛选子集 行列同时 fsubset(df,SHOP_NO ==&amp;quot;999842&amp;quot; &amp;amp; BILL_MONEY&amp;gt;10,BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() 简写方式, sbt()是的fsubset()简写。</description>
+    </item>
+    
+    <item>
+      <title>R 连接 impala</title>
+      <link>/2021/10/21/r-and-impala/</link>
+      <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/10/21/r-and-impala/</guid>
+      <description>前言 最近接触一个项目时，数据存储在内部的大数据平台，大部分同事通过 hue 查询获取数据，部分同事用 python 连接到数据平台查询。我之前并没有使用 hive 或 impala 的经历，肯定不熟悉hive 或 impala 的语法，但是作为一个 R 语言的爱好者，那我首先想到的必然是通过 R 与 hive 或 impala 连接。
+ Hue 是一个用于数据库和数据仓库的开源 SQL 助手
+ 需要说明的是，我并不太清楚 Hadoop 与 Hive、 impala、spark 之间的联系以及差异。个人理解数据是分布式存储在Hadoop集群上，我们可以通过 hive，impala 或者别的引擎去集群查询计算数据。
+既然知道了目标，将 R 与 大数据平台中的数据建立连接，那就开始查找相关资料。Google 【R connect hive】，得到如下： 注意到第二个网站是 RStudio 公司对的网页，我果断点击进去，找到了我想要的信息。通过 odbc 方式连接。
+odbc 连接 驱动配置 hive 驱动 通过 odbc 方式连接，主要问题是找到相应驱动文件，剩下就是驱动 hive odbc driver 文件的配置。
+驱动介绍，在驱动介绍页面上看到了不同系统以及不同数据库的驱动下载、安装、以及配置方法。
+但是没有看到应该去什么地址下载 hive 的什么 ODBC 驱动，那又只能Google【hive odbc driver】，搜索到的第一个结果就是 hive 的 ODBC 驱动。</description>
+    </item>
+    
+    <item>
+      <title>使用prophet预测销售额</title>
+      <link>/2021/04/14/prophet/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/04/14/prophet/</guid>
+      <description>前言 留意到&amp;quot;先知&amp;quot;prophet已经有一段时间，第一次看到先知介绍时候注意到可以人为指定异常点以及节假日让我感觉到很新颖，以往在使用forecast包预测销售额时没有该功能。
+先知可以在R中和Python中实现预测，并且速度快，提供自动化的预测，或手工调整。官网上的介绍：
+Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It works best with time series that have strong seasonal effects and several seasons of historical data. Prophet is robust to missing data and shifts in the trend, and typically handles outliers well.
+Prophet is open source software released by Facebook’s Core Data Science team.</description>
+    </item>
+    
+    <item>
+      <title>deploy plumber with docker</title>
+      <link>/2020/10/13/deploy-plumber-with-docker/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/10/13/deploy-plumber-with-docker/</guid>
+      <description>前言 最近部门同事有较多临时取数需求,但因其不熟悉SQL,Power Pivot等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装odbc package,导致没法使用现成plumber docker，如：docker pull trestletech/plumber 或 docker pull rstudio/plumber 等，需要自定义dockerfile构建docker镜像,现记录如下。
+构建dockerfile 从r-base构建R环境,然后安装R中安装包需要的环境如：libxml2-dev,libssl-dev等，但是linux系统命令都不太理解，以下代码为拼凑起来。
+其中 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ 等部分可以参考微软官网，官网详细列出了各系统安装odbc驱动的代码。
+FROM r-base RUN apt-get update -qq &amp;amp;&amp;amp; apt-get install -y \ git-core \ libssl-dev \ libcurl4-gnutls-dev RUN apt-get update \ &amp;amp;&amp;amp; apt-get install --yes --no-install-recommends \ apt-transport-https \ curl \ gnupg \ unixodbc-dev \ libxml2-dev \ libcurl4-openssl-dev \ libssl-dev \ libsodium-dev \ &amp;amp;&amp;amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \ &amp;amp;&amp;amp; curl https://packages.</description>
+    </item>
+    
+  </channel>
+</rss>

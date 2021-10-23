@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>R语言-blastula-发送邮件 - study notes</title>
+<meta property="og:title" content="R语言-blastula-发送邮件 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">R语言-blastula-发送邮件</h1>
+
+    
+    <span class="article-date">2021-01-07</span>
+    
+
+    <div class="article-content">
+      <h2 id="前言">前言</h2>
+<p><code>blastula</code>包是新出来的发送邮件包，相比<code>Rmail</code>包，该包不依赖<code>JAVA</code>环境，可移植性更好，有时候同事的电脑上并没有配置安装好<code>java</code>环境，代码在他们的电脑上将会报错，而且<code>java</code>环境配置也有很多坑，<code>Rmail</code>包依赖<code>java</code>8的版本，其他的版本好像也会报错，这样比起来<code>blastula</code>包用起来舒服太多，而且  <code>blastula</code>包可以很容易地发送HTML电子邮件 ，消息可以具有三个内容区域（正文，标题和页脚），通过<code>blastula::blocks()</code>以及<code>blastula::md()</code>函数，我们可以插入<strong>Markdown</strong>文本，甚至是HTML片段</p>
+<p><code>github</code>地址<a href="https://github.com/rstudio/blastula">https://github.com/rstudio/blastula</a></p>
+<p><a href="https://blog.mailtrap.io/r-send-email/">其他发送邮件包</a>如<code>RDCOMClient</code>，<code>sendmailR</code>，<code>mailR</code>,<code>emayili</code>,<code>gmailR</code>等。</p>
+<h2 id="常规邮件发送">常规邮件发送</h2>
+<p>第一步生成发送邮件的邮箱凭证，第二步利用<code>compose_email()</code>函数构建邮件内容，第三步<code>smtp_send()</code>发送邮件。通过下面的官方案例解析，我们将会看到多种元素间可以通过<code>c()</code>与<code>md()</code>连接起来，让我们邮件正文拥有无限可能。</p>
+<h3 id="生成凭证">生成凭证</h3>
+<p>生成邮件通行凭证,create_smtp_creds_file()函数会生成一个包含密码的文本文件，可用txt等文本工具打开查看,故有一定风险。</p>
+<p>重要邮箱邮件可用<code>create_smtp_creds_key(  id = &quot;gmail&quot;,  user = &quot;user_name@gmail.com&quot;,  provider = &quot;gmail&quot; )</code>方式创建</p>
+<pre><code>create_smtp_creds_file(file = 'email_creds',
+                      user = 'zhongyf@example.com.hk',
+                      host = 'mail.example.com.hk',
+                      port = 25,use_ssl = FALSE)
+</code></pre><p>file:文件名为email_creds;</p>
+<p>user:发送邮件的邮件账户;</p>
+<p>host:邮件服务器，像mail.example.com.hk,是目前邮件服务器地址,如果是QQ邮箱，host 地址为 smtp.qq.com，gmail邮箱是smtp.gmai.com不同邮件的host地址不一样</p>
+<p>port:邮件服务器端口地址，一般默认是25，QQ的port为465或587</p>
+<p>use_ssl：是否加密。询问公司IT人员，一般没有加密。QQ邮箱是加密的，需要另外获取密码，不是你常用的登录邮箱密码。</p>
+<p>可搜索关键词[QQ邮箱开启SMTP方法如何授权]<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>查看详情</p>
+<h3 id="构建邮件正文">构建邮件正文</h3>
+<p>以下代码是官方案例：</p>
+<pre><code>#添加时间
+date_time &lt;- add_readable_time() 
+# Create an image string using an on-disk 指定一个图像文件路径
+# image file
+img_file_path &lt;-
+  system.file(
+    &quot;img&quot;, &quot;pexels-photo-267151.jpeg&quot;,
+    package = &quot;blastula&quot;
+  )
+#添加图片 转化成html文本
+img_string &lt;- add_image(file = img_file_path) 
+
+# compose_email函数创建邮件消息，可以将字符向量合并到消息正文中
+# The compose_email() function allows us to easily create an email message. 
+# We can incorporate character vectors into the message body, the header, or the footer.
+
+email &lt;-compose_email(
+# md()函数识别markdown语法,
+# 官方解释 interpert input text as Markdown-formatted text即将输入的文本解释为markdown文本
+# 页眉部分
+  header = md('邮件主题'),
+# 主题部分
+  body = md( 
+    c(
+      &quot;Hello,
+This is a *great* picture I found when looking
+for sun + cloud photos:
+&quot;,
+      img_string
+    )
+  ),
+# 页脚部分
+  footer = md(
+    c(
+      &quot;Email sent on &quot;, date_time, &quot;.&quot;
+    )
+  )
+)
+
+# add_attachment()添加附件
+email &lt;- add_attachment(email = email,file = 'C:/Users/zhongyf/Desktop/附件数据.xlsx')
+
+# from 发件人邮箱地址
+# to 收件人邮箱地址,多个时用向量格式包裹
+# cc 抄送人邮箱地址
+
+email %&gt;%
+  smtp_send(
+    from = &quot;zhongyf@example.com.hk&quot;, # 修改发件人
+    to = &quot;zhongyf@example.com.hk&quot;, # 收件人
+    subject = &quot;Testing the `smtp_send()` function&quot;, # 邮件主题,中文乱码时  subject =  enc2utf8('中文')
+    credentials = creds_file(file = &quot;email_creds&quot;) # 第一步创建的凭证文件名
+  )
+  
+</code></pre><h3 id="完整发送邮件代码">完整发送邮件代码</h3>
+<p>替换成自己的邮箱账号试运行代码。创建凭证，注意不同邮箱端口以及是否加密，加密时的邮箱密码和你常用的密码并不一样</p>
+<pre><code># step 1 创建邮箱凭证
+create_smtp_creds_file(file = 'email_creds',
+                       user = 'zhongyf@example.com.hk',
+                       host = 'mail.example.com.hk',
+                       port = 25,use_ssl = FALSE)
+
+# step 2 构建邮件正文
+email &lt;-compose_email(
+ 
+  header = md('这是一封来着Blastula的测试邮件'),
+
+  body = md(r&quot;(嗨，大家好：
+            
+            谢谢像`Blastula`这些好用的包，让我们能愉快的工作玩耍！)&quot;),
+
+  footer = md(add_readable_time()) #blastula包自带的时间函数
+)
+
+# step 3 发送，以及抄送
+from &lt;- c('zhongyf@example.com.hk')
+to &lt;- c('zhongyf@example.com.hk')
+smtp_send(
+
+  from = from ,
+  to = to,
+  subject = enc2utf8('测试邮件'),
+  email = email,
+  credentials = creds_file(paste0(getwd(),&quot;/email_creds&quot;)) 
+
+)
+
+</code></pre><p>邮件发送成功后，如下所示：</p>
+<p><img src="https://gitee.com/zhongyufei/photo-bed/raw/pic/img/R%E8%AF%AD%E8%A8%80-blastua-%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E6%88%90%E5%8A%9F%E6%A0%87%E5%BF%97.png" alt="代码发送成功标志"></p>
+<p><!-- raw HTML omitted --></p>
+<h2 id="渲染rmd文件发送邮件">渲染Rmd文件发送邮件</h2>
+<p>当我们需要把Rmd文件运行结果当邮件正文，该包能很好适应，直接渲染利用<code> render_email('file.Rmd')</code>文件当邮件内容即可，邮件主题乱码时利用<code>enc2utf8()</code>函数解决中文乱码问题。</p>
+<pre><code>library(blastula)
+create_smtp_creds_file(file = 'email_creds',user = 'zhongyf@example.com.hk',
+host = 'mail.example.com.hk',port = 25,use_ssl = FALSE)
+
+body &lt;- 'C:/Users/admin/Desktop/timedtask/email/dxc.Rmd'
+attachment &lt;- 'C:/Users/admin/Desktop/refresh_backup/附件数据.xlsx'
+
+#利用render_email()渲染Rmd文件生成email
+
+if (attachment == &quot;&quot;) {
+  render_email(body) -&gt; email
+} else {
+  render_email(body) %&gt;% 
+  add_attachment(file = attachment) -&gt; email
+}
+
+to &lt;- c('zhongyf@example.com.hk')
+smtp_send(
+    to = to,
+    from = to,
+    subject = enc2utf8('每日数据'),
+    email = email,
+    credentials = creds_file(&quot;C:/Users/admin/Desktop/timedtask/email/email_creds&quot;) 
+    #定时任务时路径写完整，不然可能无法正确读取到凭证。
+  )
+</code></pre><section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://jingyan.baidu.com/article/6079ad0eb14aaa28fe86db5a.html">https://jingyan.baidu.com/article/6079ad0eb14aaa28fe86db5a.html</a>	&ldquo;qq邮箱开启smtp方法如何授权&rdquo;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>使用prophet预测销售额 - study notes</title>
+<meta property="og:title" content="使用prophet预测销售额 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">使用prophet预测销售额</h1>
+
+    
+    <span class="article-date">2021-04-14</span>
+    
+
+    <div class="article-content">
+      <h2 id="前言">前言</h2>
+<p>留意到&quot;先知&quot;prophet已经有一段时间，第一次看到先知介绍时候注意到可以人为指定异常点以及节假日让我感觉到很新颖，以往在使用<strong>forecast</strong>包预测销售额时没有该功能。</p>
+<p>先知可以在R中和Python中实现预测，并且速度快，提供自动化的预测，或手工调整。官网上的介绍：</p>
+<p>Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It works best with time series that have strong seasonal effects and several seasons of historical data. Prophet is robust to missing data and shifts in the trend, and typically handles outliers well.</p>
+<p>Prophet is <a href="https://code.facebook.com/projects/">open source software</a> released by Facebook’s <a href="https://research.fb.com/category/data-science/">Core Data Science team</a>. It is available for download on <a href="https://cran.r-project.org/package=prophet">CRAN</a> and <a href="https://pypi.python.org/pypi/prophet/">PyPI</a>.</p>
+<p><a href="https://facebook.github.io/prophet/">prophet官网</a>，本文代码在R中实现，主要是翻译官网中的案例。</p>
+<h2 id="prophet介绍">Prophet介绍</h2>
+<h3 id="安装">安装</h3>
+<p>prophet在<a href="https://cran.r-project.org/package=prophet">CRAN</a>上，可以直接下载。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#39;prophet&#39;</span>)
+</code></pre></div><p>在Windows上，R需要编译器，因此您需要<a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows">按照所</a>提供<a href="https://github.com/stan-dev/rstan/wiki/Installing-RStan-on-Windows">的说明</a>进行操作<code>rstan</code>，关键步骤是在尝试安装软件包之前先安装<a href="http://cran.r-project.org/bin/windows/Rtools/">Rtools</a>。具体参照官网上的安装介绍。</p>
+<h3 id="快速使用">快速使用</h3>
+<p>首先获取数据，先知中数据结构data.frame中需要ds、y列，其中ds列是日期，y列值。代码中的数据为包提供的演示案例，可在此处<a href="https://github.com/facebook/prophet/blob/master/examples/example_wp_log_peyton_manning.csv">下载</a></p>
+<pre><code># R
+library(prophet)
+library(data.table)
+df &lt;- fread('https://raw.githubusercontent.com/facebook/prophet/master/examples/example_wp_log_peyton_manning.csv')
+</code></pre><p>我们调用 <code>prophet</code> 函数去拟合模型，第一参数是历史数据，其他参数来控制拟合情况，参数在本文后面介绍。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">prophet</span>(df)
+</code></pre></div><p>使用<code>make_future_dataframe</code>函数指定预测时间周期进行并生成数据。默认情况下，生成的数据包含历史数据。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+future <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">make_future_dataframe</span>(m,periods <span style="color:#f92672">=</span> <span style="color:#ae81ff">365</span>,freq <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;day&#39;</span>,include_history <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+<span style="color:#a6e22e">tail</span>(future)
+</code></pre></div><p>使用<code>predict</code>函数来获取预测数据，生成的数据包含预测列，具有不确定性列，季节性成分列。</p>
+<pre><code># R
+forecast &lt;- predict(m, future)
+tail(forecast[c('ds', 'yhat', 'yhat_lower', 'yhat_upper')])
+</code></pre><p>最后通过<code>plot</code>来绘制预测图</p>
+<pre><code># R
+plot(m, forecast)
+</code></pre><p>使用该<code>prophet_plot_components</code>功能查看预测，分为趋势，每周季节性和年度季节性。</p>
+<pre><code># R
+prophet_plot_components(m, forecast)
+</code></pre><p>可以使用dyplot.prophet(m, forecast)画动态图。</p>
+<h3 id="prophet介绍-1">Prophet介绍</h3>
+<p>本部分主要介绍prophet函数的参数，节假日效应，不确定性等</p>
+<h4 id="prophet函数参数">prophet函数参数</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">prophet</span>(
+  df <span style="color:#f92672">=</span> <span style="color:#66d9ef">NULL</span>,
+  growth <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;linear&#34;</span>,
+  changepoints <span style="color:#f92672">=</span> <span style="color:#66d9ef">NULL</span>,
+  n.changepoints <span style="color:#f92672">=</span> <span style="color:#ae81ff">25</span>,
+  changepoint.range <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.8</span>,
+  yearly.seasonality <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,
+  weekly.seasonality <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,
+  daily.seasonality <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,
+  holidays <span style="color:#f92672">=</span> <span style="color:#66d9ef">NULL</span>,
+  seasonality.mode <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;additive&#34;</span>,
+  seasonality.prior.scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>,
+  holidays.prior.scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>,
+  changepoint.prior.scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.05</span>,
+  mcmc.samples <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>,
+  interval.width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.8</span>,
+  uncertainty.samples <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>,
+  fit <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>,
+  <span style="color:#66d9ef">...</span>
+)
+</code></pre></div><ul>
+<li>changepoint_prior_scale : 最重要的参数，它确定趋势的灵活性，尤其是确定趋势在趋势更改点处的更改量。默认值为0.05但是可以对其进行调整。[0.001，0.5]的范围大概是正确的。</li>
+<li>seasonality_prior_scale : 此参数控制季节性的灵活性，较大的值使季节性适应较大的波动，较小的值减小季节性的幅度，默认值10，调整的合理范围可能是[0.01,10],当设置为0.01时，季节性幅度非常小</li>
+<li>holidays_prior_scale : 该参数可以控制适应节日效果的灵活性，与seasonality_prior_scale类似，默认为10.0，调整的合理范围可能是[0.01,10]范围内。</li>
+<li>seasonality_mode : 选项为[ <code>'additive'</code>，<code>'multiplicative'</code>]，默认值为<code>'additive'</code>。根据业务的时间序列选择加法或乘法的季节性。</li>
+<li>changepoint_range : 允许更改趋势的历史记录的比例，默认值为历史记录的80%，最好不用调整此参数，[0.8，0.95]可能是一个合理的范围。</li>
+<li>growth : 选项为[ ‘linear’ and ‘logistic’]</li>
+<li>changepoints : 用于手动指定更改点的位置，默认情况下为None,模型自动放置突变点。</li>
+<li>n_changepoints :自动放置的更改点突变点的数量，默认值25</li>
+<li>yearly_seasonality : 默认情况下&quot;auto&quot;,如果有一年的数据，这将打开每年的季节性，参数选项为[&lsquo;auto&rsquo;，True，False]。</li>
+<li>weekly_seasonality : 与 yearly_seasonality相同。</li>
+<li>daily_seasonality : 与yearly_seasonality相同。</li>
+<li>holidays : 该参数接受指定的节假日数据框。</li>
+<li>mcmc_samples : 是否使用MCMC可能由时间序列的长度和参数不确定性的重要性等因素决定</li>
+<li>interval_width : prophet 返回预测的不确定性区间，例如<code>yhat_lower</code>和<code>yhat_upper</code>预测<code>yhat</code>。默认值0.8，如果希望间隔为95％，则可以将其更改为0.95。仅影响不确定性间隔，不会更改预测<code>yhat</code>，因此不需要调整。</li>
+</ul>
+<p>关于参数的解释详情请参见官网。</p>
+<h4 id="节假日影响">节假日影响</h4>
+<h5 id="指定节假日">指定节假日</h5>
+<p>通过指定节假日的数据框，如下指定元旦，同样方式可以指定春节、妇女节、清明节、劳动节、端午节、中秋节、国庆节、双11等节日，或自己公司设定的促销活动节日等。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">library</span>(tidyverse)
+<span style="color:#f92672">&gt;</span> yuandan <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">tibble</span>(holiday <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;yuandan&#39;</span>,
+                  ds <span style="color:#f92672">=</span> <span style="color:#a6e22e">ymd</span>(<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;2017-01-01&#39;</span>,<span style="color:#e6db74">&#39;2018-01-01&#39;</span>,<span style="color:#e6db74">&#39;2019-01-01&#39;</span>,<span style="color:#e6db74">&#39;2020-01-01&#39;</span>,<span style="color:#e6db74">&#39;2021-01-01&#39;</span>)),
+                  lower_window <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>,upper_window <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>)
+
+</code></pre></div><p>除了上述的指定holiday、ds、lower_window、upper_window之外还能新增prior_scale列，为每个节假日单独指定&quot;prior scale&quot;。</p>
+<p>创建节假日数据框后,通过holidays参数传递；如果发现假日过拟合,可以调整此参数，<code>holidays.prior.scale</code>默认参数为10</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">prophet</span>(df, holidays <span style="color:#f92672">=</span> holidays)
+<span style="color:#75715e"># m &lt;- prophet(df, holidays = holidays, holidays.prior.scale = 0.05)</span>
+forecast <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">predict</span>(m, future)
+</code></pre></div><p>节假日效果可以在<code>forecast</code>数据中查看</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+forecast <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">select</span>(ds, playoff, superbowl) <span style="color:#f92672">%&gt;%</span> 
+  <span style="color:#a6e22e">filter</span>(<span style="color:#a6e22e">abs</span>(playoff <span style="color:#f92672">+</span> superbowl) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">%&gt;%</span>
+  <span style="color:#a6e22e">tail</span>(<span style="color:#ae81ff">10</span>)
+</code></pre></div><p>可以通过<code>plot_forecast_component</code>函数查看某节假日的效应</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">plot_forecast_component</span>(m, forecast, <span style="color:#e6db74">&#39;chunjie&#39;</span>)
+</code></pre></div><h5 id="内置假期">内置假期</h5>
+<p>可以使用<code>add_country_holidays</code>函数使用内置的节假日，但是不符合我们国家目前的现状，拿五一劳动节来说，有些年份是3天有些年份是5天，除夕前后销售也会有较大的影响。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">prophet</span>(holidays <span style="color:#f92672">=</span> holidays)
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">add_country_holidays</span>(m, country_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;US&#39;</span>)
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fit.prophet</span>(m, df)
+</code></pre></div><p>可以通过<code>train.holiday.names</code>查看包含哪些假期</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+m<span style="color:#f92672">$</span>train.holiday.names
+</code></pre></div><h4 id="不确定区间">不确定区间</h4>
+<h5 id="趋势不确定">趋势不确定</h5>
+<p>预测中最大的不确定性来源未来趋势变化的可能性，不可能很确定的知道。</p>
+<p>不确定区间的宽度（默认为80％）可以使用以下参数设置<code>interval_width</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">prophet</span>(df, interval.width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.95</span>)
+forecast <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">predict</span>(m, future)
+</code></pre></div><h5 id="季节不确定性">季节不确定性</h5>
+<p>本段个人不太理解。默认情况下，模型仅返回趋势和观察噪声中的不确定性。为了获得季节性的不确定行，我们必须进行完整的贝叶斯采样。使用参数<code>mcmc.samples</code>(默认为0)可以完成此操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">prophet</span>(df, mcmc.samples <span style="color:#f92672">=</span> <span style="color:#ae81ff">300</span>)
+forecast <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">predict</span>(m, future)
+</code></pre></div><p>详情请参考官网</p>
+<h4 id="诊断预测和真实差异">诊断预测和真实差异</h4>
+<p>使用<code>cross_validation</code>功能，针对一系列历史日期自动完成交叉验证。通过指定预测的范围(horizon)，指定初始训练周期的大小(initial)和截止日期之间的间隔(period)，一半情况下initial是horizon的三倍，并且每半个周期进行一次截断。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+df.cv <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">cross_validation</span>(m, initial <span style="color:#f92672">=</span> <span style="color:#ae81ff">730</span>, period <span style="color:#f92672">=</span> <span style="color:#ae81ff">180</span>, horizon <span style="color:#f92672">=</span> <span style="color:#ae81ff">365</span>, units <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;days&#39;</span>)
+
+</code></pre></div><p>我们进行交叉验证，以评估在365天的范围内的预测效果，从第一个截止日期开始的730天训练数据开始，然后每180天进行一次预测。</p>
+<h2 id="prophet实战">Prophet实战</h2>
+<p>通过上述介绍，我们大概知道prophet是怎样预测的。接下来，我们就公司实际业务数据预测，代码是R版本。因为目前所在公司是传统零售行业，商品销售情况有较强的季节性。</p>
+<h3 id="异常数据处理">异常数据处理</h3>
+<p>先知prophet能处理历史数据中异常值，但只能通过使它们适应趋势变化来解决。处理离群值的最佳方法是将其删除，先知对丢失数据没有任何影响，将异常值设置为NA即可。</p>
+<p>考虑到2020年的新冠疫情，将历史销售数据中的2020年1月24 日至4月30日的数据设置为NA</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">dt[, y <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fcase</span>(
+  ds <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">as_date</span>(<span style="color:#e6db74">&#34;2020-01-24&#34;</span>), y,
+  ds <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">as_date</span>(<span style="color:#e6db74">&#34;2020-04-30&#34;</span>), y,
+  default <span style="color:#f92672">=</span> <span style="color:#66d9ef">NA</span>
+)]
+</code></pre></div><h3 id="预测">预测</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">prophet</span>(df <span style="color:#f92672">=</span> dt,holidays <span style="color:#f92672">=</span> holidays,seasonality.prior.scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>,holidays.prior.scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>,
+             changepoint.prior.scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>,interval.width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.95</span>) 
+future <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">make_future_dataframe</span>(m,periods <span style="color:#f92672">=</span> <span style="color:#ae81ff">365</span>)
+
+forecast <span style="color:#f92672">&lt;-</span>  <span style="color:#a6e22e">predict</span>(m,future)
+</code></pre></div><h4 id="预测拟合效果">预测拟合效果</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">plot</span>(m, forecast)
+</code></pre></div><h4 id="各成分走势图">各成分走势图</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">prophet_plot_components</span>(m, forecast)
+</code></pre></div><h4 id="查看节假日">查看节假日</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># R</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">plot_forecast_component</span>(m, forecast, <span style="color:#e6db74">&#39;chunjie&#39;</span>)
+</code></pre></div>
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

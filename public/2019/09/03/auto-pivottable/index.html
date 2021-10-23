@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>auto pivottable - study notes</title>
+<meta property="og:title" content="auto pivottable - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">auto pivottable</h1>
+
+    
+    <span class="article-date">2019-09-03</span>
+    
+
+    <div class="article-content">
+      <h4 id="为什么需要自动创建数据透视表">为什么需要自动创建数据透视表</h4>
+<p>最近接到一项工作任务，需要制作大量同款数据透视表，但是使用区域以及层级不一样导致数据源不一样，依据一个模板批量复制后更改部分细节问题会有大量工作，需要一个个透视表取更改，因此萌发了VBA实现批量制作透视表的想法。</p>
+<h4 id="基础透视表">基础透视表</h4>
+<p>本处基础透视表是指不需要从模型生成透视表，也不需要通过DAX函数添加度量值的情况下透视表。在这种情况下透视表可以通过录制宏实现VBA代码自动创建透视表。</p>
+<p>数据以及代码下载地址：<a href="https://gitee.com/zhongyufei/excel/tree/master/vba">https://gitee.com/zhongyufei/excel/tree/master/vba</a></p>
+<pre><code>Sub 创建透视表()
+    Sheets.Add
+    ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=&quot;表1&quot; _
+        , Version:=6).CreatePivotTable TableDestination:=&quot;Sheet1!R3C1&quot;, TableName _
+        :=&quot;数据透视表1&quot;, DefaultVersion:=6
+    Sheets(&quot;Sheet1&quot;).Select
+    Cells(3, 1).Select
+   
+    With ActiveSheet.PivotTables(&quot;数据透视表1&quot;).PivotCache
+        .RefreshOnFileOpen = False
+        .MissingItemsLimit = xlMissingItemsDefault
+    End With
+    
+    
+    ’数据透视表行列部分以及计算汇总字段
+    
+    ActiveSheet.PivotTables(&quot;数据透视表1&quot;).RepeatAllLabels xlRepeatLabels
+    With ActiveSheet.PivotTables(&quot;数据透视表1&quot;).PivotFields(&quot;Species&quot;)
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+    ActiveSheet.PivotTables(&quot;数据透视表1&quot;).AddDataField ActiveSheet.PivotTables(&quot;数据透视表1&quot; _
+        ).PivotFields(&quot;Petal.Width&quot;), &quot;求和项:Petal.Width&quot;, xlSum
+End Sub
+
+</code></pre><h4 id="power-pivot-透视表">Power Pivot 透视表</h4>
+<p>工作中大部分时候都是带度量值的透视表，那就需要通过VBA直接生成度量值，主要步骤：第一步将表格添加到模型，第二步创建度量值，第三步创建透视表，拉取透视表。</p>
+<p>数据以及代码下载地址：<a href="https://gitee.com/zhongyufei/excel/tree/master/vba/Powerpivot">https://gitee.com/zhongyufei/excel/tree/master/vba/Powerpivot</a></p>
+<ul>
+<li>
+<p>将表格添加到模型</p>
+<p>第一步将表添加到模型，需要说明的是 ：将Sheet1添加到模型，并命名为ORA，这些参数需根据实际情况修改调整</p>
+</li>
+</ul>
+<pre><code>Sub 添加到模型()
+Sheets(&quot;Sheet1&quot;).ListObjects(1).Name = &quot;ORA&quot;
+WrkName = ActiveWorkbook.Name
+TblName = Sheets(&quot;Sheet1&quot;).ListObjects(1).Name
+'MsgBox TbleName
+FilPath = ActiveWorkbook.Path
+'MsgBox FilePath
+ConnStr = &quot;WORKSHEET;&quot; + FilPath
+CommTxt = WrkName + &quot;!&quot; + TblName
+
+'&quot;WORKSHEET;C:\Users\305197\Desktop\PowerPivot.xlsm&quot;
+Workbooks(&quot;动销存透视表.xlsm&quot;).Connections.Add2 _
+                                        Name:=&quot;myconnection&quot;, _
+                                        Description:=&quot;This is my test dataset.&quot;, _
+                                        ConnectionString:=ConnStr, _
+                                        CommandText:=CommTxt, _
+                                        lCmdtype:=xlCmdExcel, _
+                                        CreateModelConnection:=True, _
+                                        ImportRelationships:=False
+End Sub
+
+</code></pre><ul>
+<li>在模型中添加度量值</li>
+</ul>
+<p><code>MeasureName</code>参数指定度量值名称，<code>AssociatedTable</code>度量值写进模型表中，<code>Formula</code>指定度量值，<code>FormatInformation</code>指定度量值的数据格式，<code> Description</code>度量值描述。</p>
+<pre><code>Sub 添加度量值()
+'Declare your variables.
+Dim myModel As Model
+Dim myModelTables As ModelTables
+Dim myModelMeasures As ModelMeasures
+Dim myModelTable As ModelTable
+Dim myModelTable1 As ModelTable
+
+'tablname
+Dim tabl As String
+
+'有货sku数
+Dim mea7 As String
+
+'Create a reference to the PowerPivot Model
+Set myModel = ActiveWorkbook.Model
+
+'myModel.Refresh
+Set myModelTables = myModel.ModelTables
+Set myModelTable = myModelTables.Item(1)
+Set myModelMeasures = myModel.ModelMeasures
+
+'模型的表名
+'myModelTable.Name = &quot;a&quot;
+
+tabl = myModelTable.Name
+tabll = &quot;'&quot; &amp; myModelTable.Name &amp; &quot;'&quot;
+
+
+'有货sku数
+mea7 = &quot;COUNTROWS(FILTER(&quot; &amp; tabll &amp; &quot;,&quot; &amp; tabll &amp; &quot;[可用库存]&gt;0))&quot;
+'MsgBox mea7
+myModelMeasures.Add MeasureName:=&quot;有货sku数&quot;, _
+                        AssociatedTable:=myModelTable, _
+                        Formula:=mea7, _
+                        FormatInformation:=myModel.ModelFormatDecimalNumber, _
+                        Description:=&quot;This is count of all my transactions.&quot;
+End Sub
+</code></pre><ul>
+<li>
+<p>创建透视表</p>
+<p>首先创建新的sheet 并命名为&quot;透视表&quot;,并指定透视表创建的位置<code>Worksheets(&quot;透视表&quot;).Cells(5, 3)</code>，第五行第三列的位置创建透视表。在我们多开Excel时，并创建了多个透视表，再新建透视表时会依据透视表个数依次指定透视表名称，“数据透视表1”，“数据透视表2”，“数据透视表3”，“数据透视表4”，“数据透视表5”。再以下代码中定义了<code>Pivottablename</code>参数可以用来指定透视表名称，方便最后一步拉取透视表字段。</p>
+<p><code>  Version:=xlPivotTableVersion15)</code>参数指定数据透视表版本</p>
+</li>
+</ul>
+<pre><code>Sub 创建透视表()
+Sheets.Add.Name = &quot;透视表&quot;
+Dim Pivottablename As String
+Dim PowerPivotCache As Excel.PivotCache
+Dim NewPowerPivotTable As Excel.PivotTable
+ 'Create new cache
+Set PowerPivotCache = ActiveWorkbook.PivotCaches.Create( _
+SourceType:=xlExternal, _
+SourceData:=ActiveWorkbook.Connections(&quot;ThisWorkbookDataModel&quot;), _
+Version:=xlPivotTableVersion15)
+ ' Create PivotTable
+Set NewPowerPivotTable = PowerPivotCache.CreatePivotTable( _
+TableDestination:=Worksheets(&quot;透视表&quot;).Cells(5, 3), _
+DefaultVersion:=xlPivotTableVersion15)
+
+'Settings for new PowerPivotTable
+ '指定透视表名称会自动变化
+ With NewPowerPivotTable
+   .RowAxisLayout xlTabularRow
+   .HasAutoFormat = False
+   'MsgBox NewPowerPivotTable.Name
+    Pivottablename = NewPowerPivotTable.Name
+ End With
+ 
+ ' Cleanup
+ Set NewPowerPivotTable = Nothing
+ Set PowerPivotCache = Nothing
+End Sub
+</code></pre><p>以上代码可简写为：</p>
+<pre><code>Sub 创建透视表()
+
+Sheets.Add.Name = &quot;透视表&quot;
+'定义表以及定义透视表缓存
+Dim Pivottablename As String
+Dim PowerPivotCache As Excel.PivotCache
+Dim NewPowerPivotTable As Excel.PivotTable
+
+'创建缓存
+Set PowerPivotCache = ActiveWorkbook.PivotCaches.Create( _
+SourceType:=xlExternal, _
+SourceData:=ActiveWorkbook.Connections(&quot;ThisWorkbookDataModel&quot;), _
+Version:=xlPivotTableVersion15)
+
+' 创建透视表
+Set NewPowerPivotTable = PowerPivotCache.CreatePivotTable( _
+TableDestination:=Worksheets(&quot;透视表&quot;).Cells(5, 3), _
+DefaultVersion:=xlPivotTableVersion15)
+
+End Sub
+</code></pre><ul>
+<li>
+<p>最后一步拉取透视表</p>
+<p><code>Orientation=xlRowField</code> 代表透视表中的行，<code>Orientation = xlColumnField</code>参数代表透视表中的列，<code>Position = 1,Position = 2</code>参数代表透视中的行位置或者顺序。代码最后一部分即透视表中的值。</p>
+<p>注意<code>Pivottablename</code>这个是引用的创建透视表中的值，代表当前透视表名称。分开执行时须指定<code>Pivottablename</code>的值，默认情况下为数据透视表1</p>
+</li>
+</ul>
+<pre><code>Sub 按照需求拉透视表()
+   '拉透视表过程
+
+    Application.WindowState = xlMaximized
+    
+    With ActiveSheet.PivotTables(Pivottablename).CubeFields(&quot;[ORA].[分析大类]&quot;)
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+    
+    With ActiveSheet.PivotTables(Pivottablename).CubeFields(&quot;[ORA].[排名区间]&quot;)
+        .Orientation = xlRowField
+        .Position = 2
+    End With
+    
+    
+     With ActiveSheet.PivotTables(Pivottablename).CubeFields(&quot;[ORA].[城市]&quot;)
+        .Orientation = xlColumnField
+        .Position = 1
+    End With
+    
+    ActiveSheet.PivotTables(Pivottablename).AddDataField ActiveSheet.PivotTables(Pivottablename _
+        ).CubeFields(&quot;[Measures].[有货sku数]&quot;)
+    
+End Sub
+</code></pre><ul>
+<li>调整数据透视表格式：可通过录制宏代码调整格式，以下代码可批量调整一个文件夹下所有Excel文件全部sheet的格式</li>
+</ul>
+<pre><code>Sub 调整格式()
+Dim a
+'a = Dir(&quot;C:\Users\zhongyf\Desktop\work\output\*.XLSX&quot;)' 将xlsx结尾的所有文件打开
+Do '遍历目录下的所有指定格式的文件名
+a = a = Dir(&quot;C:\Users\zhongyf\Desktop\work\output\*.XLSX&quot;)' 
+Workbooks.Open &quot;C:\Users\zhongyf\Desktop\work\output\*.XLSX\&quot; + a
+If a &lt;&gt; &quot;&quot; Then
+    For Each Sheet In Sheets 
+    Sheet.Columns(&quot;A:AZ&quot;).Font.Name = &quot;微软雅黑&quot;
+    Sheet.Columns(&quot;A:AZ&quot;).Font.Size = &quot;10&quot;
+    Sheet.Range(&quot;A:AZ&quot;).EntireColumn.AutoFit
+    Next Sheet
+
+Else
+Exit Sub
+End If
+Loop
+
+End Sub
+</code></pre><hr>
+<p>参考资料:<a href="https://github.com/areed1192/sigma_coding_youtube/tree/master/vba/vba-excel">https://github.com/areed1192/sigma_coding_youtube/tree/master/vba/vba-excel</a></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

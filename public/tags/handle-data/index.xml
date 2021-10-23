@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>handle data on study notes</title>
+    <link>/tags/handle-data/</link>
+    <description>Recent content in handle data on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/handle-data/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R 包 data.table 与 collapse 比较</title>
+      <link>/2021/10/22/data-table-vs-collapse/</link>
+      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/10/22/data-table-vs-collapse/</guid>
+      <description>前言 当我知道 collapse 包时，我第一时间去 GitHub 上查看该项目。由于我长期使用 data.table 包处理数据，所以特别想知道他们之间的优劣势，通过查看基准测试，发现两个项目各有所长。由于我是一名零售行业数据分析师，需要的数据处理函数以及逻辑相对比较简单，接下来就两个 R 包在数据处理上的差异做简单的记录，主要比较相同的处理逻辑语法上的差异。
+官方的手册中已有相关介绍，可自行前往阅读。
+ 基础用法 # 加载包 library(collapse) library(data.table) # 准备测试数据 # collapse data df &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) # data.table data dt &amp;lt;- readxl::read_excel(&amp;#39;/Users/zhongyf/Desktop/datatable vs collapse.xlsx&amp;#39;) |&amp;gt; setDT() 行列选择 列选择，新出来的数据处理框架基本都支持列名索引和数字索引的方式选择列，建议使用列名索引。
+collapse 行列选择与tidyverse系列相似,支持列名索引以及数字索引。
+ 列选择  collapse  df |&amp;gt; fselect(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() df |&amp;gt; fselect(1:3,12) |&amp;gt; head() data.table  dt[,.(BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY)] |&amp;gt; head() dt[,c(1:3,12)] |&amp;gt; head()  子集(行选择)  collapse  # 筛选子集 行列同时 fsubset(df,SHOP_NO ==&amp;quot;999842&amp;quot; &amp;amp; BILL_MONEY&amp;gt;10,BILL_DATE,POS_NO,SKU_NO,SHOP_NO,BILL_QTY) |&amp;gt; head() 简写方式, sbt()是的fsubset()简写。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>frp is a fast reverse proxy on study notes</title>
+    <link>/tags/frp-is-a-fast-reverse-proxy/</link>
+    <description>Recent content in frp is a fast reverse proxy on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 25 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/frp-is-a-fast-reverse-proxy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Frp-穿透内网</title>
+      <link>/2020/11/25/frp-%E7%A9%BF%E9%80%8F%E5%86%85%E7%BD%91/</link>
+      <pubDate>Wed, 25 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/11/25/frp-%E7%A9%BF%E9%80%8F%E5%86%85%E7%BD%91/</guid>
+      <description>Frp穿透内网  frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。本文记录下。
+项目地址 中文地址：https://github.com/fatedier/frp/blob/dev/README_zh.md
+操作指引：https://gofrp.org/docs/setup/
+Youtube视频地址:https://www.youtube.com/watch?v=KeecUhhfIE8
+说明 frp 主要由客户端frpc和服务端frps组成，服务端通常部署在具有公网IP的机器上，客户端通常部署在需要穿透的内网服务所在的机器上。
+配置过程   修改frps.ini
+[common] bind_port = 7000 token = passwordvega2020   修改frpc.ini
+[common] server_addr = x.x.x.x #公网ip server_port = 7000 [ssh] type = tcp local_ip = 127.0.0.1 local_port = 22 remote_port = 6000 [udp] type = udp local_ip = 192.168.8.116 local_port = 22 remote_port = 6001 [RDP] type = tcp local_ip = 192.168.8.116 local_port = 3389 #windows远程连接端口 remote_port = 6002   启动</description>
+    </item>
+    
+  </channel>
+</rss>

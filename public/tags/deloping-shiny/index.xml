@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>deloping shiny on study notes</title>
+    <link>/tags/deloping-shiny/</link>
+    <description>Recent content in deloping shiny on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/deloping-shiny/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Shiny部署</title>
+      <link>/2020/07/29/deploying-shiny/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/07/29/deploying-shiny/</guid>
+      <description>安装 官网资料：https://rstudio.com/products/shiny/download-server/
+第一步安装R
+sudo yum install R
+centos7 上可直接用上面命令安装R,但是在centos 8 安装会无法成功。因为R软件包没有被包含在 CentOS 8 的核心软件源中。我们需要从 EPEL 软件源中安装 R
+启用 EPEL 和 PowerTools 软件源
+sudo dnf install epel-release sudo dnf config-manager &amp;ndash;set-enabled PowerTools
+安装R输入：
+sudo yum install R
+查看R版本 R &amp;ndash;version
+第二步 安装shiny package
+sudo su -
+-c &amp;ldquo;R -e &amp;quot;install.packages(&amp;lsquo;shiny&amp;rsquo;, repos=&amp;lsquo;https://cran.rstudio.com/&#39;)&amp;quot;&amp;rdquo;
+或者近入R后install.package(&#39;shiny&#39;) 安装
+第三步 下载安装shiny
+wget https://download3.rstudio.org/centos6.3/x86_64/shiny-server-1.5.14.948-x86_64.rpm
+sudo yum install &amp;ndash;nogpgcheck shiny-server-1.5.14.948-x86_64.rpm
+第四步 测试是否安装成功
+http://ip:3838
+ip地址如果是本机,可以换成localhost,或者是本机ip地址。如果是公网像云服务器,需要开放3838的端口后再测试。
+查看shiny-server 状态
+sudo systemctl status shiny-server</description>
+    </item>
+    
+  </channel>
+</rss>

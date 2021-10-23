@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>批量创建透视表 - study notes</title>
+<meta property="og:title" content="批量创建透视表 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">批量创建透视表</h1>
+
+    
+    <span class="article-date">2020-11-12</span>
+    
+
+    <div class="article-content">
+      <h2 id="背景说明">背景说明</h2>
+<p>当需要根据不用客户分发透视表时，意味着透视表需要重复做N次，之所以是透视表不是完全固定的报表，是透视表有一定的灵活性，可自助拉取报表。</p>
+<p>我们显然是不可能将事情重复做N次的，经过测试，以下是较为方便通用且成熟方案，除了速度上有一定缺陷。</p>
+<p>另外方案：</p>
+<ul>
+<li>
+<p>利用Power Bi的”行安全性“可以做到类似权限管控，数据源切割的效果，但是第一次做的工作量也较大，并且通用性没上面的好。</p>
+</li>
+<li>
+<p>VBA 创建透视表，该任务本质上是利用不同的数据源制作相同的透视表，利用VBA代码自动生成透视表功能也能实现，但是编写VBA代码时工作量也较大，如果不是长期且高频使用，性价比不高。</p>
+</li>
+</ul>
+<h2 id="构建基础文件">构建基础文件</h2>
+<p>根据实际需求,利用 power pivot ，创建需求度量值，完成透视表，并调整好透视表格式。</p>
+<p>1.透视表</p>
+<ul>
+<li>
+<p>利用Excel Power Pivot 连接数据库并创建透视表</p>
+</li>
+<li>
+<p>设置Power Pivot 免密刷新 Excel数据选项卡中的链接属性 修改为保存密码。或者利用windows身份认证免密刷新避免密码</p>
+</li>
+</ul>
+<p>2.刷新功能宏文件</p>
+<ul>
+<li>构建带宏的refresh.xls 文件</li>
+</ul>
+<p>创建名为<code>refresh.xls</code>的文件，并在其中插入<code>VBA</code>代码，VBA代码如下：</p>
+<p>该代码实现刷新该文件下全部<code>xlsx</code>,<code>xls</code>后缀文件。</p>
+<pre><code>Sub refresh()
+Dim wb As Excel.Workbook
+x = ThisWorkbook.Path &amp; &quot;\&quot;
+f = Dir(x &amp; &quot;&quot; &amp; &quot;*xls&quot;)
+Do While f &lt;&gt; &quot;&quot;
+If f &lt;&gt; ThisWorkbook.Name Then
+Set wb = Workbooks.Open(x &amp; &quot;&quot; &amp; f)
+    ActiveWorkbook.RefreshAll
+    wb.Save
+    wb.Close
+    End If
+    f = Dir
+    Loop
+End Sub
+
+</code></pre><p><code>Dir</code>函数<a href="https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/dir-function">参考资料</a></p>
+<p>3.脚本</p>
+<ul>
+<li>创建<code>vbs</code>脚本</li>
+</ul>
+<p>打开Txt文本文件，将以下代码复制，并另存为<code>refreshs.vbs</code>.</p>
+<pre><code>Set objExcel = CreateObject(&quot;Excel.Application&quot;)
+objExcel.Visible = False
+objExcel.DisplayAlerts=False
+Set wb = objExcel.Workbooks.Open(&quot;C:\Users\zhongyf\Desktop\make-power-pivot\data\refreshs.xls&quot;)
+objExcel.Application.Run &quot;refresh&quot;
+wb.save
+objExcel.Application.quit
+</code></pre><ul>
+<li>R中调用脚本</li>
+</ul>
+<pre><code>pathofvbscript = './refreshs.vbs'
+shell(shQuote(normalizePath(pathofvbscript)), &quot;cscript&quot;, flag = &quot;//nologo&quot;)
+</code></pre><h2 id="完整r脚本">完整R脚本</h2>
+<p>定义函数,并按照拆分维度依次执行</p>
+<pre><code>refresh_power_pivot &lt;- function(dt) {
+  # connect database--------
+  con &lt;- dbConnect(odbc::odbc(), .connection_string = &quot;driver={ODBC Driver 17 for SQL Server};server=172.16.88.2;database=test;uid=zhongyf;pwd=Zyf123456&quot;, timeout = 10)
+  DBI::dbWriteTable(conn = con, name = &quot;split_table&quot;, value = dt, overwrite = TRUE)
+  dbDisconnect(con)
+
+  print(paste0(&quot;正在刷新&quot;, dt[, .N, by = .(老板)][, (老板)], &quot;数据&quot;))
+
+  # output file name
+  output_file_name &lt;- paste0(&quot;./result/木九十&quot;, &quot;-&quot;, dt[, .N, by = .(老板)][, (老板)], &quot;-&quot;, &quot;动销存数据.xlsx&quot;)
+
+  # 提示进度
+  print(paste0(&quot;数据上传成功,&quot;, &quot;接下来打开模板开始刷新&quot;))
+
+  # 执行vbs脚本
+  pathofvbscript &lt;- &quot;./basic/refresh.vbs&quot;
+  shell(shQuote(normalizePath(pathofvbscript)), &quot;cscript&quot;, flag = &quot;//nologo&quot;)
+
+  # 等待时间
+  Sys.sleep(2)
+
+  print(paste0(&quot;数据刷新成功,&quot;, &quot;并保存&quot;))
+
+  # 复制并另存文件
+  file.copy(from = &quot;./data/model.xlsx&quot;, to = &quot;./result&quot;)
+  file.rename(from = &quot;./result/model.xlsx&quot;, to = output_file_name)
+}
+
+# 假定完整数据源为dt ,并按照老板字段拆分
+dtlist &lt;- split(dt, dt$老板)
+# purrr safely功能
+savefun &lt;- purrr::safely(refresh_power_pivot)
+# 开始刷新
+map(dtlist, savefun)
+</code></pre>
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

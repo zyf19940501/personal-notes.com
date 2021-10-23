@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>impala on study notes</title>
+    <link>/tags/impala/</link>
+    <description>Recent content in impala on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/impala/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R 连接 impala</title>
+      <link>/2021/10/21/r-and-impala/</link>
+      <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/10/21/r-and-impala/</guid>
+      <description>前言 最近接触一个项目时，数据存储在内部的大数据平台，大部分同事通过 hue 查询获取数据，部分同事用 python 连接到数据平台查询。我之前并没有使用 hive 或 impala 的经历，肯定不熟悉hive 或 impala 的语法，但是作为一个 R 语言的爱好者，那我首先想到的必然是通过 R 与 hive 或 impala 连接。
+ Hue 是一个用于数据库和数据仓库的开源 SQL 助手
+ 需要说明的是，我并不太清楚 Hadoop 与 Hive、 impala、spark 之间的联系以及差异。个人理解数据是分布式存储在Hadoop集群上，我们可以通过 hive，impala 或者别的引擎去集群查询计算数据。
+既然知道了目标，将 R 与 大数据平台中的数据建立连接，那就开始查找相关资料。Google 【R connect hive】，得到如下： 注意到第二个网站是 RStudio 公司对的网页，我果断点击进去，找到了我想要的信息。通过 odbc 方式连接。
+odbc 连接 驱动配置 hive 驱动 通过 odbc 方式连接，主要问题是找到相应驱动文件，剩下就是驱动 hive odbc driver 文件的配置。
+驱动介绍，在驱动介绍页面上看到了不同系统以及不同数据库的驱动下载、安装、以及配置方法。
+但是没有看到应该去什么地址下载 hive 的什么 ODBC 驱动，那又只能Google【hive odbc driver】，搜索到的第一个结果就是 hive 的 ODBC 驱动。</description>
+    </item>
+    
+  </channel>
+</rss>

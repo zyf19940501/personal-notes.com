@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>refresh on study notes</title>
+    <link>/tags/refresh/</link>
+    <description>Recent content in refresh on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/refresh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>批量创建透视表</title>
+      <link>/2020/11/12/batch-refresh-pivot-table-with-different-data-sources/</link>
+      <pubDate>Thu, 12 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/11/12/batch-refresh-pivot-table-with-different-data-sources/</guid>
+      <description>背景说明 当需要根据不用客户分发透视表时，意味着透视表需要重复做N次，之所以是透视表不是完全固定的报表，是透视表有一定的灵活性，可自助拉取报表。
+我们显然是不可能将事情重复做N次的，经过测试，以下是较为方便通用且成熟方案，除了速度上有一定缺陷。
+另外方案：
+  利用Power Bi的”行安全性“可以做到类似权限管控，数据源切割的效果，但是第一次做的工作量也较大，并且通用性没上面的好。
+  VBA 创建透视表，该任务本质上是利用不同的数据源制作相同的透视表，利用VBA代码自动生成透视表功能也能实现，但是编写VBA代码时工作量也较大，如果不是长期且高频使用，性价比不高。
+  构建基础文件 根据实际需求,利用 power pivot ，创建需求度量值，完成透视表，并调整好透视表格式。
+1.透视表
+  利用Excel Power Pivot 连接数据库并创建透视表
+  设置Power Pivot 免密刷新 Excel数据选项卡中的链接属性 修改为保存密码。或者利用windows身份认证免密刷新避免密码
+  2.刷新功能宏文件
+ 构建带宏的refresh.xls 文件  创建名为refresh.xls的文件，并在其中插入VBA代码，VBA代码如下：
+该代码实现刷新该文件下全部xlsx,xls后缀文件。
+Sub refresh() Dim wb As Excel.Workbook x = ThisWorkbook.Path &amp;amp; &amp;quot;\&amp;quot; f = Dir(x &amp;amp; &amp;quot;&amp;quot; &amp;amp; &amp;quot;*xls&amp;quot;) Do While f &amp;lt;&amp;gt; &amp;quot;&amp;quot; If f &amp;lt;&amp;gt; ThisWorkbook.Name Then Set wb = Workbooks.</description>
+    </item>
+    
+  </channel>
+</rss>

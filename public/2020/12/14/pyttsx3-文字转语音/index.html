@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>pyttsx3 -文字转语音 - study notes</title>
+<meta property="og:title" content="pyttsx3 -文字转语音 - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">pyttsx3 -文字转语音</h1>
+
+    
+    <span class="article-date">2020-12-14</span>
+    
+
+    <div class="article-content">
+      <h2 id="说明">说明</h2>
+<p>有天突发奇想，想把一些书本转化成语音mp3格式，方便听。简单搜素后决定用python的pyttsx3库实现。</p>
+<h2 id="代码">代码</h2>
+<p>中间存在一些版本问题，后来实现miniconda 创建新环境实现。</p>
+<h3 id="安装">安装</h3>
+<p>1.安装 miniconda
+进入网址 Miniconda - Conda</p>
+<p>下载 Python3 的 64-bit 版本即可。注意，最好是64位的版本（除非你的电脑是32位的）。这里选择3.X或者2.X没关系，都可以，但建议和课程一致选Python3版本。</p>
+<p>2.添加 conda 的镜像服务器
+因为conda 下载文件要用到国外的服务器，速度一般会比较慢，我们可以通过增加一个清华的镜像服务器来解决。</p>
+<p>打开cmd终端或者Anaconda Prompt（快捷键： win+r ：然后输入cmd，回车）。</p>
+<p>分别在cmd终端或者Anaconda Prompt里粘贴下面两行代码（每粘贴一行回车确认）。</p>
+<p><code>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</code></p>
+<p><code>conda config --set show_channel_urls yes</code></p>
+<pre><code># 创建新环境
+conda create –n yuyin python=3.9
+activate yuyin
+pip install pyinstaller 
+pyinstaller -F C:\Users\zhongyf\Desktop\文字转语音.py  --hidden-import=pyttsx3.drivers.sapi5
+</code></pre><p>pyttsx3代码如下：</p>
+<pre><code>import pyttsx3
+filename = input('请输入需转化语音的txt文件名称:')
+f = open(filename,'r',encoding = 'utf-8')
+line = f.readlines()
+line = str(line)
+line = line.replace('\\n',' ')
+engine = pyttsx3.init()
+# engine.say(line)
+#调整人的声音
+voices = engine.getProperty('voices') 
+engine.setProperty('voice', voices[0].id)
+# 调整语速,范围一般在0~500之间
+rate = engine.getProperty('rate')                         
+engine.setProperty('rate', 200)
+engine.save_to_file(line,'output.mp3')
+engine.runAndWait()
+</code></pre><h2 id="资料">资料</h2>
+<p><a href="https://pyttsx3.readthedocs.io/en/latest/engine.html#the-engine-factory">https://pyttsx3.readthedocs.io/en/latest/engine.html#the-engine-factory</a></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

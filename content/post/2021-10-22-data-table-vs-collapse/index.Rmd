@@ -198,10 +198,12 @@ ftransformv(df,vars = c('BILL_QTY','BILL_MONEY'),FUN = \ (x){x*2}) |>
   fselect(SHOP_NO,BILL_DATE,BILL_QTY,BILL_MONEY)
 ```
 
-额外参数
+分组聚合
 
 ```{r}
-ftransformv(df,vars = 'BILL_MONEY',FUN = \(x,y,z){x/(y*z)},list(y=BILL_QTY,z=PRICE))
+df |> 
+  fgroup_by(SHOP_NO) |> 
+  fsummarise(销量 = fsum(BILL_QTY))
 ```
 
 
@@ -219,7 +221,33 @@ dt[,colnames(dt[,.(BILL_QTY,BILL_MONEY)]):=lapply(.SD[,.(BILL_QTY,BILL_MONEY)],\
 
 data.table 中的批量操作方便给新列重新命名。
 
+分组聚合
 
-zhongyf test
+```{r}
+dt[,.(销量 = sum(BILL_QTY)),by=.(SHOP_NO)]
+```
 
+
+
+### 列重命名
+
+```{r}
+frename(df,BILL_QTY = qty, BILL_MONEY = money ) |> 
+  head(2)
+
+frename(df, tolower, cols = .c(BILL_QTY, BILL_MONEY)) %>% head(2)
+```
+
+自定义函数改名
+
+```{r}
+frename(iris, paste, "new", sep = "_", cols = 1:2)
+```
+
+
+改变数据框
+
+```{r}
+setrename(df,BILL_QTY = qty, BILL_MONEY = money ) 
+```
 

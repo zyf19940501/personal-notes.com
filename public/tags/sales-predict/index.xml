@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>sales predict on study notes</title>
+    <link>/tags/sales-predict/</link>
+    <description>Recent content in sales predict on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 14 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/sales-predict/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用prophet预测销售额</title>
+      <link>/2021/04/14/prophet/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/04/14/prophet/</guid>
+      <description>前言 留意到&amp;quot;先知&amp;quot;prophet已经有一段时间，第一次看到先知介绍时候注意到可以人为指定异常点以及节假日让我感觉到很新颖，以往在使用forecast包预测销售额时没有该功能。
+先知可以在R中和Python中实现预测，并且速度快，提供自动化的预测，或手工调整。官网上的介绍：
+Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It works best with time series that have strong seasonal effects and several seasons of historical data. Prophet is robust to missing data and shifts in the trend, and typically handles outliers well.
+Prophet is open source software released by Facebook’s Core Data Science team.</description>
+    </item>
+    
+  </channel>
+</rss>

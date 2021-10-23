@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on study notes</title>
+    <link>/tags/</link>
+    <description>Recent content in Tags on study notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>handle data</title>
+      <link>/tags/handle-data/</link>
+      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/handle-data/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>database</title>
+      <link>/tags/database/</link>
+      <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>impala</title>
+      <link>/tags/impala/</link>
+      <pubDate>Thu, 21 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/impala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bookdown</title>
+      <link>/tags/bookdown/</link>
+      <pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/bookdown/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>version update</title>
+      <link>/tags/version-update/</link>
+      <pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/version-update/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>r-4.1.0</title>
+      <link>/tags/r-4.1.0/</link>
+      <pubDate>Sat, 29 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r-4.1.0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>prophet</title>
+      <link>/tags/prophet/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/prophet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sales predict</title>
+      <link>/tags/sales-predict/</link>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/sales-predict/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blastula email</title>
+      <link>/tags/blastula-email/</link>
+      <pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/blastula-email/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Power Pivot</title>
+      <link>/tags/power-pivot/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/power-pivot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pyttsx3</title>
+      <link>/tags/pyttsx3/</link>
+      <pubDate>Mon, 14 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/pyttsx3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>usemethod DT</title>
+      <link>/tags/usemethod-dt/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/usemethod-dt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>git study</title>
+      <link>/tags/git-study/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/git-study/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberry</title>
+      <link>/tags/raspberry/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/raspberry/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>frp is a fast reverse proxy</title>
+      <link>/tags/frp-is-a-fast-reverse-proxy/</link>
+      <pubDate>Wed, 25 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/frp-is-a-fast-reverse-proxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>refresh</title>
+      <link>/tags/refresh/</link>
+      <pubDate>Thu, 12 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/refresh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>李子柒</title>
+      <link>/tags/%E6%9D%8E%E5%AD%90%E6%9F%92/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E6%9D%8E%E5%AD%90%E6%9F%92/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>plumber</title>
+      <link>/tags/plumber/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/plumber/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>deloping shiny</title>
+      <link>/tags/deloping-shiny/</link>
+      <pubDate>Wed, 29 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/deloping-shiny/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

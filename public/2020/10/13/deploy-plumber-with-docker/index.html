@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.83.1" />
+
+
+<title>deploy plumber with docker - study notes</title>
+<meta property="og:title" content="deploy plumber with docker - study notes">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="/categories/">Categories</a></li>
+    
+    <li><a href="/tags/">Tags</a></li>
+    
+    <li><a href="https://github.com/zyf1994050/personal-notes">GitHub</a></li>
+    
+    <li><a href="https://bookdown.org/zhongyufei/Data-Handling-in-R/">R book</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">deploy plumber with docker</h1>
+
+    
+    <span class="article-date">2020-10-13</span>
+    
+
+    <div class="article-content">
+      <h2 id="前言">前言</h2>
+<p>最近部门同事有较多临时取数需求,但因其不熟悉<code>SQL</code>,<code>Power Pivot</code>等取数方式,故想部署一个api方便部门取数。相比起部署shiny,刚开始以为api更简单。但实际过程中遇到Docker中无法成功安装<code>odbc</code> package,导致没法使用现成<code>plumber docker</code>，如：<code>docker pull trestletech/plumber</code> 或 <code>docker pull rstudio/plumber</code> 等，需要自定义<code>dockerfile</code>构建docker镜像,现记录如下。</p>
+<h2 id="构建dockerfile">构建<code>dockerfile</code></h2>
+<p>从<code>r-base</code>构建<code>R</code>环境,然后安装<code>R</code>中安装包需要的环境如：<code>libxml2-dev</code>,<code>libssl-dev</code>等，但是linux系统命令都不太理解，以下代码为拼凑起来。</p>
+<p>其中 <code>curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \</code> 等部分可以参考<a href="https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15">微软官网</a>，官网详细列出了各系统安装odbc驱动的代码。</p>
+<p><img src="/img/2020-10-14/p1.png" alt="p1"></p>
+<pre><code>FROM r-base
+
+RUN apt-get update -qq &amp;&amp; apt-get install -y \
+    git-core \
+    libssl-dev \
+    libcurl4-gnutls-dev
+  
+RUN apt-get update \
+ &amp;&amp; apt-get install --yes --no-install-recommends \
+        apt-transport-https \
+        curl \
+        gnupg \
+        unixodbc-dev \
+        libxml2-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+		    libsodium-dev \
+ &amp;&amp; curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+ &amp;&amp; curl https://packages.microsoft.com/config/debian/9/prod.list &gt; /etc/apt/sources.list.d/mssql-release.list \
+ &amp;&amp; apt-get update \
+ &amp;&amp; ACCEPT_EULA=Y apt-get install --yes --no-install-recommends msodbcsql17 \
+ &amp;&amp; install2.r odbc \
+ &amp;&amp; install2.r plumber \
+ &amp;&amp; install2.r tidyverse \
+ &amp;&amp; install2.r data.table \
+ &amp;&amp; install2.r lubridate \
+ &amp;&amp; install2.r stringr \
+ &amp;&amp; install2.r dbplyr \
+ &amp;&amp; apt-get clean \
+ &amp;&amp; rm -rf /var/lib/apt/lists/* \
+ &amp;&amp; rm -rf /tmp/*
+
+EXPOSE 8000
+ENTRYPOINT [&quot;R&quot;, &quot;-e&quot;, &quot;pr &lt;- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=8000)&quot;]
+
+</code></pre><h2 id="构建docker镜像">构建docker镜像</h2>
+<p>在服务上新建文件夹，并将以上<code>dockerfile</code>移动到该文件夹并确保系统已经正常启动docker,注意<code>build</code>命令最后的点，表示当前文件夹，方便找到<code>dockerfile</code></p>
+<pre><code># docker status
+systemctl  status docker
+# 构建docker 镜像
+docker build -t namedvega/ghzy:v8 name . 
+# 构建镜像是否成功
+docker images
+</code></pre><h2 id="运行docker镜像">运行docker镜像</h2>
+<p>具体<code>docker</code>运行参数请参阅官网。 <code>-d</code>以后台模型运行，<code>-p 8082:8000</code> 服务器的8082端口影视docker的8000端口（dockerfile指定）。</p>
+<p>-v <code>pwd</code> 参数时运行docker时服务器当前文件夹下的api.R文件，也就是我们的api文件。本文测试api.R文件如下：</p>
+<p><strong>注意脚本最后一句需换行</strong></p>
+<pre><code>library(plumber)
+library(odbc)
+
+# plumber.R
+
+#* Echo the parameter that was sent in
+#* @param msg The message to echo back.
+#* @get /echos
+function(msg=&quot;&quot;){
+  list(msg = paste0(&quot;The message is: '&quot;, msg, &quot;'&quot;))
+}
+
+
+#* get  database info
+#* @get /getinfo
+function(){
+  con &lt;- dbConnect(odbc::odbc(), .connection_string = &quot;driver={ODBC Driver 17 for SQL Server};server=457.123.48.107;database=master;uid=sa;pwd=12qw#$ER&quot;, timeout = 10)
+  DBI::dbGetInfo(con)
+}
+
+</code></pre><pre><code>docker run -d -p 8082:8000 -v `pwd`/api.R:/plumber.R namedvega/ghzy:v8  /plumber.R
+</code></pre><h2 id="测试api">测试api</h2>
+<pre><code>http://457.123.48.107:8082/echos
+</code></pre>
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
