@@ -251,3 +251,37 @@ frename(iris, paste, "new", sep = "_", cols = 1:2)
 setrename(df,BILL_QTY = qty, BILL_MONEY = money ) 
 ```
 
+### 缺失值 
+
+collapse
+
+```{r}
+na.omit(df,cols=c('SHOP_NO'))
+```
+
+
+### 唯一值
+
+与`base::unique`功能一致
+
+collapse
+
+```{r}
+df |> 
+  fselect(SHOP_NO,SKU_NO) |>
+  funique() |> 
+  head()
+```
+
+
+data.table
+
+```{r}
+dt[,.(SHOP_NO,SKU_NO)] |> 
+  unique() |> 
+  head()
+```
+
+关于非重复计数，`collapse::fndistinct` 和 `data.table::uniqueN` 分别实现。
+
+
